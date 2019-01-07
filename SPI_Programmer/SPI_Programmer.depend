@@ -1,0 +1,36 @@
+# depslib dependency file v1.0
+1538740857 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/SPI_Programmer/src/s25fs512.c
+	<stdio.h>
+	<stdint.h>
+	<stdlib.h>
+	<string.h>
+	"ftd2xx.h"
+	"libMPSSE_spi.h"
+	"s25fs512.h"
+
+1538141344 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/SPI_Programmer/include/ftd2xx.h
+	<pthread.h>
+	"WinTypes.h"
+
+1538141344 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/SPI_Programmer/include/WinTypes.h
+	<sys/time.h>
+
+1538148927 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/SPI_Programmer/include/libMPSSE_spi.h
+	"ftd2xx.h"
+
+1538564347 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/SPI_Programmer/include/s25fs512.h
+	<stdint.h>
+	<unistd.h>
+	<stdio.h>
+	<stdlib.h>
+
+1538150710 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/SPI_Programmer/src/main.c
+	<ctype.h>
+	<stdint.h>
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<string.h>
+	"ftd2xx.h"
+	"libMPSSE_spi.h"
+

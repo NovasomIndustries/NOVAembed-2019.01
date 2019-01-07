@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="SPI_Programmer" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/SPI_Programmer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/SPI_Programmer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-m32" />
+			<Add directory="include" />
+		</Compiler>
+		<Linker>
+			<Add option="-m32" />
+			<Add option="-ldl" />
+			<Add library="libs/libftd2xx.a" />
+			<Add library="libs/libMPSSE.a" />
+			<Add library="libs/libMPSSE.so" />
+			<Add library="libs/libftd2xx.so" />
+		</Linker>
+		<Unit filename="N1_qoriq_memory_layout.txt" />
+		<Unit filename="include/SPI_Programmer.h" />
+		<Unit filename="include/ftd2xx.h" />
+		<Unit filename="include/libMPSSE_spi.h" />
+		<Unit filename="include/s25fs512.h" />
+		<Unit filename="src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/s25fs512.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

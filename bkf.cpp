@@ -1,0 +1,1126 @@
+#include "novaembed.h"
+#include "ui_novaembed.h"
+#include <QFileDialog>
+#include <QTreeView>
+#include <QDebug>
+#include <QDir>
+#include <QStatusBar>
+#include <QMessageBox>
+#include <QPixmap>
+#include <QSettings>
+#include <QUrl>
+#include <QtCore>
+#include <QDesktopServices>
+//#include <QHostInfo>
+#include <QDirIterator>
+#include <QNetworkInterface>
+#include <QDialog>
+#include <iostream>
+
+extern  QString FileSystemName;
+extern  QString DeployedFileSystemName;
+extern  QString FileSystemConfigName;
+extern  QString _Board_comboBox;
+extern  QString Last_M7_BSPFactoryFile;
+extern  QString Last_M8_BSPFactoryFile;
+extern  QString Last_P_BSPFactoryFile;
+extern  QString Last_U_BSPFactoryFile;
+extern  QString NumberOfUserPartitions;
+extern  QString UserPartition1Size;
+extern  QString UserPartition2Size;
+extern  QString uSD_Device;
+extern  QString CurrentBSPF_Tab;
+extern  QString CurrentPrimaryVideo;
+extern  QString CurrentSecondaryVideo;
+extern  QString AutoRunSelected;
+extern  QString AutoRunFolder;
+extern  QString Kernel;
+extern  QString SourceMeFile;
+extern  QString instpath;
+
+extern  QString Last_P_FileSystem;
+extern  QString Last_U_FileSystem;
+extern  QString Last_N1_FileSystem;
+extern  QString Last_M8_FileSystem;
+extern  QString Last_M7_FileSystem;
+
+extern  QWidget *PBSP_stab,*UBSP_stab,*SBSP_stab,*M8BSP_stab,*M9BSP_stab,*TOOL_stab;
+
+extern QString BootValid , FSValid , KernelValid , uSDwriteValid;
+
+int initrd_size;
+
+QWidget *current_stab;
+
+/*****************************************************************************************************************************************************************************************/
+/*                                                                               BKF Tab                                                                                                 */
+/*****************************************************************************************************************************************************************************************/
+
+void NOVAembed::initrd_helper(void)
+{
+    QFileInfo info1(instpath+"/FileSystem/"+FileSystemName+"/output/images/rootfs.ext2");
+
+    initrd_size = (info1.size() / 1024) * 1.5;
+/*
+    std::cout << "\n" << FileSystemName.toLatin1().constData()<< "\n" << std::flush;
+    std::cout << info1.size()<< "\n" << std::flush;
+    std::cout << initrd_size << "\n" << std::flush;
+*/
+    ui->CurrentFS_lineEdit->setText( FileSystemName );
+    ui->initRdSize_lineEdit->setText( QString::number(initrd_size) );
+}
+
+/* Bootloader */
+void NOVAembed::on_BootLoaderCompile_pushButton_clicked()
+{
+    QFile scriptfile("/tmp/script");
+    update_status_bar("Compiling boot loader for "+ui->Board_comboBox->currentText()+" ... ");
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/bash\n");
+    out << QString("cd "+instpath+"/Utils\n");
+    out << QString(". ./version\n");
+    if ( ui->Board_comboBox->currentText() == "P Series")
+    {
+        out << QString("cd nxp\n");
+        out << QString("./umakeP > "+instpath+"/Logs/umakeP.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "U5")
+    {
+        out << QString("cd nxp\n");
+        out << QString("./umakeU > "+instpath+"/Logs/umakeU.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "N1")
+    {
+        out << QString("cd nxp\n");
+        out << QString("./umakeN1 > "+instpath+"/Logs/umakeN1.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "M8")
+    {
+        out << QString("cd qcom\n");
+        out << QString("./umakeM8 > "+instpath+"/Logs/umakeM8.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "M7")
+    {
+        out << QString("cd rock\n");
+        out << QString("./umakeM7 > "+instpath+"/Logs/umakeM7.log\n");
+    }
+
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar("Boot loader for "+ui->Board_comboBox->currentText()+" compiled");
+        BootValid = "OK";
+        ui->BootStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
+    }
+    else
+    {
+        update_status_bar("Error building boot loader for "+ui->Board_comboBox->currentText());
+        BootValid = "INVALID";
+        ui->BootStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
+    }
+    storeNOVAembed_ini();
+}
+
+/* Kernel */
+void NOVAembed::on_KernelXconfig_pushButton_clicked()
+{
+    QFile scriptfile("/tmp/script");
+    QString config_file;
+
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("cd "+instpath+"/Kernel/"+Kernel+"\n");
+    out << QString(". ../../Utils/"+SourceMeFile+"\n");
+
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        config_file = "imx_novasomp_defconfig";
+    if ( ui->Board_comboBox->currentText() == "U5")
+        config_file = "imx_v7_defconfig";
+    if ( ui->Board_comboBox->currentText() == "M8")
+        config_file = "qcom_defconfig";
+    if ( ui->Board_comboBox->currentText() == "M9")
+        config_file = "sun50iw6p1smp_defconfig";
+    if ( ui->Board_comboBox->currentText() == "N1")
+        config_file = "NOVAsomN1_defconfig";
+
+    if ( !QFile(instpath+"/Kernel/"+Kernel+"/.config").exists() )
+    {
+            out << QString("make "+config_file+"\n");
+    }
+    out << QString("make xconfig\n");
+    out << QString("echo \"0\" > /tmp/result\n");
+
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar("Kernel configuration done");
+        ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
+        KernelValid = "OK";
+    }
+    else
+    {
+        update_status_bar("Configuration error");
+        KernelValid = "INVALID";
+        ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
+    }
+    storeNOVAembed_ini();
+}
+
+QString LinuxSplashLogos =  "/Devel/NOVAsom6_SDK/Utils/LinuxSplashLogos/";
+extern QString CurrentSplashName;
+
+void NOVAembed::on_KernelCompile_pushButton_clicked()
+{
+    if ( !QFile(instpath+"/Kernel/"+Kernel+"/.config").exists() )
+    {
+        on_KernelReCompile_pushButton_clicked();
+        return;
+    }
+
+    QFile scriptfile("/tmp/script");
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    update_status_bar("Compiling "+Kernel);
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("echo \"Compiled on `date`\"> "+instpath+"/Logs/kmake.log\n");
+    if ( ui->Board_comboBox->currentText() == "P Series")
+    {
+        out << QString("cd "+instpath+"/Deploy\n");
+        out << QString("rm zImage ; ln -s ../Kernel/"+Kernel+"/arch/arm/boot/zImage\n");
+        out << QString("cd "+instpath+"/Utils/nxp\n");
+        out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
+        QString this_kernel=NXP_P_KERNEL;
+        out << QString("if [ -f ../../FileSystem/"+ui->FileSystemSelectedlineEdit->text()+"/output/images/rootfs.ext2.gz ]; then\n");
+        out << QString("    if [ -f ../../Kernel/"+this_kernel+"/vmlinux ]; then\n");
+        out << QString("        cd ../../Kernel/"+this_kernel+"\n");
+        out << QString("        ./install_modules_local "+ui->FileSystemSelectedlineEdit->text()+" >> "+instpath+"/Logs/kmake.log\n");
+        out << QString("    fi\n");
+        out << QString("fi\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "U5")
+    {
+        out << QString("cd "+instpath+"/Deploy\n");
+        out << QString("rm zImage ; ln -s ../Kernel/"+Kernel+"/arch/arm/boot/zImage\n");
+        out << QString("cd "+instpath+"/Utils/nxp\n");
+        out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "M8")
+    {
+        out << QString("cd "+instpath+"/Deploy\n");
+        out << QString("rm Image ; ln -s ../Kernel/"+Kernel+"/arch/arm64/boot/Image\n");
+        out << QString("cd "+instpath+"/Utils/qcom\n");
+        out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "M7")
+    {
+        out << QString("cd "+instpath+"/Utils/rock\n");
+        out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "N1")
+    {
+        out << QString("cd "+instpath+"/Deploy\n");
+        out << QString("rm Image ; ln -s ../Kernel/"+Kernel+"/arch/arm64/boot/Image\n");
+        out << QString("cd "+instpath+"/Utils/nxp\n");
+        out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
+    }
+
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar("Kernel built succesfully");
+        KernelValid = "OK";
+        ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
+    }
+    else
+    {
+        update_status_bar("Kernel Build error");
+        KernelValid = "INVALID";
+        ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
+    }
+    storeNOVAembed_ini();
+}
+
+void NOVAembed::on_KernelReCompile_pushButton_clicked()
+{
+    QFile scriptfile("/tmp/script");
+    QString config_file;
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    update_status_bar("ReCompiling "+Kernel);
+
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("echo \"Compiled on `date`\"> "+instpath+"/Logs/kmake.log\n");
+    if ( ui->Board_comboBox->currentText() == "P Series")
+    {
+        out << QString("cd "+instpath+"/Deploy\n");
+        out << QString("rm zImage ; ln -s ../Kernel/"+Kernel+"/arch/arm/boot/zImage\n");
+        out << QString("cd "+instpath+"/Utils/nxp\n");
+        config_file = "imx_novasomp_defconfig";
+        out << QString("./kremake "+Kernel+" "+SourceMeFile+" "+config_file+" >> "+instpath+"/Logs/kremake.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "U5")
+    {
+        out << QString("cd "+instpath+"/Deploy\n");
+        out << QString("rm zImage ; ln -s ../Kernel/"+Kernel+"/arch/arm/boot/zImage\n");
+        out << QString("cd "+instpath+"/Utils/nxp\n");
+        config_file = "imx_v7_defconfig";
+        out << QString("./kremake "+Kernel+" "+SourceMeFile+" "+config_file+" >> "+instpath+"/Logs/kremake.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "N1")
+    {
+        out << QString("cd "+instpath+"/Deploy\n");
+        out << QString("rm Image ; ln -s ../Kernel/"+Kernel+"/arch/arm/boot/Image\n");
+        out << QString("cd "+instpath+"/Utils/nxp\n");
+        config_file = "NOVAsomN1_defconfig";
+        out << QString("./kremake "+Kernel+" "+SourceMeFile+" "+config_file+" >> "+instpath+"/Logs/kremake.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "M8")
+    {
+        out << QString("cd "+instpath+"/Deploy\n");
+        out << QString("rm Image ; ln -s ../Kernel/"+Kernel+"/arch/arm64/boot/Image\n");
+        out << QString("cd "+instpath+"/Utils/qcom\n");
+        config_file = "qcom_defconfig";
+        out << QString("./kremake "+Kernel+" "+SourceMeFile+" "+config_file+" >> "+instpath+"/Logs/kremake.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "M7")
+    {
+        out << QString("cd "+instpath+"/Deploy\n");
+        out << QString("rm Image ; ln -s ../Kernel/"+Kernel+"/arch/arm64/boot/Image\n");
+        out << QString("cd "+instpath+"/Utils/rock\n");
+        config_file = "rockchip_linux_defconfig";
+        out << QString("./kremake "+Kernel+" "+SourceMeFile+" "+config_file+" >> "+instpath+"/Logs/kremake.log\n");
+    }
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar("Kernel re-built succesfully");
+        ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
+        KernelValid = "OK";
+    }
+    else
+    {
+        update_status_bar("Kernel re-build error");
+        ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
+        KernelValid = "INVALID";
+    }
+    storeNOVAembed_ini();
+}
+
+/* File System */
+void NOVAembed::on_SelectFileSystem_pushButton_clicked()
+{
+    //QString directory =  QFileDialog::getOpenFileName(this,"Open File System",instpath+"/FileSystem/","*.*");
+    QString directory = QFileDialog::getExistingDirectory(this, tr("Open Directory"),instpath+"/FileSystem/",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QFileInfo fileInfo(directory );
+    QString filesystemname(fileInfo.fileName());
+    ui->FileSystemSelectedlineEdit->setText(filesystemname);
+    FileSystemName = filesystemname;
+    storeNOVAembed_ini();
+}
+
+void NOVAembed::on_LaunchMenuConfig_pushButton_clicked()
+{
+    if ( ui->FileSystemSelectedlineEdit->text() == "")
+    {
+       update_status_bar("File system name is empty");
+       return;
+    }
+    update_status_bar("Configuring "+FileSystemName+" ...");
+    QFile scriptfile("/tmp/script");
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("cd "+instpath+"/FileSystem/"+FileSystemName+"\n");
+    out << QString("make menuconfig\n");
+    out << QString("echo \"0\" > /tmp/result\n");
+
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar("Buildroot Configuration Finished");
+        FSValid = "OK";
+        ui->FileSystemStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
+    }
+    else
+    {
+        update_status_bar("Configuration error");
+        FSValid = "INVALID";
+        ui->FileSystemStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
+    }
+    storeNOVAembed_ini();
+}
+
+void NOVAembed::on_LaunchBusyboxMenuConfig_pushButton_clicked()
+{
+    if ( ui->FileSystemSelectedlineEdit->text() == "")
+    {
+       update_status_bar("File system name is empty");
+       return;
+    }
+    update_status_bar("Configuring "+FileSystemName+" ...");
+    QFile scriptfile("/tmp/script");
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("cd "+instpath+"/FileSystem/"+FileSystemName+"\n");
+    out << QString("make busybox-menuconfig\n");
+    out << QString("echo \"0\" > /tmp/result\n");
+
+    scriptfile.close();
+    if ( run_script() == 0)
+        update_status_bar("Busybox Configuration Finished");
+    else
+        update_status_bar("Configuration error");
+}
+
+void NOVAembed::on_ThisIsReferenceServer_checkBox_clicked(bool checked)
+{
+    QString IP;
+
+    ui->iperror_label->setVisible(false);
+
+    if ( checked == false )
+    {
+        ui->REFERENCE_SERVER_label->setEnabled(true);
+        ui->REFERENCE_SERVER_lineEdit->setEnabled(true);
+        IP=ui->REFERENCE_SERVER_lineEdit->text();
+    }
+    else
+    {
+        ui->REFERENCE_SERVER_label->setEnabled(false);
+        ui->REFERENCE_SERVER_lineEdit->setEnabled(false);
+        QNetworkInterface eth1Ip = QNetworkInterface::interfaceFromName("enp0s3");
+        QList<QNetworkAddressEntry> entries = eth1Ip.addressEntries();
+        if (!entries.isEmpty()) {
+            QNetworkAddressEntry entry = entries.first();
+            IP=entry.ip().toString();
+        }
+    }
+    ui->REFERENCE_SERVER_lineEdit->setText(IP);
+
+}
+
+void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
+{
+    if ( ui->FileSystemSelectedlineEdit->text().isEmpty())
+    {
+        update_status_bar("File system name is empty");
+        return;
+    }
+    QHostAddress myIP;
+    QString IP=ui->REFERENCE_SERVER_lineEdit->text();
+    if( myIP.setAddress(ui->REFERENCE_SERVER_lineEdit->text()) )
+    {
+        ui->iperror_label->setVisible(false);
+    }
+    else
+    {
+        ui->iperror_label->setVisible(true);
+        update_status_bar("Invalid IP address");
+        return;
+    }
+    QFile scriptfile("/tmp/script");
+    update_status_bar("Compiling "+ui->FileSystemSelectedlineEdit->text()+" ...");
+
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("cd "+instpath+"/Utils\n");
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" P > "+instpath+"/Logs/FileSystem_Pmake.log\n");
+    if ( ui->Board_comboBox->currentText() == "U5")
+        out << QString(".MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" U > "+instpath+"/Logs/FileSystem_Umake.log\n");
+    if ( ui->Board_comboBox->currentText() == "N1")
+        out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" N1 > "+instpath+"/Logs/FileSystem_N1make.log\n");
+    if ( ui->Board_comboBox->currentText() == "M8")
+        out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" M8 > "+instpath+"/Logs/FileSystem_M8make.log\n");
+    if ( ui->Board_comboBox->currentText() == "M7")
+        out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" M7 > "+instpath+"/Logs/FileSystem_M7make.log\n");
+
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar("File system "+ui->FileSystemSelectedlineEdit->text()+" deployed");
+        DeployedFileSystemName = FileSystemName = ui->FileSystemSelectedlineEdit->text();
+        FSValid = "OK";
+        ui->FileSystemStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
+        initrd_helper();
+        if ( ui->Board_comboBox->currentText() == "P Series")
+            Last_P_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
+        if ( ui->Board_comboBox->currentText() == "U5")
+            Last_U_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
+        if ( ui->Board_comboBox->currentText() == "N1")
+            Last_N1_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
+        if ( ui->Board_comboBox->currentText() == "M8")
+            Last_M8_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
+        if ( ui->Board_comboBox->currentText() == "M7")
+            Last_M7_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
+        std::cout << FileSystemName.toLatin1().constData() << std::flush;
+    }
+    else
+    {
+        update_status_bar("Build error");
+        FSValid = "INVALID";
+        ui->FileSystemStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
+        if ( ui->Board_comboBox->currentText() == "P Series")
+            Last_P_FileSystem = "";
+        if ( ui->Board_comboBox->currentText() == "U5")
+            Last_U_FileSystem = "";
+        if ( ui->Board_comboBox->currentText() == "N1")
+            Last_N1_FileSystem = "";
+        if ( ui->Board_comboBox->currentText() == "M8")
+            Last_M8_FileSystem = "";
+        if ( ui->Board_comboBox->currentText() == "M7")
+            Last_M7_FileSystem = "";
+    }
+    storeNOVAembed_ini();
+}
+
+
+/* uSD write */
+
+void NOVAembed::on_UserPartition_comboBox_currentIndexChanged(const QString &arg1)
+{
+    NumberOfUserPartitions = arg1;
+    if ( NumberOfUserPartitions == "-")
+    {
+                ui->label_78->setVisible(false);
+                ui->UserPartition1Size_lineEdit->setVisible(false);
+                ui->label_79->setVisible(false);
+                ui->UserPartition2Size_lineEdit->setVisible(false);
+
+    }
+    if ( NumberOfUserPartitions == "1")
+    {
+                ui->label_78->setVisible(true);
+                ui->UserPartition1Size_lineEdit->setVisible(true);
+                ui->label_79->setVisible(false);
+                ui->UserPartition2Size_lineEdit->setVisible(false);
+    }
+    if ( NumberOfUserPartitions == "2")
+    {
+                ui->label_78->setVisible(true);
+                ui->UserPartition1Size_lineEdit->setVisible(true);
+                ui->label_79->setVisible(true);
+                ui->UserPartition2Size_lineEdit->setVisible(true);
+    }
+    storeNOVAembed_ini();
+}
+
+
+void NOVAembed::on_UserPartition1Size_lineEdit_textChanged(const QString &arg1)
+{
+    UserPartition1Size = arg1;
+    storeNOVAembed_ini();
+}
+
+
+void NOVAembed::on_UserPartition2Size_lineEdit_textChanged(const QString &arg1)
+{
+    UserPartition2Size = arg1;
+    storeNOVAembed_ini();
+}
+
+void NOVAembed::on_uSD_Device_comboBox_currentIndexChanged(const QString &arg1)
+{
+    uSD_Device = arg1;
+    storeNOVAembed_ini();
+}
+
+QString NOVAsomParamsName;
+void NOVAembed::NOVAsom_Params_helper()
+{
+    if ( ui->Board_comboBox->currentText() == "P Series")
+    {
+        if ( ui->PrimaryVideo_comboBox->currentText() == "HDMI 1920x1080")
+        {
+            NOVAsomParamsName = "NOVAsomParams_P_HDMI_1920x1080";
+        }
+        if ( ui->PrimaryVideo_comboBox->currentText() == "HDMI 1280x720" )
+        {
+            NOVAsomParamsName = "NOVAsomParams_P_HDMI_1280x720";
+        }
+        if ( ui->PrimaryVideo_comboBox->currentText() == "LVDS 1920x1080 2Ch")
+        {
+            NOVAsomParamsName = "NOVAsomParams_P_LVDS_1920x10802CH";
+        }
+        if ( ui->PrimaryVideo_comboBox->currentText() == "LVDS 1366x768")
+        {
+            NOVAsomParamsName = "NOVAsomParams_P_LVDS_1366x768";
+        }
+        if ( ui->PrimaryVideo_comboBox->currentText() == "LVDS 1280x800")
+        {
+            if ( ui->PriVideo_24bit_checkBox->isChecked() == true)
+                NOVAsomParamsName = "NOVAsomParams_P_LVDS_1280x800_24";
+            else
+                NOVAsomParamsName = "NOVAsomParams_P_LVDS_1280x800_18";
+        }
+        if ( ui->PrimaryVideo_comboBox->currentText() == "LVDS 1024x768")
+        {
+            NOVAsomParamsName = "NOVAsomParams_P_LVDS_1024x768";
+        }
+        if ( ui->PrimaryVideo_comboBox->currentText() == "LVDS 1024x600")
+        {
+            NOVAsomParamsName = "NOVAsomParams_P_LVDS_1024x600";
+        }
+        if ( ui->PrimaryVideo_comboBox->currentText() == "LVDS 800x600")
+        {
+            NOVAsomParamsName = "NOVAsomParams_P_LVDS_800x600";
+        }
+        if ( ui->PrimaryVideo_comboBox->currentText() == "LVDS 800x480")
+        {
+            NOVAsomParamsName = "NOVAsomParams_P_LVDS_800x480";
+        }
+    }
+    if ( ui->Board_comboBox->currentText() == "U5")
+    {
+        if ( ui->U_PrimaryVideo_comboBox->currentText() == "800x480")
+        {
+            NOVAsomParamsName = "NOVAsomParams_U5_800x480";
+        }
+        if ( ui->U_PrimaryVideo_comboBox->currentText() == "480x272")
+        {
+            NOVAsomParamsName = "NOVAsomParams_U5_480x272";
+        }
+    }
+    if ( ui->Board_comboBox->currentText() == "N1")
+    {
+        NOVAsomParamsName = "NOVAsomParams_N1";
+    }
+    if ( ui->Board_comboBox->currentText() == "M7")
+    {
+        NOVAsomParamsName = "NOVAsomParams_M7";
+    }
+}
+
+void NOVAembed::on_Write_uSD_pushButton_clicked()
+{
+    /*uSD_Device_comboBox*/
+
+    uSD_Device = ui->uSD_Device_comboBox->currentText();
+    QFile scriptfile("/tmp/script");
+    update_status_bar("Writing uSD with "+FileSystemName+" ...");
+
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+
+    NOVAsom_Params_helper();
+
+    QFileInfo fi(ui->UserBSPFselectedlineEdit->text());
+
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+
+    if ( ui->Board_comboBox->currentText() == "U5")
+    {
+        out << QString("cd "+instpath+"/Utils/nxp\n");
+        out << QString("./flashU "+NumberOfUserPartitions+" "+UserPartition1Size+" "+UserPartition2Size+" /dev/"+uSD_Device+" "+fi.baseName()+" "+NOVAsomParamsName+" "+ui->initRdSize_lineEdit->text()+" > "+instpath+"/Logs/uSD_Write.log\n");
+        if ( ui->UserAutoRun_checkBox->isChecked())
+            out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "P Series")
+    {
+        out << QString("cd "+instpath+"/Utils/nxp\n");
+        out << QString("./flashP "+NumberOfUserPartitions+" "+UserPartition1Size+" "+UserPartition2Size+" /dev/"+uSD_Device+" "+"SDL_"+fi.baseName()+".dtb"+" "+"QUAD_"+fi.baseName()+".dtb"+" "+NOVAsomParamsName+" "+ui->initRdSize_lineEdit->text()+" > "+instpath+"/Logs/uSD_Write.log\n");
+        if ( ui->UserAutoRun_checkBox->isChecked())
+            out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "N1")
+    {
+        out << QString("cd "+instpath+"/Utils/nxp\n");
+        out << QString("./flashN1 "+NumberOfUserPartitions+" "+UserPartition1Size+" "+UserPartition2Size+" /dev/"+uSD_Device+" "+instpath+"/Kernel/"+NXP_N1_KERNEL+"/arch/arm64/boot/dts/freescale/fsl-ls1012a-frdm.dtb "+NOVAsomParamsName+" "+ui->initRdSize_lineEdit->text()+" > "+instpath+"/Logs/uSD_Write.log\n");
+        if ( ui->UserAutoRun_checkBox->isChecked())
+            out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "M8")
+    {
+        out << QString("cd "+instpath+"/Utils/qcom\n");
+        out << QString("./flashM8 /dev/"+uSD_Device+" > "+instpath+"/Logs/uSD_Write.log\n");
+        if ( ui->UserAutoRun_checkBox->isChecked())
+            out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write.log\n");
+    }
+    if ( ui->Board_comboBox->currentText() == "M7")
+    {
+        out << QString("cd "+instpath+"/Utils/rock\n");
+        out << QString("./flashM7 "+NumberOfUserPartitions+" "+UserPartition1Size+" "+UserPartition2Size+" /dev/"+uSD_Device+" NotSet NotSet NOVAsomParams_M7 "+ui->initRdSize_lineEdit->text()+" > "+instpath+"/Logs/uSD_Write.log\n");
+        if ( ui->UserAutoRun_checkBox->isChecked())
+            out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write.log\n");
+    }
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar("uSD successfully written, file system is "+FileSystemName);
+        DeployedFileSystemName = FileSystemName;
+        storeNOVAembed_ini();
+    }
+    else
+        update_status_bar("Write error");
+}
+
+void NOVAembed::on_GenerateFileSystem_pushButton_clicked()
+{
+    if ( ui->NewFileSystemSelectedlineEdit->text().isEmpty())
+    {
+        update_status_bar("File System name can't be empty");
+        return;
+    }
+    if ( QDir(instpath+"/FileSystem/"+ui->NewFileSystemSelectedlineEdit->text()).exists() )
+    {
+        update_status_bar("A file system called "+ui->NewFileSystemSelectedlineEdit->text()+" already exists");
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "A file system called "+ui->NewFileSystemSelectedlineEdit->text()+" already exists      ","Overwrite?", QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::Yes)
+        {
+            QDir dir( instpath+"/FileSystem/"+ui->NewFileSystemSelectedlineEdit->text() );
+            dir.removeRecursively();
+        }
+        else
+        {
+            return;
+        }
+    }
+    QString testing = ui->NewFileSystemSelectedlineEdit->text().remove(" ");
+    if ( testing != ui->NewFileSystemSelectedlineEdit->text() )
+    {
+        update_status_bar("Spaces in File System name not allowed");
+        return;
+    }
+    QFile scriptfile("/tmp/script");
+    update_status_bar("Creating file system "+ui->NewFileSystemSelectedlineEdit->text()+" ...");
+
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("cd "+instpath+"/Utils\n");
+    out << QString("./SetupFs "+ui->NewFileSystemSelectedlineEdit->text()+" \""+ui->Board_comboBox->currentText()+"\" "+ ui->NewFileSystemConfigurationcomboBox->currentText()+"\n");
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar("File System "+ui->NewFileSystemSelectedlineEdit->text()+" generated succesfully");
+        DeployedFileSystemName = FileSystemName = ui->NewFileSystemSelectedlineEdit->text();
+        ui->FileSystemSelectedlineEdit->setText(DeployedFileSystemName);
+        storeNOVAembed_ini();
+    }
+    else
+        update_status_bar("File System Creation error");
+}
+
+void NOVAembed::on_AddFileSystemConfig_pushButton_clicked()
+{
+    QString fileName;
+    QString dest_file;
+
+    if ( ui->Board_comboBox->currentText() == "P Series")
+    {
+        fileName = QFileDialog::getSaveFileName(this,tr("Select .config"), instpath+"/Utils/Configurations/PClass_Buildroot_",tr(".config (PClass_*.config)"));
+        dest_file = instpath+"/Utils/Configurations/PClass_Buildroot_";
+    }
+    if ( ui->Board_comboBox->currentText() == "U5")
+    {
+        fileName = QFileDialog::getSaveFileName(this,tr("Select .config"), instpath+"/Utils/Configurations/U5Class_Buildroot_",tr(".config (U5Class_*.config)"));
+        dest_file = instpath+"/Utils/Configurations/U5Class_Buildroot_";
+    }
+    if ( ui->Board_comboBox->currentText() == "M8")
+    {
+        fileName = QFileDialog::getSaveFileName(this,tr("Select .config"), instpath+"/Utils/Configurations/M8Class_Buildroot_",tr(".config (M8Class_*.config)"));
+        dest_file = instpath+"/Utils/Configurations/M8Class_Buildroot_";
+    }
+    if ( ui->Board_comboBox->currentText() == "M7")
+    {
+        fileName = QFileDialog::getSaveFileName(this,tr("Select .config"), instpath+"/Utils/Configurations/M7Class_Buildroot_",tr(".config (M7Class_*.config)"));
+        dest_file = instpath+"/Utils/Configurations/M7Class_Buildroot_";
+    }
+    if (fileName.isEmpty())
+    {
+        update_status_bar(fileName+" overwrite cancelled");
+        return;
+    }
+    else
+    {
+        update_status_bar(fileName+" selected");
+    }
+    QFile::copy(instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+"/.config", fileName);
+    QFile::copy(instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+"/BusyBox.config", instpath+"/Utils/Configurations/BusyBox_"+ui->FileSystemSelectedlineEdit->text()+".config");
+    compile_NewFileSystemFileSystemConfigurationcomboBox();
+}
+
+/* External file systems */
+QString extfsname;
+QString extfsfilename;
+QString extfsversion;
+QString extfsboard;
+
+void NOVAembed::on_ExtFS_CheckAvailable_FS_pushButton_clicked()
+{
+const char *cmd;
+QByteArray ba;
+QString repo_server=KERNEL_REPO_SERVER;
+QString backup_repo_server=BKP_KERNEL_REPO_SERVER;
+QString currentboard=ui->Board_comboBox->currentText();
+QString content;
+QString ExternalFileSystemsFile;
+QString Qcmd;
+
+    ui->ExtFS_Available_comboBox->clear();
+    ui->ExtFS_Available_comboBox->setCurrentIndex(0);
+
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        currentboard="P";
+
+    update_status_bar("Downloading External File System List");
+
+    Qcmd = "cd /tmp; rm nova_os*.* ;wget http://"+repo_server+"/OS/"+currentboard+"/nova_os.txt";
+    update_status_bar("Trying "+repo_server);
+    ba = Qcmd.toLatin1();
+    cmd = ba.data();
+    system(cmd);
+
+    QFile file("/tmp/nova_os.txt");
+    if ( file.size() < 10 )
+    {
+        Qcmd = "cd /tmp; rm nova_os*.* ;wget http://"+backup_repo_server+"/OS/"+currentboard+"/nova_os.txt";
+        update_status_bar("Trying "+backup_repo_server);
+        ba = Qcmd.toLatin1();
+        cmd = ba.data();
+        system(cmd);
+        QFile file1("/tmp/nova_os.txt");
+        if ( file1.size() < 10 )
+        {
+            update_status_bar("Failed to retrieve External File System List");
+            return;
+        }
+        else
+            update_status_bar("External File System List retrieved from "+backup_repo_server);
+    }
+    else
+        update_status_bar("External File System List retrieved from "+repo_server);
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(&file);
+        while (!stream.atEnd())
+        {
+            content = stream.readLine();
+        }
+        file.close();
+    }
+    ui->ExtFS_Available_comboBox->setCurrentIndex(0);
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(&file);
+        while (!stream.atEnd())
+        {
+            content = stream.readLine();
+            if ( content.length() > 20 )
+            {
+                extfsfilename = content.split(" ").at(0);
+                extfsname = content.split(" ").at(1);
+                extfsboard = content.split(" ").at(2);
+                extfsversion = content.split(" ").at(3);
+                ui->ExtFSName_lineEdit->setText(extfsname);
+                ui->ExtFSFileName_lineEdit->setText(extfsfilename);
+                ui->ExtFSVersion_lineEdit->setText(extfsversion);
+                ui->ExtFSBoard_lineEdit->setText(extfsboard);
+                if ( ui->Board_comboBox->currentText() == "M8")
+                    ExternalFileSystemsFile=instpath+"/ExternalFileSystems/M8/"+extfsfilename;
+                if ( ui->Board_comboBox->currentText() == "M9")
+                    ExternalFileSystemsFile=instpath+"/ExternalFileSystems/M9/"+extfsfilename;
+                if ( ui->Board_comboBox->currentText() == "U5")
+                    ExternalFileSystemsFile=instpath+"/ExternalFileSystems/U5/"+extfsfilename;
+                if ( ui->Board_comboBox->currentText() == "P Series")
+                    ExternalFileSystemsFile=instpath+"/ExternalFileSystems/P/"+extfsfilename;
+                QFileInfo check_file(ExternalFileSystemsFile);
+                if ( ! check_file.exists() )
+                    ui->ExtFS_Available_comboBox->addItem(extfsname);
+                QString locextfsname = content.split(" ").at(1);
+                if ( locextfsname == ui->ExtFS_Available_comboBox->currentText())
+                {
+                    extfsname = content.split(" ").at(1);
+                    extfsfilename = content.split(" ").at(0);
+                    extfsboard = content.split(" ").at(2);
+                    extfsversion = content.split(" ").at(3);
+                    ui->ExtFSName_lineEdit->setText(extfsname);
+                    ui->ExtFSFileName_lineEdit->setText(extfsfilename);
+                    ui->ExtFSVersion_lineEdit->setText(extfsversion);
+                    ui->ExtFSBoard_lineEdit->setText(extfsboard);
+                }
+            }
+        }
+        file.close();
+    }
+}
+
+void NOVAembed::on_ExtFS_Available_comboBox_currentIndexChanged(const QString &arg1)
+{
+    ui->ExtFS_DownloadSelected_FS_pushButton->setText("Download "+ui->ExtFS_Available_comboBox->currentText());
+    QFile file("/tmp/nova_os.txt");
+    QString content;
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(&file);
+        while (!stream.atEnd())
+        {
+            content = stream.readLine();
+            QString locextfsname = content.split(" ").at(1);
+            if ( locextfsname == arg1)
+            {
+                extfsname = content.split(" ").at(1);
+                extfsfilename = content.split(" ").at(0);
+                extfsboard = content.split(" ").at(2);
+                extfsversion = content.split(" ").at(3);
+                ui->ExtFSName_lineEdit->setText(extfsname);
+                ui->ExtFSFileName_lineEdit->setText(extfsfilename);
+                ui->ExtFSVersion_lineEdit->setText(extfsversion);
+                ui->ExtFSBoard_lineEdit->setText(extfsboard);
+            }
+        }
+        file.close();
+    }
+}
+
+void NOVAembed::on_ExtFS_DownloadSelected_FS_pushButton_clicked()
+{
+    QFile scriptfile("/tmp/script");
+    QString repo_server=KERNEL_REPO_SERVER;
+    QString currentboard=ui->Board_comboBox->currentText();
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        currentboard="P";
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("cd "+instpath+"/ExternalFileSystems/"+currentboard+"\n");
+    out << QString("wget http://"+repo_server+"/OS/"+currentboard+"/"+ui->ExtFSFileName_lineEdit->text()+"\n");
+    out << QString("echo 0 > /tmp/result\n");
+    out << QString("return 0\n");
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        compile_ExtFS_comboBox();
+        update_status_bar("File System "+ui->ExtFS_Available_comboBox->currentText()+" downloaded");
+    }
+    else
+        update_status_bar("File System "+ui->ExtFS_Available_comboBox->currentText()+" download error");
+}
+
+void NOVAembed::on_ExtFS_Write_uSD_pushButton_clicked()
+{
+    QFile scriptfile("/tmp/script");
+    QString full_path;
+    QFileInfo fi(ui->ExtFSBSPFselectedlineEdit->text());
+
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    if ( ui->Board_comboBox->currentText() == "U5")
+        full_path=instpath+"/ExternalFileSystems/U5/"+ui->ExtFS_comboBox->currentText();
+    if ( ui->Board_comboBox->currentText() == "M8")
+        full_path=instpath+"/ExternalFileSystems/M8/"+ui->ExtFS_comboBox->currentText();
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        full_path=instpath+"/ExternalFileSystems/P/"+ui->ExtFS_comboBox->currentText();
+    if ( ui->Board_comboBox->currentText() == "M9")
+        full_path=instpath+"/ExternalFileSystems/M8/"+ui->ExtFS_comboBox->currentText();
+
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("cd "+instpath+"/Utils\n");
+
+    if ( ui->ExtFSBSPFselectedlineEdit->text() == "")
+        out << QString("./flash_extfs /dev/"+ui->ExtFS_uSD_Device_comboBox->currentText()+"  "+full_path+" > "+instpath+"/Logs/extfs.log \n");
+    else
+        out << QString("./flash_extfs /dev/"+ui->ExtFS_uSD_Device_comboBox->currentText()+" "+full_path+" "+"SDL_"+fi.baseName()+".dtb"+" "+"QUAD_"+fi.baseName()+".dtb"+" > "+instpath+"/Logs/extfs.log \n");
+    scriptfile.close();
+    update_status_bar("Writing image "+ui->ExtFS_comboBox->currentText()+" ...");
+    if ( run_script() == 0)
+    {
+        update_status_bar("File System "+ui->ExtFSFileName_lineEdit->text()+" written");
+    }
+    else
+        update_status_bar("File System Creation error");
+}
+
+void NOVAembed::on_ExtFSBSPFSelect_pushButton_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/PClass_bspf",tr("BSPF (*.bspf)"));
+    if (fileName.isEmpty())
+        return;
+    else
+    {
+        QFileInfo fileinfo(fileName);
+        fileinfo.baseName();
+        ui->ExtFSBSPFselectedlineEdit->setText(fileinfo.baseName());
+    }
+}
+
+/* External file systems end */
+
+void NOVAembed::on_UserBSPFSelect_pushButton_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/PClass_bspf",tr("BSPF (*.bspf)"));
+    if (fileName.isEmpty())
+        return;
+    else
+    {
+        QFileInfo fileinfo(fileName);
+        fileinfo.baseName();
+        ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
+        if ( ui->Board_comboBox->currentText() == "M8")
+            Last_M8_BSPFactoryFile = ui->UserBSPFselectedlineEdit->text();
+        if ( ui->Board_comboBox->currentText() == "P Series")
+            Last_P_BSPFactoryFile = ui->UserBSPFselectedlineEdit->text();
+        if ( ui->Board_comboBox->currentText() == "U5")
+            Last_U_BSPFactoryFile = ui->UserBSPFselectedlineEdit->text();
+        storeNOVAembed_ini();
+    }
+}
+
+void NOVAembed::on_UserAutoRun_checkBox_toggled(bool checked)
+{
+    if ( checked == true)
+    {
+        AutoRunSelected = "true";
+        ui->UserAutoRunSelect_pushButton->setEnabled(true);
+        ui->UserAutoRunSelectedlineEdit->setEnabled(true);
+        ui->UserAutoRunSelectedlineEdit->setText(AutoRunFolder);
+        ui->Write_AutoRun_pushButton->setEnabled(true);
+    }
+    else
+    {
+        AutoRunSelected = "false";
+        ui->UserAutoRunSelect_pushButton->setEnabled(false);
+        ui->UserAutoRunSelectedlineEdit->setEnabled(false);
+        ui->Write_AutoRun_pushButton->setEnabled(false);
+    }
+    storeNOVAembed_ini();
+}
+
+void NOVAembed::on_UserAutoRunSelect_pushButton_clicked()
+{
+    QString directory = QFileDialog::getExistingDirectory(this, tr("Select the AutoRun folder"),instpath+"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    ui->UserAutoRunSelectedlineEdit->setText(directory);
+    AutoRunFolder = directory;
+    ui->Write_AutoRun_pushButton->setEnabled(true);
+    storeNOVAembed_ini();
+}
+
+void NOVAembed::on_Write_AutoRun_pushButton_clicked()
+{
+    uSD_Device = ui->uSD_Device_comboBox->currentText();
+    QFile scriptfile("/tmp/script");
+    update_status_bar("Writing AutoRun using folder "+ui->UserAutoRunSelectedlineEdit->text()+" ...");
+
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("cd "+instpath+"/Utils\n");
+    out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write\n");
+    scriptfile.close();
+
+    if ( run_script() == 0)
+    {
+        update_status_bar("AutoRun successfully written with folder "+ui->UserAutoRunSelectedlineEdit->text());
+    }
+    else
+        update_status_bar("AutoRun Write error");
+}
+
+void NOVAembed::on_PrimaryVideo_comboBox_currentTextChanged(const QString &arg1)
+{
+    CurrentPrimaryVideo = ui->PrimaryVideo_comboBox->currentText();
+}
+
+void NOVAembed::on_ViewBootLog_pushButton_clicked()
+{
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        system("kwrite "+instpath.toLatin1()+"/Logs/umakeP.log");
+    if ( ui->Board_comboBox->currentText() == "U5")
+        system("kwrite "+instpath.toLatin1()+"/Logs/umakeU.log");
+    if ( ui->Board_comboBox->currentText() == "M8")
+        system("kwrite "+instpath.toLatin1()+"/Logs/umakeM8.log");
+    if ( ui->Board_comboBox->currentText() == "M9")
+        system("kwrite "+instpath.toLatin1()+"/Logs/umakeM9.log");
+}
+
+void NOVAembed::on_ViewFSLog_pushButton_clicked()
+{
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_Pmake.log");
+    if ( ui->Board_comboBox->currentText() == "U5")
+        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_Umake.log");
+    if ( ui->Board_comboBox->currentText() == "M8")
+        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_M8make.log");
+    if ( ui->Board_comboBox->currentText() == "M9")
+        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_M9make.log");
+}
+
+void NOVAembed::on_ViewKernelLog_pushButton_clicked()
+{
+    system("kwrite "+instpath.toLatin1()+"/Logs/kmake.log");
+}
+
+
+
+void NOVAembed::on_ViewuSDwriteLog_pushButton_clicked()
+{
+    system("kwrite "+instpath.toLatin1()+"/Logs/uSD_Write.log");
+}
+
+
+
+void NOVAembed::on_ViewPreCompiledLog_pushButton_clicked()
+{
+    system("kwrite "+instpath.toLatin1()+"/Logs/extfs.log");
+}
+
+
+
+
+/*****************************************************************************************************************************************************************************************/
+/*                                                                             BKF Tab END                                                                                               */
+/*****************************************************************************************************************************************************************************************/
