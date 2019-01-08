@@ -310,28 +310,6 @@ void NOVAembed::on_actionExit_triggered()
 /*****************************************************************************************************************************************************************************************/
 /*                                                                              Helper Functions                                                                                         */
 /*****************************************************************************************************************************************************************************************/
-void NOVAembed::disable_kernelbuttons()
-{
-
-}
-
-void NOVAembed::enable_kernelbuttons()
-{
-
-}
-
-void NOVAembed::manage_kerneldwnld_decompress()
-{
-    if ( QFile(instpath+"/Kernel/"+Kernel+"/Makefile").exists() )
-    {
-        enable_kernelbuttons();
-    }
-    else
-    {
-        disable_kernelbuttons();
-    }
-}
-
 
 void NOVAembed::storeNOVAembed_ini()
 {
@@ -588,7 +566,6 @@ QString line;
         compile_ExtFS_comboBox();
         on_ThisIsReferenceServer_checkBox_clicked(true);
         initrd_helper();
-        manage_kerneldwnld_decompress();
 
         ui->iperror_label->setVisible(false);
         ui->REFERENCE_SERVER_label->setEnabled(false);

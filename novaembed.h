@@ -85,9 +85,6 @@ private slots:
     void P_save_helper( QString filename, QString Processor_model);
     void NOVAsom_Params_helper();
     void initrd_helper(void);
-    void disable_kernelbuttons();
-    void enable_kernelbuttons();
-    void manage_kerneldwnld_decompress();
     void Board_comboBox_setText(const QString &arg1);
     int CheckIfKernelsPresent();
 
@@ -260,12 +257,6 @@ private slots:
     void P_pin_decode();
 
     void on_P_Clear_pushButton_clicked();
-/*
-    void on_KernelSplash_pushButton_clicked();
-
-    void on_KernelCompileSplash_pushButton_clicked();
-*/
-    void on_PrimaryVideo_comboBox_currentTextChanged(const QString &arg1);
 
     void on_ViewBootLog_pushButton_clicked();
 
@@ -292,8 +283,6 @@ private slots:
     void on_U_I2C2_checkBox_toggled(bool checked);
 
     void on_U_UART6_checkBox_toggled(bool checked);
-
-    void on_U_Audio1_checkBox_toggled(bool checked);
 
     void on_U_SPDIF_checkBox_toggled(bool checked);
 

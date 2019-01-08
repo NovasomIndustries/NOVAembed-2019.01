@@ -203,7 +203,6 @@ QString file_exists_path;
         ui->BrandNameBKF->setPixmap(QPixmap(":/Icons/NXP-LayerScapeLogo.png"));
         ui->BoardNameBKF->setText(arg1);
     }
-    manage_kerneldwnld_decompress();
 
     /* hide Tools for recompose order */
     ui->tab->removeTab(3);

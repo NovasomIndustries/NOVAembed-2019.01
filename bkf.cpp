@@ -1077,11 +1077,6 @@ void NOVAembed::on_Write_AutoRun_pushButton_clicked()
         update_status_bar("AutoRun Write error");
 }
 
-void NOVAembed::on_PrimaryVideo_comboBox_currentTextChanged(const QString &arg1)
-{
-    CurrentPrimaryVideo = ui->PrimaryVideo_comboBox->currentText();
-}
-
 void NOVAembed::on_ViewBootLog_pushButton_clicked()
 {
     if ( ui->Board_comboBox->currentText() == "P Series")

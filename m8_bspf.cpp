@@ -34,14 +34,14 @@ QString M8_getvalue(QString strKey, QSettings *settings , QString entry)
 
 void NOVAembed::M8_load_BSPF_File(QString fileName)
 {
-QString strKeyFunc("M8_IOMUX/");
-QSettings * func_settings = 0;
+//QString strKeyFunc("M8_IOMUX/");
+//QSettings * func_settings = 0;
 
     on_M8_Clear_pushButton_clicked();
 
     Last_M8_BSPFactoryFile = fileName;
 
-    func_settings = new QSettings( fileName, QSettings::IniFormat );
+    //func_settings = new QSettings( fileName, QSettings::IniFormat );
 }
 
 
@@ -80,9 +80,6 @@ void NOVAembed::on_M8_Save_pushButton_clicked()
         ui->M8_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
         M8_save_helper(fileName);
 }
-
-
-
 
 void NOVAembed::on_M8_Generate_pushButton_clicked()
 {

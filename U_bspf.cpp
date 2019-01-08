@@ -250,10 +250,6 @@ void NOVAembed::on_U_UART5_4WirescheckBox_toggled(bool checked)
         ui->U_UART6_4WirescheckBox->setChecked(false);
     }
 }
-void NOVAembed::on_U_Audio1_checkBox_toggled(bool checked)
-{
-
-}
 
 void NOVAembed::on_U_SPDIF_checkBox_toggled(bool checked)
 {
