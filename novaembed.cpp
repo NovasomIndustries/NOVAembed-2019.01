@@ -510,6 +510,7 @@ int NOVAembed::CheckIfKernelsPresent()
                 update_status_bar("Unable to create /tmp/script");
                 return 1;
             }
+            update_status_bar("Cloning "+Kernel+"...");
             QTextStream out(&scriptfile);
             out << QString("#!/bin/sh\n");
             out << QString("cd "+instpath+"/Utils\n");
