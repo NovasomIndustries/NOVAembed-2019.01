@@ -340,17 +340,17 @@ private slots:
 
     void on_M8_Generate_pushButton_clicked();
 
-    void on_M9_Load_pushButton_clicked();
+    void on_M7_Load_pushButton_clicked();
 
-    void on_M9_Save_pushButton_clicked();
+    void on_M7_Save_pushButton_clicked();
 
-    void M9_load_BSPF_File(QString fileName);
+    void M7_load_BSPF_File(QString fileName);
 
-    void M9_save_helper(QString fileName);
+    void M7_save_helper(QString fileName);
 
     void on_actionVersion_triggered();
 
-    void on_M9_Generate_pushButton_clicked();
+    void on_M7_Generate_pushButton_clicked();
 
     void on_ExtFS_CheckAvailable_FS_pushButton_clicked();
 
@@ -367,6 +367,8 @@ private slots:
     void on_ExtFSBSPFSelect_pushButton_clicked();
 
     void on_PrimaryVideo_comboBox_currentIndexChanged(const QString &arg1);
+
+    void on_M7_ViewDtbCompileLog_pushButton_clicked();
 
 private:
     Ui::NOVAembed *ui;

@@ -88390,7 +88390,7 @@ a PCAP or an external RT touch</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QCheckBox" name="M8_PWM2_checkBox_2">
+      <widget class="QCheckBox" name="M7_PWM2_checkBox">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -88496,7 +88496,7 @@ a PCAP or an external RT touch</string>
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
       </widget>
-      <widget class="QPushButton" name="M9_Load_pushButton">
+      <widget class="QPushButton" name="M7_Load_pushButton">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -88514,7 +88514,7 @@ a PCAP or an external RT touch</string>
         <string>Load .bspf</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="M9_Save_pushButton">
+      <widget class="QPushButton" name="M7_Save_pushButton">
        <property name="geometry">
         <rect>
          <x>100</x>
@@ -88532,7 +88532,7 @@ a PCAP or an external RT touch</string>
         <string>Save .bspf</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="M9_Generate_pushButton">
+      <widget class="QPushButton" name="M7_Generate_pushButton">
        <property name="geometry">
         <rect>
          <x>210</x>
@@ -88550,7 +88550,7 @@ a PCAP or an external RT touch</string>
         <string>Save current .bspf and generate .dtb</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="M9_EditBeforeGenerate_checkBox">
+      <widget class="QCheckBox" name="M7_EditBeforeGenerate_checkBox">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -88573,7 +88573,7 @@ a PCAP or an external RT touch</string>
         <string>Edit before generate</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="M9_ViewDtbCompileLog_pushButton">
+      <widget class="QPushButton" name="M7_ViewDtbCompileLog_pushButton">
        <property name="geometry">
         <rect>
          <x>380</x>
@@ -88625,7 +88625,7 @@ a PCAP or an external RT touch</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QPushButton" name="M9_Clear_pushButton">
+      <widget class="QPushButton" name="M7_Clear_pushButton">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -88687,7 +88687,7 @@ a PCAP or an external RT touch</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QComboBox" name="M9_PrimaryVideo_comboBox">
+      <widget class="QComboBox" name="M7_PrimaryVideo_comboBox">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -88736,7 +88736,7 @@ a PCAP or an external RT touch</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QCheckBox" name="M9_PrimaryVideo_24bit_comboBox">
+      <widget class="QCheckBox" name="M7_PrimaryVideo_24bit_comboBox">
        <property name="geometry">
         <rect>
          <x>360</x>
@@ -88802,7 +88802,7 @@ a PCAP or an external RT touch</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="label_M8GPIO04_IO20_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO20_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88822,7 +88822,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO20</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO4_IO23_5">
+      <widget class="QLabel" name="label_M7GPIO4_IO23_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88842,7 +88842,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO23</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_PECSPI2_SS0_7">
+      <widget class="QLabel" name="label_GND2">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -88865,7 +88865,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO1_IO10_5">
+      <widget class="QLabel" name="label_M7GPIO1_IO10_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88885,7 +88885,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO01_IO10</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO04_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO04_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88905,7 +88905,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO04</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO00_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO00_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88948,7 +88948,7 @@ a PCAP or an external RT touch</string>
         <string>VPERI_3V3</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO07_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO07_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88968,7 +88968,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO07</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO08_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO08_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88988,7 +88988,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO08</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO06_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO06_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89008,7 +89008,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO06</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_PSD3_CMD_7">
+      <widget class="QLabel" name="label_GND3">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89054,7 +89054,7 @@ a PCAP or an external RT touch</string>
         <string>N.C.</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO4_IO21_5">
+      <widget class="QLabel" name="label_M7GPIO4_IO21_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89074,7 +89074,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO21</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO10_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO10_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89094,7 +89094,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO10</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO18_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO18_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89114,7 +89114,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO18</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO17_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO17_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89158,7 +89158,7 @@ a PCAP or an external RT touch</string>
         <string>VPERI_3V3</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO19_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO19_5">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -89206,7 +89206,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO03</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_PGPIO3_IO19_107">
+      <widget class="QLabel" name="label_GND6">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89251,7 +89251,7 @@ a PCAP or an external RT touch</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="label_PECSPI1_MOSI_7">
+      <widget class="QLabel" name="label_GND1">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89320,7 +89320,7 @@ a PCAP or an external RT touch</string>
         <string>UART5_RXD</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO4_IO22_5">
+      <widget class="QLabel" name="label_M7GPIO4_IO22_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89363,7 +89363,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO01_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO01_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89383,7 +89383,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO01</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO02_9">
+      <widget class="QLabel" name="label_M7GPIO04_IO02_9">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89426,7 +89426,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO02_10">
+      <widget class="QLabel" name="label_M7GPIO04_IO02_10">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89446,7 +89446,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO02</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO09_5">
+      <widget class="QLabel" name="label_M7GPIO04_IO09_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89466,7 +89466,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO09</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO4_IO24_5">
+      <widget class="QLabel" name="label_M7GPIO4_IO24_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89486,7 +89486,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO04_IO24</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_PSD3_DATA1_7">
+      <widget class="QLabel" name="label_GND4">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89509,7 +89509,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO01_IO09_5">
+      <widget class="QLabel" name="label_M7GPIO01_IO09_5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89529,7 +89529,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO01_IO09</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_PSD3_DATA5_7">
+      <widget class="QLabel" name="label_GND5">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89572,7 +89572,7 @@ a PCAP or an external RT touch</string>
         <string>GPIO01_IO27</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_PGPIO3_IO19_108">
+      <widget class="QLabel" name="label_5V1">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89596,7 +89596,7 @@ a PCAP or an external RT touch</string>
         <string>VPMIC_5V</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_PGPIO3_IO19_109">
+      <widget class="QLabel" name="label_5V2">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89646,7 +89646,7 @@ a PCAP or an external RT touch</string>
       </widget>
       <widget class="QLabel" name="label_UGPIO01_IO00_5">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -89670,7 +89670,7 @@ a PCAP or an external RT touch</string>
       </widget>
       <widget class="QLabel" name="label_UGPIO01_IO05_5">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -107209,7 +107209,7 @@ a PCAP or an external RT touch</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QCheckBox" name="M9_SPI1_checkBox">
+      <widget class="QCheckBox" name="M7_SPI1_checkBox">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -107229,7 +107229,7 @@ a PCAP or an external RT touch</string>
         <string>SPI1</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="M9_I2C2_checkBox">
+      <widget class="QCheckBox" name="M7_I2C2_checkBox">
        <property name="geometry">
         <rect>
          <x>400</x>
@@ -107249,7 +107249,7 @@ a PCAP or an external RT touch</string>
         <string>I2C 2</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="M9_UART2_checkBox">
+      <widget class="QCheckBox" name="M7_UART2_checkBox">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -107334,7 +107334,7 @@ a PCAP or an external RT touch</string>
         <string>Speed</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="M8_SPIdev4_checkBox_2">
+      <widget class="QCheckBox" name="M7_SPIdev4_checkBox">
        <property name="enabled">
         <bool>false</bool>
        </property>

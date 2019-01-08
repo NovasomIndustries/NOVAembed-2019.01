@@ -520,86 +520,39 @@ int NOVAembed::CheckIfKernelsPresent()
     // Check if the kernel exists
     if ( !QFile(instpath+"/Kernel/"+Kernel+"/Makefile").exists() )
     {
-        if ( !QFile(instpath+"/Kernel/"+Kernel+".tar.bz2").exists() )
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "Kernel not present" , Kernel+" does not exists and will be downloaded.\nThis should be a time consuming task,\nand depends on your internet connection\nand on remote servers load.\n\nIf you reply \"No\" the correct file cannot be compiled.\n\nDo you want to start the download?", QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::Yes)
         {
-            system("rm /tmp/wgetpidlen ; pidof wget > /tmp/wgetpidlen");
-            int size;
-            QFile wgetpidlen("/tmp/wgetpidlen");
-            if (wgetpidlen.open(QIODevice::ReadOnly)){
-                size = wgetpidlen.size();
-                wgetpidlen.close();
-            }
-            if ( size > 1 )
+            QFile scriptfile("/tmp/script");
+            QString currentboard=ui->Board_comboBox->currentText();
+            if ( ui->Board_comboBox->currentText() == "P Series")
+                currentboard="P";
+            if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
             {
-                QMessageBox::StandardButton reply = QMessageBox::question(this, "Download still in progress" , "If you reply \"Yes\" the current download will be stopped.\n\nDo you want to stop the current download?", QMessageBox::Yes|QMessageBox::No);
-                if (reply == QMessageBox::Yes)
-                {
-                    system("kill -9 `pidof wget`");
-                    update_status_bar("Download of "+Kernel+".tar.bz2 cancelled");
-                }
-                else
-                    return 1;
+                update_status_bar("Unable to create /tmp/script");
+                return 1;
             }
-
-            QMessageBox::StandardButton reply = QMessageBox::question(this, "Archive not present" , "The archive "+Kernel+".tar.bz2 does not exists.\nThis should be a time consuming task,\nand depends on your internet connection\nand on remote servers load.\n\nIf you reply \"No\" the correct file cannot be compiled.\n\nDo you want to start the download?", QMessageBox::Yes|QMessageBox::No);
-            if (reply == QMessageBox::Yes)
+            QTextStream out(&scriptfile);
+            out << QString("#!/bin/sh\n");
+            out << QString("cd "+instpath+"/Utils\n");
+            out << QString("./clone_kernel "+Kernel+"\n");
+            out << QString("echo 0 > /tmp/result\n");
+            out << QString("return 0\n");
+            scriptfile.close();
+            if ( run_script() == 0)
             {
-                QFile scriptfile("/tmp/script");
-                QString currentboard=ui->Board_comboBox->currentText();
-                if ( ui->Board_comboBox->currentText() == "P Series")
-                    currentboard="P";
-                if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
-                {
-                    update_status_bar("Unable to create /tmp/script");
-                    return 1;
-                }
-                QTextStream out(&scriptfile);
-                out << QString("#!/bin/sh\n");
-                out << QString("cd "+instpath+"/Utils\n");
-                out << QString("./clone_kernel "+Kernel+"\n");
-                out << QString("echo 0 > /tmp/result\n");
-                out << QString("return 0\n");
-                scriptfile.close();
-                if ( run_script() == 0)
-                {
-                    update_status_bar(Kernel+" cloned");
-                }
-                else
-                    update_status_bar(Kernel+" clone error");
-
-                /*
-                QString syscmd = instpath+"/Utils/download_kernel "+Kernel+" "+KERNEL_REPO_SERVER;
-                const char *str =syscmd.toLocal8Bit().data();
-                update_status_bar("Downloading "+Kernel+".tar.bz2 from "+KERNEL_REPO_SERVER+" ...");
-                this->setCursor(Qt::WaitCursor);
-                system(str);
-                this->setCursor(Qt::ArrowCursor);
-                return 0;
-                */
+                update_status_bar(Kernel+" cloned");
             }
             else
-                return 1;
-        }
-        if ( QFile(instpath+"/Kernel/"+Kernel+".tar.bz2").exists() )
-        {
-            if ( !QFile(instpath+"/Kernel/"+Kernel+"/Makefile").exists() )
             {
-                QMessageBox::StandardButton reply = QMessageBox::question(this, "Kernel source not decompressed" , "The archive "+Kernel+".tar.bz2 exists and must be decompressed.\nThis will be a disk space consuming task,\n\nIf you reply \"No\" the dtb file cannot be compiled.\n\nDo you want to decompress the kernel?", QMessageBox::Yes|QMessageBox::No);
-                if (reply == QMessageBox::Yes)
-                {
-                    QString syscmd = instpath+"/Utils/decompress_kernel "+Kernel;
-                    const char *str =syscmd.toLocal8Bit().data();
-                    update_status_bar("Decompressing "+Kernel+".tar.bz2 ...");
-                    this->setCursor(Qt::WaitCursor);
-                    system(str);
-                    this->setCursor(Qt::ArrowCursor);
-                    return 0;
-                }
-                else
-                    return 1;
+                update_status_bar(Kernel+" clone error");
+                return 1;
             }
         }
+        else
+            return 1;
     }
+    return 0;
 }
 
 
@@ -962,8 +915,8 @@ QString line;
                 QString base = fi.baseName();
                 if ( base != "" )
                     ui->M9_Current_BSPF_File_label->setText(base+".bspf");
-                M9_load_BSPF_File(Last_M7_BSPFactoryFile);
-                ui->M9_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
+                M7_load_BSPF_File(Last_M7_BSPFactoryFile);
+                ui->M7_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
                 update_status_bar("BSP Factory : Loaded file "+Last_M7_BSPFactoryFile);
             }
         }
@@ -1035,12 +988,4 @@ void NOVAembed::on_actionVersion_triggered()
         tr(msg1)
     );
 }
-
-void NOVAembed::on_M9_Generate_pushButton_clicked()
-{
-    if ( CheckIfKernelsPresent() == 1 )
-        return;
-}
-
-
 
