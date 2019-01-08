@@ -60,7 +60,7 @@ void NOVAembed::initrd_helper(void)
 {
     QFileInfo info1(instpath+"/FileSystem/"+FileSystemName+"/output/images/rootfs.ext2");
 
-    initrd_size = (info1.size() / 1024) * 1.5;
+    initrd_size = (info1.size() / 1024) * 1.1;
 /*
     std::cout << "\n" << FileSystemName.toLatin1().constData()<< "\n" << std::flush;
     std::cout << info1.size()<< "\n" << std::flush;
@@ -129,6 +129,8 @@ void NOVAembed::on_BootLoaderCompile_pushButton_clicked()
 /* Kernel */
 void NOVAembed::on_KernelXconfig_pushButton_clicked()
 {
+    if ( CheckIfKernelsPresent() == 1 )
+        return;
     QFile scriptfile("/tmp/script");
     QString config_file;
 
@@ -142,16 +144,17 @@ void NOVAembed::on_KernelXconfig_pushButton_clicked()
     out << QString("cd "+instpath+"/Kernel/"+Kernel+"\n");
     out << QString(". ../../Utils/"+SourceMeFile+"\n");
 
+
     if ( ui->Board_comboBox->currentText() == "P Series")
-        config_file = "imx_novasomp_defconfig";
+        config_file = NXP_P_DEFCONFIG;
     if ( ui->Board_comboBox->currentText() == "U5")
-        config_file = "imx_v7_defconfig";
+        config_file = NXP_U_DEFCONFIG;
     if ( ui->Board_comboBox->currentText() == "M8")
-        config_file = "qcom_defconfig";
-    if ( ui->Board_comboBox->currentText() == "M9")
-        config_file = "sun50iw6p1smp_defconfig";
+        config_file = QUALCOMM_DEFCONFIG;
     if ( ui->Board_comboBox->currentText() == "N1")
-        config_file = "NOVAsomN1_defconfig";
+        config_file = NXP_N1_DEFCONFIG;
+    if ( ui->Board_comboBox->currentText() == "M7")
+        config_file = RK_M7_DEFCONFIG;
 
     if ( !QFile(instpath+"/Kernel/"+Kernel+"/.config").exists() )
     {
@@ -181,6 +184,8 @@ extern QString CurrentSplashName;
 
 void NOVAembed::on_KernelCompile_pushButton_clicked()
 {
+    if ( CheckIfKernelsPresent() == 1 )
+        return;
     if ( !QFile(instpath+"/Kernel/"+Kernel+"/.config").exists() )
     {
         on_KernelReCompile_pushButton_clicked();
@@ -256,6 +261,8 @@ void NOVAembed::on_KernelCompile_pushButton_clicked()
 
 void NOVAembed::on_KernelReCompile_pushButton_clicked()
 {
+    if ( CheckIfKernelsPresent() == 1 )
+        return;
     QFile scriptfile("/tmp/script");
     QString config_file;
     if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
@@ -305,7 +312,7 @@ void NOVAembed::on_KernelReCompile_pushButton_clicked()
         out << QString("cd "+instpath+"/Deploy\n");
         out << QString("rm Image ; ln -s ../Kernel/"+Kernel+"/arch/arm64/boot/Image\n");
         out << QString("cd "+instpath+"/Utils/rock\n");
-        config_file = "rockchip_linux_defconfig";
+        config_file = "NOVAsomM7_defconfig";
         out << QString("./kremake "+Kernel+" "+SourceMeFile+" "+config_file+" >> "+instpath+"/Logs/kremake.log\n");
     }
     scriptfile.close();
@@ -792,8 +799,8 @@ void NOVAembed::on_ExtFS_CheckAvailable_FS_pushButton_clicked()
 {
 const char *cmd;
 QByteArray ba;
-QString repo_server=KERNEL_REPO_SERVER;
-QString backup_repo_server=BKP_KERNEL_REPO_SERVER;
+QString repo_server=FS_REPO_SERVER;
+QString backup_repo_server=BKP_FS_REPO_SERVER;
 QString currentboard=ui->Board_comboBox->currentText();
 QString content;
 QString ExternalFileSystemsFile;
@@ -918,7 +925,7 @@ void NOVAembed::on_ExtFS_Available_comboBox_currentIndexChanged(const QString &a
 void NOVAembed::on_ExtFS_DownloadSelected_FS_pushButton_clicked()
 {
     QFile scriptfile("/tmp/script");
-    QString repo_server=KERNEL_REPO_SERVER;
+    QString repo_server=FS_REPO_SERVER;
     QString currentboard=ui->Board_comboBox->currentText();
     if ( ui->Board_comboBox->currentText() == "P Series")
         currentboard="P";

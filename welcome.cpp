@@ -159,21 +159,21 @@ QString file_exists_path;
             kernelok=1;
         else
             std::cout << "M7 kernel not found\n" << std::flush;
-        check_file1 = QFileInfo(instpath+"/Blobs/rk3328-uboot.img");
+        check_file1 = QFileInfo(instpath+"/Blobs/"+RK_M7_BOOT);
         if (check_file1.exists() && check_file1.isFile())
             bootok++;
         else
-            std::cout << "M7 rk3328-uboot.img not found\n" << std::flush;
-        check_file1 = QFileInfo(instpath+"/Blobs/rk3328-trust.img");
+            std::cout << "M7 uboot not found\n" << std::flush;
+        check_file1 = QFileInfo(instpath+"/Blobs/"+RK_M7_TRUST);
         if (check_file1.exists() && check_file1.isFile())
             bootok++;
         else
-            std::cout << "M7 rk3328-trust.img not found\n" << std::flush;
-        check_file1 = QFileInfo(instpath+"/Blobs/rk3328-idbloader.img");
+            std::cout << "M7 trust not found\n" << std::flush;
+        check_file1 = QFileInfo(instpath+"/Blobs/"+RK_M7_IDBLOADER);
         if (check_file1.exists() && check_file1.isFile())
             bootok++;
         else
-            std::cout << "M7 rk3328-idbloader.img not found\n" << std::flush;
+            std::cout << "M7 idbloader not found\n" << std::flush;
         if ( bootok == 3)
             bootok=1;
         else

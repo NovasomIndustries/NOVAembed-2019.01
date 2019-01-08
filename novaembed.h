@@ -25,6 +25,17 @@
 #define NXP_U_KERNEL        "linux-imx_4.1.43"
 #define NXP_N1_KERNEL       "linux-4.14.47_layerscape"
 
+#define RK_M7_DEFCONFIG     "NOVAsomM7_defconfig"
+#define QUALCOMM_DEFCONFIG  "qcom_defconfig"
+#define NXP_P_DEFCONFIG     "imx_novasomp_defconfig"
+#define NXP_U_DEFCONFIG     "imx_v7_defconfig"
+#define NXP_N1_DEFCONFIG    "NOVAsomN1_defconfig"
+
+
+#define RK_M7_BOOT          "m7-uboot.img"
+#define RK_M7_TRUST         "m7-trust.img"
+#define RK_M7_IDBLOADER     "m7-idbloader.img"
+
 #define RK_M7_SOURCEME      "SourceMe64"
 #define QUALCOMM_SOURCEME   "SourceMe64"
 #define NXP_N1_SOURCEME     "SourceMe64"
@@ -39,6 +50,8 @@
 
 #define KERNEL_REPO_SERVER      "82.78.202.216"
 #define BKP_KERNEL_REPO_SERVER  "93.41.190.216"
+#define FS_REPO_SERVER      "82.78.202.216"
+#define BKP_FS_REPO_SERVER  "93.41.190.216"
 #define HUM_P               "NI150316-HUM-P-V1.1.pdf"
 #define QSG_P               "NI150316-QSG-P-V1.0.pdf"
 #define HUM_U5              "N.U-200417-HUM-U5-V1.2.pdf"

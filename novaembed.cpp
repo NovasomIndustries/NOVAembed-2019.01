@@ -181,7 +181,6 @@ QString PixMapName="";
     }
 
 
-
     if ( ! QDir(instpath+"/NOVAembed_Settings/PClass_bspf").exists() )
     {
         QDir().mkdir(instpath+"/NOVAembed_Settings/PClass_bspf");
@@ -542,9 +541,33 @@ int NOVAembed::CheckIfKernelsPresent()
                     return 1;
             }
 
-            QMessageBox::StandardButton reply = QMessageBox::question(this, "Archive not present" , "The archive "+Kernel+".tar.bz2 does not exists.\nThis should be a time consuming task,\nand depends on your internet connection\nand on remote servers load.\n\nIf you reply \"No\" the dtb file cannot be compiled.\n\nDo you want to start the download?", QMessageBox::Yes|QMessageBox::No);
+            QMessageBox::StandardButton reply = QMessageBox::question(this, "Archive not present" , "The archive "+Kernel+".tar.bz2 does not exists.\nThis should be a time consuming task,\nand depends on your internet connection\nand on remote servers load.\n\nIf you reply \"No\" the correct file cannot be compiled.\n\nDo you want to start the download?", QMessageBox::Yes|QMessageBox::No);
             if (reply == QMessageBox::Yes)
             {
+                QFile scriptfile("/tmp/script");
+                QString currentboard=ui->Board_comboBox->currentText();
+                if ( ui->Board_comboBox->currentText() == "P Series")
+                    currentboard="P";
+                if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+                {
+                    update_status_bar("Unable to create /tmp/script");
+                    return 1;
+                }
+                QTextStream out(&scriptfile);
+                out << QString("#!/bin/sh\n");
+                out << QString("cd "+instpath+"/Utils\n");
+                out << QString("./clone_kernel "+Kernel+"\n");
+                out << QString("echo 0 > /tmp/result\n");
+                out << QString("return 0\n");
+                scriptfile.close();
+                if ( run_script() == 0)
+                {
+                    update_status_bar(Kernel+" cloned");
+                }
+                else
+                    update_status_bar(Kernel+" clone error");
+
+                /*
                 QString syscmd = instpath+"/Utils/download_kernel "+Kernel+" "+KERNEL_REPO_SERVER;
                 const char *str =syscmd.toLocal8Bit().data();
                 update_status_bar("Downloading "+Kernel+".tar.bz2 from "+KERNEL_REPO_SERVER+" ...");
@@ -552,6 +575,7 @@ int NOVAembed::CheckIfKernelsPresent()
                 system(str);
                 this->setCursor(Qt::ArrowCursor);
                 return 0;
+                */
             }
             else
                 return 1;
