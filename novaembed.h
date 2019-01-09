@@ -46,7 +46,7 @@
 #define NXP_P_BLOB_NAME     "linux-nxp_p-4.1.15.2_zImage"
 #define NXP_U_BLOB_NAME     "linux-nxp_u-4.1.43_zImage"
 #define NXP_N1_BLOB_NAME    "linux-nxp-n1-4.14.47_uImage"
-#define RK_M7_BLOB_NAME     "linux-rock_m7-4.4.143_Image"
+#define RK_M7_BLOB_NAME     "linux-rock_m7-4.4.126_Image"
 
 #define KERNEL_REPO_SERVER      "82.78.202.216"
 #define BKP_KERNEL_REPO_SERVER  "93.41.190.216"
