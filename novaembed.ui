@@ -88472,7 +88472,7 @@ a PCAP or an external RT touch</string>
         <string>Current BSPF file :</string>
        </property>
       </widget>
-      <widget class="QLabel" name="M9_Current_BSPF_File_label">
+      <widget class="QLabel" name="M7_Current_BSPF_File_label">
        <property name="geometry">
         <rect>
          <x>130</x>

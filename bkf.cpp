@@ -887,8 +887,8 @@ QString Qcmd;
                 ui->ExtFSBoard_lineEdit->setText(extfsboard);
                 if ( ui->Board_comboBox->currentText() == "M8")
                     ExternalFileSystemsFile=instpath+"/ExternalFileSystems/M8/"+extfsfilename;
-                if ( ui->Board_comboBox->currentText() == "M9")
-                    ExternalFileSystemsFile=instpath+"/ExternalFileSystems/M9/"+extfsfilename;
+                if ( ui->Board_comboBox->currentText() == "M7")
+                    ExternalFileSystemsFile=instpath+"/ExternalFileSystems/M7/"+extfsfilename;
                 if ( ui->Board_comboBox->currentText() == "U5")
                     ExternalFileSystemsFile=instpath+"/ExternalFileSystems/U5/"+extfsfilename;
                 if ( ui->Board_comboBox->currentText() == "P Series")
@@ -987,8 +987,8 @@ void NOVAembed::on_ExtFS_Write_uSD_pushButton_clicked()
         full_path=instpath+"/ExternalFileSystems/M8/"+ui->ExtFS_comboBox->currentText();
     if ( ui->Board_comboBox->currentText() == "P Series")
         full_path=instpath+"/ExternalFileSystems/P/"+ui->ExtFS_comboBox->currentText();
-    if ( ui->Board_comboBox->currentText() == "M9")
-        full_path=instpath+"/ExternalFileSystems/M8/"+ui->ExtFS_comboBox->currentText();
+    if ( ui->Board_comboBox->currentText() == "M7")
+        full_path=instpath+"/ExternalFileSystems/M7/"+ui->ExtFS_comboBox->currentText();
 
     QTextStream out(&scriptfile);
     out << QString("#!/bin/sh\n");

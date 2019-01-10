@@ -60,7 +60,7 @@ QString file_exists_path;
         return;
     if (( arg1 == "M8") && ( CurrentBSPF_Tab == "M8 BSP Factory"))
         return;
-    if (( arg1 == "M9") && ( CurrentBSPF_Tab == "M9 BSP Factory"))
+    if (( arg1 == "M7") && ( CurrentBSPF_Tab == "M7 BSP Factory"))
         return;
     if (( arg1 == "N1") && ( CurrentBSPF_Tab == "N1 BSP Factory"))
         return;

@@ -85,7 +85,7 @@ QString PixMapName="";
         system("mkdir -p "+instpath.toLatin1()+"/ExternalFileSystems/P");
         system("mkdir -p "+instpath.toLatin1()+"/ExternalFileSystems/U");
         system("mkdir -p "+instpath.toLatin1()+"/ExternalFileSystems/M8");
-        system("mkdir -p "+instpath.toLatin1()+"/ExternalFileSystems/M9");
+        system("mkdir -p "+instpath.toLatin1()+"/ExternalFileSystems/M7");
         copy_required_files = 1;
     }
     if ( ! QDir(instpath+"/DtbUserWorkArea").exists() )
@@ -94,7 +94,7 @@ QString PixMapName="";
         system("mkdir -p "+instpath.toLatin1()+"/DtbUserWorkArea/PClass_bspf/temp");
         system("mkdir -p "+instpath.toLatin1()+"/DtbUserWorkArea/UClass_bspf/temp");
         system("mkdir -p "+instpath.toLatin1()+"/DtbUserWorkArea/M8Class_bspf/temp");
-        system("mkdir -p "+instpath.toLatin1()+"/DtbUserWorkArea/M9Class_bspf/temp");
+        system("mkdir -p "+instpath.toLatin1()+"/DtbUserWorkArea/M7Class_bspf/temp");
         copy_required_files = 1;
     }
     if ( ! QDir(instpath+"/DtbUserWorkArea/PClass_bspf").exists() )
@@ -415,8 +415,8 @@ void NOVAembed::compile_ExtFS_comboBox()
     QDir ExternalFileSystemsDir;
     if ( ui->Board_comboBox->currentText() == "M8")
         ExternalFileSystemsDir=instpath+"/ExternalFileSystems/M8";
-    if ( ui->Board_comboBox->currentText() == "M9")
-        ExternalFileSystemsDir=instpath+"/ExternalFileSystems/M9";
+    if ( ui->Board_comboBox->currentText() == "M7")
+        ExternalFileSystemsDir=instpath+"/ExternalFileSystems/M7";
     if ( ui->Board_comboBox->currentText() == "U5")
         ExternalFileSystemsDir=instpath+"/ExternalFileSystems/U5";
     if ( ui->Board_comboBox->currentText() == "N1")
@@ -892,7 +892,7 @@ QString line;
             {
                 QString base = fi.baseName();
                 if ( base != "" )
-                    ui->M9_Current_BSPF_File_label->setText(base+".bspf");
+                    ui->M7_Current_BSPF_File_label->setText(base+".bspf");
                 M7_load_BSPF_File(Last_M7_BSPFactoryFile);
                 ui->M7_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
                 update_status_bar("BSP Factory : Loaded file "+Last_M7_BSPFactoryFile);
