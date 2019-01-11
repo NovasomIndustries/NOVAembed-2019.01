@@ -50432,7 +50432,7 @@ a PCAP/RT touch</string>
         <rect>
          <x>230</x>
          <y>50</y>
-         <width>61</width>
+         <width>71</width>
          <height>21</height>
         </rect>
        </property>
@@ -50452,7 +50452,7 @@ a PCAP/RT touch</string>
         <rect>
          <x>10</x>
          <y>50</y>
-         <width>51</width>
+         <width>61</width>
          <height>21</height>
         </rect>
        </property>
@@ -50470,7 +50470,7 @@ a PCAP/RT touch</string>
       <widget class="QCheckBox" name="U_I2C2_checkBox">
        <property name="geometry">
         <rect>
-         <x>400</x>
+         <x>380</x>
          <y>50</y>
          <width>61</width>
          <height>21</height>
@@ -50492,7 +50492,7 @@ a PCAP/RT touch</string>
         <rect>
          <x>10</x>
          <y>110</y>
-         <width>71</width>
+         <width>111</width>
          <height>21</height>
         </rect>
        </property>
@@ -50554,7 +50554,7 @@ a PCAP/RT touch</string>
       <widget class="QLabel" name="label_UI2C2Speed">
        <property name="geometry">
         <rect>
-         <x>460</x>
+         <x>450</x>
          <y>50</y>
          <width>41</width>
          <height>20</height>
@@ -50578,9 +50578,9 @@ a PCAP/RT touch</string>
        </property>
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>70</x>
          <y>50</y>
-         <width>111</width>
+         <width>131</width>
          <height>21</height>
         </rect>
        </property>
@@ -50613,7 +50613,7 @@ a PCAP/RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>SPI                                      </string>
+        <string>SPI                          </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -50638,7 +50638,7 @@ a PCAP/RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>UART                                                                              </string>
+        <string>UART                                                            </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -50664,7 +50664,7 @@ a PCAP/RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>CAN                                </string>
+        <string>CAN                     </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -50673,7 +50673,7 @@ a PCAP/RT touch</string>
       <widget class="QLabel" name="label_37">
        <property name="geometry">
         <rect>
-         <x>400</x>
+         <x>380</x>
          <y>30</y>
          <width>151</width>
          <height>20</height>
@@ -50689,7 +50689,7 @@ a PCAP/RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>I2C                                      </string>
+        <string>I2C                         </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -50701,7 +50701,7 @@ a PCAP/RT touch</string>
        </property>
        <property name="geometry">
         <rect>
-         <x>190</x>
+         <x>120</x>
          <y>110</y>
          <width>171</width>
          <height>21</height>
@@ -50980,7 +50980,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>AUDIO                                              </string>
+        <string>AUDIO                                  </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -51099,7 +51099,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>VIDEO                                                                                     </string>
+        <string>VIDEO                                                             </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

@@ -15,7 +15,7 @@ char    file_name_in[256];
     bzero(header_defs_dump,sizeof(header_defs_dump));
     bzero(iomux_defs_dump,sizeof(iomux_defs_dump));
     if ( argc < 2 )
-        sprintf(file_name_in,"/Devel/NOVAsdk2019.1/DtbUserWorkArea/UClass_bspf/test01.bspf");
+        sprintf(file_name_in,"/Devel/NOVAsdk2019.01/DtbUserWorkArea/UClass_bspf/test01.bspf");
     else
         sprintf(file_name_in,"%s",argv[1]);
 

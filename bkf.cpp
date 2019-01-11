@@ -483,7 +483,7 @@ void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
     if ( ui->Board_comboBox->currentText() == "P Series")
         out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" P > "+instpath+"/Logs/FileSystem_Pmake.log\n");
     if ( ui->Board_comboBox->currentText() == "U5")
-        out << QString(".MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" U > "+instpath+"/Logs/FileSystem_Umake.log\n");
+        out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" U > "+instpath+"/Logs/FileSystem_Umake.log\n");
     if ( ui->Board_comboBox->currentText() == "N1")
         out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" N1 > "+instpath+"/Logs/FileSystem_N1make.log\n");
     if ( ui->Board_comboBox->currentText() == "M8")

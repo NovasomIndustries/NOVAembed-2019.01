@@ -185,14 +185,21 @@ void create_dts_file(void)
 FILE    *fpout_dts;
 
     sprintf(dtsfile_dump,dts_header);
+    printf("After sprintf %s\n",dtsfile_dump);
     process_special_devs_pins();
+    printf("After process_special_devs_pins\n");
     strcat(dtsfile_dump,dts_footer);
+    printf("After strcat %s\n",dtsfile_dump);
     process_special_devs_defs();
+    printf("After process_special_devs_defs\n");
+    printf("file_name_dts : %s\n",file_name_dts);
     if ( (fpout_dts = fopen(file_name_dts,"w" ) ))
     {
         fwrite(dtsfile_dump, strlen(dtsfile_dump), 1, fpout_dts);
         fclose(fpout_dts);
     }
+    else
+        printf("Write error\n");
 }
 
 void create_file_names(char *file_in)
@@ -214,7 +221,7 @@ int     i;
         if ( file_name_noext[i] == '.')
             file_name_noext[i]=0;
     }
-    sprintf(file_name_dts,"/Devel/NOVAsdk2019.1/DtbUserWorkArea/%s.dts",file_name_noext);
+    sprintf(file_name_dts,"/Devel/NOVAsdk2019.01/DtbUserWorkArea/%s.dts",file_name_noext);
 
     printf("Input File Name       :  %s\n",file_in);
     printf("Output DTS  File Name : %s\n",file_name_dts);
