@@ -929,9 +929,7 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
     {
             update_status_bar("Check log to see the updates found");
     }
-
 }
-
 
 void NOVAembed::on_ViewUpdatesLog_pushButton_clicked()
 {
