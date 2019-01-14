@@ -920,27 +920,15 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
     QTextStream out(&scriptfile);
     out << QString("#!/bin/sh\n");
     out << QString("cd "+instpath+"/Utils\n");
-    out << QString("./UpdateUtils\n");
-    out << QString("./CheckGitHubRepo\n");
-    out << QString("echo $? > /tmp/result\n");
+    out << QString("./update_all\n");
+    out << QString("echo 0 > /tmp/result\n");
 
     scriptfile.close();
     int result = run_script();
     if (  result >= 0)
     {
-        if ( result > 0 )
-        {
-            QString s = QString::number(result);
-            if ( result > 1 )
-                update_status_bar("Found "+s+" updates, system updated");
-            else
-                update_status_bar("Found "+s+" update, system updated");
-        }
-        else
-            update_status_bar("No updates found");
+            update_status_bar("Check log to see the updates found");
     }
-    else
-        update_status_bar("Update error");
 
 }
 
