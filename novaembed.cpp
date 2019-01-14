@@ -927,7 +927,7 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
     int result = run_script();
     if (  result > 0)
     {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, "NOVAembed updated" ,"NOVAembed has been updated. Due to this now the application NOVAembed will shut down and mus be manually restarted.\nIf you have unsaved work press \"No\" and save your work, but remember to restart NOVAembed.\n\nDo you want to shut down NOVAembed?", QMessageBox::Yes|QMessageBox::No);
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "NOVAembed Updated!" ,"NOVAembed has been updated. Due to this now the application NOVAembed will shut down and mus be manually restarted.\nIf you have unsaved work press \"No\" and save your work, but remember to restart NOVAembed.\n\nDo you want to shut down NOVAembed?", QMessageBox::Yes|QMessageBox::No);
         if (reply == QMessageBox::Yes)
         {
             exit(0);
