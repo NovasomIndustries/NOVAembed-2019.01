@@ -927,7 +927,7 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
     int result = run_script();
     if (  result >= 0)
     {
-            update_status_bar("Check log to see the updates found");
+            update_status_bar("Log reports the updates found");
     }
 }
 
