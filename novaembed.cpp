@@ -454,8 +454,8 @@ int NOVAembed::run_script(void)
 
     system("rm -f /tmp/result");
     system("chmod 777 /tmp/script");
-    system("konsole -e /tmp/script > "+instpath.toLatin1()+"/Logs/main_log");
-    //system("xterm -geometry 120x24 -e /tmp/script > "+instpath.toLatin1()+"/Logs/main_log");
+    //system("konsole -e /tmp/script > "+instpath.toLatin1()+"/Logs/main_log");
+    system("xterm -geometry 120x24 -e /tmp/script > "+instpath.toLatin1()+"/Logs/main_log");
 
     QFile file("/tmp/result");
     while( file.open(QIODevice::ReadOnly) == false )
