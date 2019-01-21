@@ -73,6 +73,9 @@ void NOVAembed::initrd_helper(void)
 /* Bootloader */
 void NOVAembed::on_BootLoaderCompile_pushButton_clicked()
 {
+    update_status_bar("Cloning the required boot loader for "+ui->Board_comboBox->currentText()+" ... ");
+    system(instpath.toLatin1()+"/Utils/clone_uboot");
+
     QFile scriptfile("/tmp/script");
     update_status_bar("Compiling boot loader for "+ui->Board_comboBox->currentText()+" ... ");
     if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
