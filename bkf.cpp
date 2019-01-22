@@ -73,8 +73,37 @@ void NOVAembed::initrd_helper(void)
 /* Bootloader */
 void NOVAembed::on_BootLoaderCompile_pushButton_clicked()
 {
-    update_status_bar("Cloning the required boot loader for "+ui->Board_comboBox->currentText()+" ... ");
-    system(instpath.toLatin1()+"/Utils/clone_uboot");
+
+    if ( ui->Board_comboBox->currentText() == "P Series")
+    {
+        QString a=NXP_P_BOOTLOADER;
+        update_status_bar("Cloning "+a+" boot loader for "+ui->Board_comboBox->currentText()+" ... ");
+        system(instpath.toLatin1()+"/Utils/clone_singleboot "+NXP_P_BOOTLOADER+"_2019.01 "+NXP_P_BOOTLOADER);
+    }
+    if ( ui->Board_comboBox->currentText() == "U5")
+    {
+        QString a=NXP_U_BOOTLOADER;
+        update_status_bar("Cloning "+a+" boot loader for "+ui->Board_comboBox->currentText()+" ... ");
+        system(instpath.toLatin1()+"/Utils/clone_singleboot "+NXP_U_BOOTLOADER+"_2019.01 "+NXP_U_BOOTLOADER);
+    }
+    if ( ui->Board_comboBox->currentText() == "N1")
+    {
+        QString a=NXP_N1_BOOTLOADER;
+        update_status_bar("Cloning "+a+" boot loader for "+ui->Board_comboBox->currentText()+" ... ");
+        system(instpath.toLatin1()+"/Utils/clone_singleboot "+NXP_N1_BOOTLOADER+"_2019.01 "+NXP_N1_BOOTLOADER);
+    }
+    if ( ui->Board_comboBox->currentText() == "M8")
+    {
+        QString a=QUALCOMM_BOOTLOADER;
+        update_status_bar("Cloning "+a+" boot loader for "+ui->Board_comboBox->currentText()+" ... ");
+        system(instpath.toLatin1()+"/Utils/clone_singleboot "+QUALCOMM_BOOTLOADER+"_2019.01 "+QUALCOMM_BOOTLOADER);
+    }
+    if ( ui->Board_comboBox->currentText() == "M7")
+    {
+        QString a=RK_M7_BOOTLOADER;
+        update_status_bar("Cloning "+a+" boot loader for "+ui->Board_comboBox->currentText()+" ... ");
+        system(instpath.toLatin1()+"/Utils/clone_singleboot "+RK_M7_BOOTLOADER+"_2019.01 "+RK_M7_BOOTLOADER);
+    }
 
     QFile scriptfile("/tmp/script");
     update_status_bar("Compiling boot loader for "+ui->Board_comboBox->currentText()+" ... ");

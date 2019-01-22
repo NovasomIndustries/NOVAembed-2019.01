@@ -48,6 +48,13 @@
 #define NXP_N1_BLOB_NAME    "linux-nxp-n1-4.14.47_uImage"
 #define RK_M7_BLOB_NAME     "linux-rock_m7-4.4.126_Image"
 
+#define RK_M7_BOOTLOADER    "u-boot-novasomM7-2017.09"
+#define NXP_P_BOOTLOADER    "u-boot-novasomP-2015.04"
+#define NXP_U_BOOTLOADER    "u-boot-novasomU-2016.03"
+#define NXP_N1_BOOTLOADER   "u-boot-novasomM7-2017.09"
+#define QUALCOMM_BOOTLOADER "u-boot-novasomM8-2017.11"
+
+
 #define KERNEL_REPO_SERVER      "82.78.202.216"
 #define BKP_KERNEL_REPO_SERVER  "93.41.190.216"
 #define FS_REPO_SERVER      "82.78.202.216"
