@@ -970,7 +970,7 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
     out << QString("#!/bin/sh\n");
     out << QString("cd "+instpath+"/Utils\n");
     out << QString("echo 0 > /tmp/result\n");
-    out << QString("./update_all\n");
+    out << QString("./update_all > "+instpath+"/Logs/update.log\n");
 
     scriptfile.close();
     int result = run_script();
