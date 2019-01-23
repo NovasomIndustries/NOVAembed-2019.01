@@ -748,6 +748,38 @@ QString line;
             ui->UserPartition2Size_lineEdit->setVisible(true);
         }
         ui->uSD_Device_comboBox->setCurrentText(uSD_Device);
+
+        if ( ui->Board_comboBox->currentText() == "P Series")
+        {
+            if ( !QFile(instpath+"/Blobs/"+NXP_P_SPL).exists() )
+                BootValid = "INVALID";
+            if ( !QFile(instpath+"/Blobs/"+NXP_P_UBOOT).exists() )
+                BootValid = "INVALID";
+        }
+
+        if ( ui->Board_comboBox->currentText() == "U5")
+        {
+            if ( !QFile(instpath+"/Blobs/"+NXP_U_UBOOT).exists() )
+                BootValid = "INVALID";
+        }
+        if ( ui->Board_comboBox->currentText() == "N1")
+        {
+            if ( !QFile(instpath+"/Blobs/"+NXP_N1_UBOOT).exists() )
+                BootValid = "INVALID";
+        }
+        if ( ui->Board_comboBox->currentText() == "M8")
+            BootValid = "OK";
+
+        if ( ui->Board_comboBox->currentText() == "M7")
+        {
+            if ( !QFile(instpath+"/Blobs/"+RK_M7_BOOT).exists() )
+                BootValid = "INVALID";
+            if ( !QFile(instpath+"/Blobs/"+RK_M7_TRUST).exists() )
+                BootValid = "INVALID";
+            if ( !QFile(instpath+"/Blobs/"+RK_M7_IDBLOADER).exists() )
+                BootValid = "INVALID";
+        }
+
         if ( BootValid == "OK" )
         {
             ui->BootStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
@@ -758,6 +790,23 @@ QString line;
             ui->BootStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
             std::cout << "BootNotValid\n" << std::flush;
         }
+
+        if ( ui->Board_comboBox->currentText() == "P Series")
+            if ( !QFile(instpath+"/Blobs/"+NXP_P_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+        if ( ui->Board_comboBox->currentText() == "U5")
+            if ( !QFile(instpath+"/Blobs/"+NXP_U_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+        if ( ui->Board_comboBox->currentText() == "N1")
+            if ( !QFile(instpath+"/Blobs/"+NXP_N1_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+        if ( ui->Board_comboBox->currentText() == "M8")
+            if ( !QFile(instpath+"/Blobs/"+QUALCOMM_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+        if ( ui->Board_comboBox->currentText() == "M7")
+            if ( !QFile(instpath+"/Blobs/"+RK_M7_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+
         if ( KernelValid == "OK" )
         {
             ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));

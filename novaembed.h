@@ -19,7 +19,7 @@
 #define INSTALLATION_PATH   "/Devel/NOVAsdk2019.01"
 #define BLOBS_PATH          "/Devel/NOVAsdk2019.01/Blobs/"
 
-#define RK_M7_KERNEL        "linux-4.4.126_M7_2019.01"
+#define RK_M7_KERNEL        "linux-4.4.126_M7"
 #define QUALCOMM_KERNEL     "linux-4.11.0-QualcommLinaro"
 #define NXP_P_KERNEL        "linux-imx_4.1.15_1.2.0_ga"
 #define NXP_U_KERNEL        "linux-imx_4.1.43"
@@ -31,10 +31,14 @@
 #define NXP_U_DEFCONFIG     "imx_v7_defconfig"
 #define NXP_N1_DEFCONFIG    "NOVAsomN1_defconfig"
 
-
+/* Boot components by board */
 #define RK_M7_BOOT          "m7-uboot.img"
 #define RK_M7_TRUST         "m7-trust.img"
 #define RK_M7_IDBLOADER     "m7-idbloader.img"
+#define NXP_P_SPL           "p-SPL"
+#define NXP_P_UBOOT         "p-uboot.img"
+#define NXP_U_UBOOT         "u-uboot.imx"
+#define NXP_N1_UBOOT        "N1_u-boot-dtb.bin"
 
 #define RK_M7_SOURCEME      "SourceMe64"
 #define QUALCOMM_SOURCEME   "SourceMe64"
@@ -51,7 +55,7 @@
 #define RK_M7_BOOTLOADER    "u-boot-novasomM7-2017.09"
 #define NXP_P_BOOTLOADER    "u-boot-novasomP-2015.04"
 #define NXP_U_BOOTLOADER    "u-boot-novasomU-2016.03"
-#define NXP_N1_BOOTLOADER   "u-boot-novasomM7-2017.09"
+#define NXP_N1_BOOTLOADER   "u-boot-novasomN1-2018.03"
 #define QUALCOMM_BOOTLOADER "u-boot-novasomM8-2017.11"
 
 
