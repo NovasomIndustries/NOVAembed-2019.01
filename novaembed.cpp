@@ -454,8 +454,8 @@ int NOVAembed::run_script(void)
 
     system("rm -f /tmp/result");
     system("chmod 777 /tmp/script");
-    //system("konsole -e /tmp/script > "+instpath.toLatin1()+"/Logs/main_log");
-    system("xterm -geometry 120x24 -e /tmp/script > "+instpath.toLatin1()+"/Logs/main_log");
+    system("xterm -geometry 120x24 -e /tmp/script");
+
 
     QFile file("/tmp/result");
     while( file.open(QIODevice::ReadOnly) == false )
@@ -474,7 +474,7 @@ int NOVAembed::run_background_script(void)
 
     system("rm -f /tmp/result");
     system("chmod 777 /tmp/background_script");
-    system("konsole -e /tmp/background_script --background-mode -geometry 350x150 & > "+instpath.toLatin1()+"/Logs/main_log");
+    system("konsole -e /tmp/background_script --background-mode -geometry 350x150 &");
 
     QFile file("/tmp/result");
     while( file.open(QIODevice::ReadOnly) == false )
@@ -974,7 +974,10 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
     out << QString("#!/bin/sh\n");
     out << QString("cd "+instpath+"/Utils\n");
     out << QString("echo 0 > /tmp/result\n");
-    out << QString("./update_all > "+instpath+"/Logs/update.log\n");
+    out << QString("echo \"**********************************************\" >> "+instpath+"/Logs/update.log\n");
+    out << QString("echo \"Update started on `date`\" >> "+instpath+"/Logs/update.log\n");
+    out << QString("echo \"**********************************************\"  >> "+instpath+"/Logs/update.log\n");
+    out << QString("./update_all >> "+instpath+"/Logs/update.log\n");
 
     scriptfile.close();
     int result = run_script();

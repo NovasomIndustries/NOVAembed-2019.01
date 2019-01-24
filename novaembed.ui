@@ -1235,9 +1235,9 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -1463,12 +1463,12 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
-         <bold>true</bold>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>User app stored in /bin</string>
+        <string>Store user app in /bin</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="UserAPPselectedlineEdit">
@@ -1701,9 +1701,9 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -1839,9 +1839,9 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -1862,8 +1862,8 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
-         <bold>true</bold>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -1941,9 +1941,9 @@
        <property name="font">
         <font>
          <pointsize>9</pointsize>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -1974,9 +1974,9 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -2012,21 +2012,21 @@
       <widget class="QLabel" name="label_104">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>20</x>
          <y>130</y>
-         <width>31</width>
+         <width>81</width>
          <height>20</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>size</string>
+        <string>Resulting size</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -2087,9 +2087,9 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -2405,9 +2405,9 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -2443,9 +2443,9 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -2503,9 +2503,9 @@
        <property name="font">
         <font>
          <pointsize>9</pointsize>
-         <weight>75</weight>
+         <weight>50</weight>
          <italic>true</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
