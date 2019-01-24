@@ -265,21 +265,30 @@ QString PixMapName="";
 
     /* std::cout << CurrentBSPF_Tab.toLatin1().constData() << std::flush; */
 
-    if (CurrentBSPF_Tab == "P BSP Factory")
+    if ( _Board_comboBox == "P Series")
+//    if (CurrentBSPF_Tab == "P BSP Factory")
     {
         ui->tab->insertTab(2,PBSP_stab,"P BSP Factory");
     }
-    else if (CurrentBSPF_Tab == "M8 BSP Factory")
+    else if ( _Board_comboBox == "M8")
+    //else if (CurrentBSPF_Tab == "M8 BSP Factory")
     {
         ui->tab->insertTab(2,M8BSP_stab,"M8 BSP Factory");
     }
-    else if (CurrentBSPF_Tab == "U BSP Factory")
+    else if ( _Board_comboBox == "U5")
+    //else if (CurrentBSPF_Tab == "U BSP Factory")
     {
         ui->tab->insertTab(2,UBSP_stab,"U BSP Factory");
     }
-    else if (CurrentBSPF_Tab == "M7 BSP Factory")
+    else if ( _Board_comboBox == "M7")
+    //else if (CurrentBSPF_Tab == "M7 BSP Factory")
     {
         ui->tab->insertTab(2,M7BSP_stab,"M7 BSP Factory");
+    }
+    else if ( _Board_comboBox == "N1")
+    {
+        ui->tab->insertTab(2,TOOL_stab,"Tools");
+        return;
     }
     /*
     else if (CurrentBSPF_Tab == "N1 BSP Factory")
@@ -952,6 +961,13 @@ QString line;
             }
         }
         break;
+    case 3 : // Tools
+        if ( ui->Board_comboBox->currentText() == "N1")
+            ui->SPIProg_pushButton->setVisible(true);
+        else
+            ui->SPIProg_pushButton->setVisible(false);
+        break;
+
     }
 }
 

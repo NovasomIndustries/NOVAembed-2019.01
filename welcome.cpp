@@ -54,22 +54,14 @@ void NOVAembed::on_Board_comboBox_currentIndexChanged(const QString &arg1)
 int kernelok=0,bootok=0;
 QFileInfo check_file1;
 QString file_exists_path;
-    if (( arg1 == "P Series") && ( CurrentBSPF_Tab == "P BSP Factory"))
-        return;
-    if (( arg1 == "U5") && ( CurrentBSPF_Tab == "U BSP Factory"))
-        return;
-    if (( arg1 == "M8") && ( CurrentBSPF_Tab == "M8 BSP Factory"))
-        return;
-    if (( arg1 == "M7") && ( CurrentBSPF_Tab == "M7 BSP Factory"))
-        return;
-    if (( arg1 == "N1") && ( CurrentBSPF_Tab == "N1 BSP Factory"))
+    if ( _Board_comboBox == arg1 )
         return;
     _Board_comboBox = arg1;
     file_exists_path = BLOBS_PATH;
 
     Board_comboBox_setText(arg1);
 
-    if ( arg1 == "U5")
+    if ( _Board_comboBox == "U5")
     {
         CurrentBSPF_Tab = "U BSP Factory";
         current_stab = UBSP_stab;
@@ -90,7 +82,7 @@ QString file_exists_path;
         ui->BoardNameBKF->setText(arg1);
         ui->BrandNameBKF->setPixmap(QPixmap(":/Icons/NXP-Logo.png"));
     }
-    if ( arg1 == "P Series")
+    if ( _Board_comboBox == "P Series")
     {
         ui->FileSystemSelectedlineEdit->setText("");
         CurrentBSPF_Tab = "P BSP Factory";
@@ -122,7 +114,7 @@ QString file_exists_path;
         ui->BrandNameBKF->setPixmap(QPixmap(":/Icons/NXP-Logo.png"));
         ui->BoardNameBKF->setText(arg1);
     }
-    if ( arg1 == "M8")
+    if ( _Board_comboBox == "M8")
     {
         ui->FileSystemSelectedlineEdit->setText("");
         CurrentBSPF_Tab = "M8 BSP Factory";
@@ -146,7 +138,7 @@ QString file_exists_path;
         ui->BrandNameBKF->setPixmap(QPixmap(":/Icons/Qualcomm_Snapdragon_logo.png"));
         ui->BoardNameBKF->setText(arg1);
     }
-    if ( arg1 == "M7")
+    if ( _Board_comboBox == "M7")
     {
         ui->FileSystemSelectedlineEdit->setText("");
         CurrentBSPF_Tab = "M7 BSP Factory";
@@ -182,10 +174,9 @@ QString file_exists_path;
         ui->BrandNameBKF->setPixmap(QPixmap(":/Icons/RockchipLogo.jpg"));
         ui->BoardNameBKF->setText(arg1);
     }
-    if ( arg1 == "N1")
+    if ( _Board_comboBox == "N1")
     {
         ui->FileSystemSelectedlineEdit->setText("");
-        CurrentBSPF_Tab = "N1 BSP Factory";
         Kernel=NXP_N1_KERNEL;
         SourceMeFile=NXP_N1_SOURCEME;
         file_exists_path += NXP_N1_BLOB_NAME;
@@ -204,14 +195,18 @@ QString file_exists_path;
         ui->BoardNameBKF->setText(arg1);
     }
 
-    /* hide Tools for recompose order */
+    /* hide Tools for recompose order, remind : N1 has no BSPF tab */
     ui->tab->removeTab(3);
-
     ui->tab->removeTab(2);
-    ui->tab->insertTab(2,current_stab,CurrentBSPF_Tab);
-
-    /* now show tools again */
-    ui->tab->insertTab(3,TOOL_stab,"Tools");
+    if ( _Board_comboBox != "N1")
+    {
+        ui->tab->insertTab(2,current_stab,CurrentBSPF_Tab);
+        /* now show tools again, on 3 if it's not N1 */
+        ui->tab->insertTab(3,TOOL_stab,"Tools");
+    }
+    else
+        /* on 2 if it's N1 */
+        ui->tab->insertTab(2,TOOL_stab,"Tools");
 
     compile_NewFileSystemFileSystemConfigurationcomboBox();
 

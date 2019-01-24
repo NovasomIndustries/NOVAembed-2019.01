@@ -372,6 +372,8 @@ private slots:
 
     void on_UserAPPSelect_pushButton_clicked();
 
+    void on_SPIProg_pushButton_clicked();
+
 private:
     Ui::NOVAembed *ui;
 };
