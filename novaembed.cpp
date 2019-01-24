@@ -813,6 +813,7 @@ QString line;
         if ( ui->Board_comboBox->currentText() == "N1")
             if ( !QFile(instpath+"/Blobs/"+NXP_N1_BLOB_NAME).exists() )
                 KernelValid = "INVALID";
+
         if ( ui->Board_comboBox->currentText() == "M8")
             if ( !QFile(instpath+"/Blobs/"+QUALCOMM_BLOB_NAME).exists() )
                 KernelValid = "INVALID";
