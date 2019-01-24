@@ -53,8 +53,8 @@ void NOVAembed::on_SPIProg_pushButton_clicked()
     QTextStream out(&scriptfile);
     out << QString("#!/bin/sh\n");
     out << QString("cd "+instpath+"/Qt/NOVAembed/SPI_Programmer\n");
-    out << QString("rmmod ftdi_sio ; sleep 1; sudo LD_LIBRARY_PATH=libs:$LD_LIBRARY_PATH bin/Debug/SPI_Programmer -b > "+instpath+"/Logs/SPI_Programmer.log\n");
-    out << QString("echo \"0\" > /tmp/result\n");
+    out << QString("sudo rmmod ftdi_sio ; sleep 1; sudo LD_LIBRARY_PATH=libs:$LD_LIBRARY_PATH bin/Debug/SPI_Programmer -b > "+instpath+"/Logs/SPI_Programmer.log\n");
+    out << QString("echo \"$?\" > /tmp/result\n");
     scriptfile.close();
     if ( run_script() == 0)
     {
@@ -72,8 +72,8 @@ void NOVAembed::on_SPIProg_pushButton_clicked()
     }
     out << QString("#!/bin/sh\n");
     out << QString("cd "+instpath+"/Qt/NOVAembed/SPI_Programmer\n");
-    out << QString("rmmod ftdi_sio ; sleep 1; sudo LD_LIBRARY_PATH=libs:$LD_LIBRARY_PATH bin/Debug/SPI_Programmer -w >> "+instpath+"/Logs/SPI_Programmer.log\n");
-    out << QString("echo \"0\" > /tmp/result\n");
+    out << QString("sudo rmmod ftdi_sio ; sleep 1; sudo LD_LIBRARY_PATH=libs:$LD_LIBRARY_PATH bin/Debug/SPI_Programmer -w >> "+instpath+"/Logs/SPI_Programmer.log\n");
+    out << QString("echo \"$?\" > /tmp/result\n");
     scriptfile.close();
     if ( run_script() == 0)
     {
