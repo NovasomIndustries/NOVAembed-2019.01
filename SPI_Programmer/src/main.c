@@ -53,6 +53,7 @@ Table-1: The uniform 64MB memory layout of NOR/QSPI/NAND/SD media on all QorIQ p
 |Ramdisk rfs  |               | 32MB    | 0x02000000   |
 +-------------+---------------+---------|--------------|
 
+run with sudo rmmod ftdi_sio ; sleep 1; LD_LIBRARY_PATH=libs:$LD_LIBRARY_PATH bin/Debug/SPI_Programmer -b
  */
 
 #include <ctype.h>
@@ -218,7 +219,7 @@ char    strc;
 
 	status = SPI_GetNumChannels((uint32 *)&channels);
 	APP_CHECK_STATUS(status);
-	printf("Number of available SPI channels = %d\n",(int)channels);
+	printf("Number of available SPI channels = %d , status= 0x%08x\n",(int)channels,status);
 
     if(channels > 0)
     {
