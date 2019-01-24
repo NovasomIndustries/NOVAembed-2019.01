@@ -578,11 +578,11 @@ QString line;
         ui->SecondaryVideo_comboBox->setVisible(true);
         ui->PriVideo_24bit_checkBox->setVisible(true);
         ui->SecVideo_24bit_checkBox->setVisible(true);
-        ui->label_61->setVisible(true);
+        //ui->label_61->setVisible(true);
         ui->UserBSPFSelect_pushButton->setVisible(true);
         ui->UserBSPFselectedlineEdit->setVisible(true);
 
-        ui->label_61->setVisible(false);
+        //ui->label_61->setVisible(false);
         ui->UserBSPFSelect_pushButton->setVisible(false);
         ui->UserBSPFselectedlineEdit->setVisible(false);
         ui->label_65->setVisible(false);
@@ -591,7 +591,7 @@ QString line;
         ui->ExtFSBSPFselectedlineEdit->setVisible(false);
         if ( ui->Board_comboBox->currentText() == "M7")
         {
-            ui->label_61->setVisible(true);
+        //    ui->label_61->setVisible(true);
             ui->UserBSPFSelect_pushButton->setVisible(true);
             ui->UserBSPFselectedlineEdit->setVisible(true);
             ui->label_65->setVisible(true);
@@ -606,7 +606,8 @@ QString line;
             }
             else
             {
-                ui->UserBSPFselectedlineEdit->setText(Last_M7_BSPFactoryFile);
+                QFileInfo fileinfo(Last_M7_BSPFactoryFile);
+                ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
             }
             ui->FileSystemSelectedlineEdit->setText(Last_M7_FileSystem);
             ui->brand_label->setPixmap(QPixmap(":/Icons/RockchipLogo.jpg"));
@@ -614,7 +615,7 @@ QString line;
         }
         if ( ui->Board_comboBox->currentText() == "M8")
         {
-            ui->label_61->setVisible(true);
+           // ui->label_61->setVisible(true);
             ui->UserBSPFSelect_pushButton->setVisible(true);
             ui->UserBSPFselectedlineEdit->setVisible(true);
             ui->label_65->setVisible(true);
@@ -629,7 +630,8 @@ QString line;
             }
             else
             {
-                ui->UserBSPFselectedlineEdit->setText(Last_M8_BSPFactoryFile);
+                QFileInfo fileinfo(Last_M8_BSPFactoryFile);
+                ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
             }
             ui->FileSystemSelectedlineEdit->setText(Last_M8_FileSystem);
             ui->brand_label->setPixmap(QPixmap(":/Icons/Qualcomm_Snapdragon_logo.png"));
@@ -637,7 +639,7 @@ QString line;
         }
         if ( ui->Board_comboBox->currentText() == "P Series")
         {
-            ui->label_61->setVisible(true);
+            //ui->label_61->setVisible(true);
             ui->UserBSPFSelect_pushButton->setVisible(true);
             ui->UserBSPFselectedlineEdit->setVisible(true);
             ui->label_65->setVisible(true);
@@ -653,7 +655,8 @@ QString line;
             else
             {
                 P_load_BSPF_File(Last_P_BSPFactoryFile);
-                ui->UserBSPFselectedlineEdit->setText(Last_P_BSPFactoryFile);
+                QFileInfo fileinfo(Last_P_BSPFactoryFile);
+                ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
             }
             ui->FileSystemSelectedlineEdit->setText(Last_P_FileSystem);
             ui->brand_label->setPixmap(QPixmap(":/Icons/NXP-Logo.png"));
@@ -661,7 +664,7 @@ QString line;
         }
         if ( ui->Board_comboBox->currentText() == "U5")
         {
-            ui->label_61->setVisible(true);
+            //ui->label_61->setVisible(true);
             ui->UserBSPFSelect_pushButton->setVisible(true);
             ui->UserBSPFselectedlineEdit->setVisible(true);
             ui->label_65->setVisible(true);
@@ -676,7 +679,8 @@ QString line;
             }
             else
             {
-                ui->UserBSPFselectedlineEdit->setText(Last_U_BSPFactoryFile);
+                QFileInfo fileinfo(Last_U_BSPFactoryFile);
+                ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
             }
             ui->FileSystemSelectedlineEdit->setText(Last_U_FileSystem);
             ui->brand_label->setPixmap(QPixmap(":/Icons/NXP-Logo.png"));
@@ -1015,4 +1019,3 @@ void NOVAembed::on_actionVersion_triggered()
         tr(msg1)
     );
 }
-

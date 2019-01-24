@@ -1639,8 +1639,8 @@
       <widget class="QComboBox" name="UserPartition_comboBox">
        <property name="geometry">
         <rect>
-         <x>160</x>
-         <y>50</y>
+         <x>280</x>
+         <y>30</y>
          <width>71</width>
          <height>21</height>
         </rect>
@@ -1664,8 +1664,8 @@
       <widget class="QLabel" name="label_60">
        <property name="geometry">
         <rect>
-         <x>0</x>
-         <y>50</y>
+         <x>110</x>
+         <y>30</y>
          <width>141</width>
          <height>20</height>
         </rect>
@@ -1687,8 +1687,8 @@
       <widget class="QLineEdit" name="UserPartition1Size_lineEdit">
        <property name="geometry">
         <rect>
-         <x>160</x>
-         <y>70</y>
+         <x>280</x>
+         <y>50</y>
          <width>71</width>
          <height>21</height>
         </rect>
@@ -1697,8 +1697,8 @@
       <widget class="QLineEdit" name="UserPartition2Size_lineEdit">
        <property name="geometry">
         <rect>
-         <x>160</x>
-         <y>90</y>
+         <x>280</x>
+         <y>70</y>
          <width>71</width>
          <height>21</height>
         </rect>
@@ -1707,8 +1707,8 @@
       <widget class="QLabel" name="label_78">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>70</y>
+         <x>130</x>
+         <y>50</y>
          <width>131</width>
          <height>20</height>
         </rect>
@@ -1723,8 +1723,8 @@
       <widget class="QLabel" name="label_79">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>90</y>
+         <x>130</x>
+         <y>70</y>
          <width>131</width>
          <height>20</height>
         </rect>
@@ -1767,8 +1767,8 @@
       <widget class="QComboBox" name="uSD_Device_comboBox">
        <property name="geometry">
         <rect>
-         <x>160</x>
-         <y>110</y>
+         <x>280</x>
+         <y>90</y>
          <width>71</width>
          <height>21</height>
         </rect>
@@ -1802,8 +1802,8 @@
       <widget class="QLabel" name="label_102">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>110</y>
+         <x>110</x>
+         <y>90</y>
          <width>111</width>
          <height>20</height>
         </rect>
@@ -1825,22 +1825,28 @@
       <widget class="QPushButton" name="UserBSPFSelect_pushButton">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>200</y>
-         <width>81</width>
+         <x>0</x>
+         <y>160</y>
+         <width>171</width>
          <height>21</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
-        <string>Browse</string>
+        <string>Select BSPF file</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="UserBSPFselectedlineEdit">
        <property name="geometry">
         <rect>
-         <x>100</x>
-         <y>200</y>
-         <width>261</width>
+         <x>180</x>
+         <y>160</y>
+         <width>181</width>
          <height>21</height>
         </rect>
        </property>
@@ -1849,7 +1855,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>230</y>
+         <y>220</y>
          <width>21</width>
          <height>21</height>
         </rect>
@@ -1862,7 +1868,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>250</y>
+         <y>240</y>
          <width>81</width>
          <height>21</height>
         </rect>
@@ -1875,7 +1881,7 @@
        <property name="geometry">
         <rect>
          <x>100</x>
-         <y>250</y>
+         <y>240</y>
          <width>261</width>
          <height>21</height>
         </rect>
@@ -1885,7 +1891,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>270</y>
+         <y>260</y>
          <width>171</width>
          <height>21</height>
         </rect>
@@ -1894,35 +1900,11 @@
         <string>Write autorun Only</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_61">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>180</y>
-         <width>111</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <italic>true</italic>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Select BSPF file</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_62">
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>230</y>
+         <y>220</y>
          <width>71</width>
          <height>20</height>
         </rect>
@@ -1946,7 +1928,7 @@
        <property name="geometry">
         <rect>
          <x>160</x>
-         <y>150</y>
+         <y>130</y>
          <width>71</width>
          <height>21</height>
         </rect>
@@ -1956,7 +1938,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>130</y>
+         <y>110</y>
          <width>131</width>
          <height>20</height>
         </rect>
@@ -1992,7 +1974,7 @@
        <property name="geometry">
         <rect>
          <x>160</x>
-         <y>130</y>
+         <y>110</y>
          <width>191</width>
          <height>21</height>
         </rect>
@@ -2002,7 +1984,7 @@
        <property name="geometry">
         <rect>
          <x>60</x>
-         <y>150</y>
+         <y>130</y>
          <width>31</width>
          <height>20</height>
         </rect>
@@ -2019,6 +2001,35 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="UserAPPSelect_pushButton">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>180</y>
+         <width>171</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>User app stored in /bin</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="UserAPPselectedlineEdit">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>180</y>
+         <width>181</width>
+         <height>21</height>
+        </rect>
        </property>
       </widget>
      </widget>

@@ -203,8 +203,33 @@ void NOVAembed::on_KernelXconfig_pushButton_clicked()
     if ( run_script() == 0)
     {
         update_status_bar("Kernel configuration done");
-        ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
         KernelValid = "OK";
+        if ( ui->Board_comboBox->currentText() == "P Series")
+            if ( !QFile(instpath+"/Blobs/"+NXP_P_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+        if ( ui->Board_comboBox->currentText() == "U5")
+            if ( !QFile(instpath+"/Blobs/"+NXP_U_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+        if ( ui->Board_comboBox->currentText() == "N1")
+            if ( !QFile(instpath+"/Blobs/"+NXP_N1_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+        if ( ui->Board_comboBox->currentText() == "M8")
+            if ( !QFile(instpath+"/Blobs/"+QUALCOMM_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+        if ( ui->Board_comboBox->currentText() == "M7")
+            if ( !QFile(instpath+"/Blobs/"+RK_M7_BLOB_NAME).exists() )
+                KernelValid = "INVALID";
+        if ( KernelValid == "OK" )
+        {
+            ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
+            std::cout << "KernelValid\n" << std::flush;
+        }
+        else
+        {
+            ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
+            std::cout << "KernelNotValid\n" << std::flush;
+        }
+
     }
     else
     {
@@ -1055,6 +1080,42 @@ void NOVAembed::on_ExtFSBSPFSelect_pushButton_clicked()
 
 /* External file systems end */
 
+
+void NOVAembed::on_UserAPPSelect_pushButton_clicked()
+{
+    std::cout << instpath.toStdString()+"/FileSystem/"+FileSystemName.toStdString()+"/output/target/bin" << std::flush;
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Select User app to store in target /bin"), instpath,tr("all (*)"));
+    if (fileName.isEmpty())
+        return;
+    else
+    {
+        QFileInfo fileinfo(fileName);
+        QFile scriptfile("/tmp/script");
+        update_status_bar("Storing user app "+fileinfo.baseName()+" in "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin");
+        ui->UserAPPselectedlineEdit->setText(fileinfo.baseName());
+
+        if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        {
+            update_status_bar("Unable to create /tmp/script");
+            return;
+        }
+        QTextStream out(&scriptfile);
+        out << QString("#!/bin/sh\n");
+        out << QString("cp "+fileinfo.absoluteFilePath()+" "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin/.\n");
+        out << QString("echo \"0\" > /tmp/result\n");
+        out << QString("echo \""+fileinfo.absoluteFilePath()+" stored succesfully\"\n");
+        out << QString("exit 0");
+
+        scriptfile.close();
+        if ( run_script() == 0)
+        {
+            update_status_bar("User app "+fileinfo.baseName()+" successfully written to "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin");
+        }
+        else
+            update_status_bar("User app "+fileinfo.baseName()+" write failed to "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin");
+    }
+}
+
 void NOVAembed::on_UserBSPFSelect_pushButton_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/PClass_bspf",tr("BSPF (*.bspf)"));
@@ -1171,6 +1232,7 @@ void NOVAembed::on_ViewPreCompiledLog_pushButton_clicked()
 {
     system("kwrite "+instpath.toLatin1()+"/Logs/extfs.log");
 }
+
 
 
 

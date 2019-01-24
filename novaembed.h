@@ -370,6 +370,8 @@ private slots:
 
     void on_M7_ViewDtbCompileLog_pushButton_clicked();
 
+    void on_UserAPPSelect_pushButton_clicked();
+
 private:
     Ui::NOVAembed *ui;
 };
