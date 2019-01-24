@@ -961,12 +961,6 @@ QString line;
             }
         }
         break;
-    case 3 : // Tools
-        if ( ui->Board_comboBox->currentText() == "N1")
-            ui->SPIProg_pushButton->setVisible(true);
-        else
-            ui->SPIProg_pushButton->setVisible(false);
-        break;
 
     }
 }

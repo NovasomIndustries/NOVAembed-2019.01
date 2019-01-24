@@ -203,10 +203,14 @@ QString file_exists_path;
         ui->tab->insertTab(2,current_stab,CurrentBSPF_Tab);
         /* now show tools again, on 3 if it's not N1 */
         ui->tab->insertTab(3,TOOL_stab,"Tools");
+        ui->SPIProg_pushButton->setVisible(false);
     }
     else
+    {
         /* on 2 if it's N1 */
         ui->tab->insertTab(2,TOOL_stab,"Tools");
+        ui->SPIProg_pushButton->setVisible(true);
+    }
 
     compile_NewFileSystemFileSystemConfigurationcomboBox();
 

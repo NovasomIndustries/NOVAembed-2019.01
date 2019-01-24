@@ -62,7 +62,7 @@ void NOVAembed::on_SPIProg_pushButton_clicked()
     }
     else
     {
-        update_status_bar("SPI error");
+        update_status_bar("SPI blank error");
         return;
     }
     if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
@@ -81,7 +81,7 @@ void NOVAembed::on_SPIProg_pushButton_clicked()
     }
     else
     {
-        update_status_bar("SPI error");
+        update_status_bar("SPI write error");
         return;
     }
 }
