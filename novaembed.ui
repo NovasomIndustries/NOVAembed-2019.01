@@ -689,8 +689,8 @@
        <property name="geometry">
         <rect>
          <x>9</x>
-         <y>340</y>
-         <width>351</width>
+         <y>360</y>
+         <width>161</width>
          <height>21</height>
         </rect>
        </property>
@@ -707,7 +707,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>290</y>
+         <y>300</y>
          <width>151</width>
          <height>21</height>
         </rect>
@@ -748,7 +748,7 @@
        <property name="geometry">
         <rect>
          <x>200</x>
-         <y>290</y>
+         <y>300</y>
          <width>161</width>
          <height>21</height>
         </rect>
@@ -761,7 +761,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>260</y>
+         <y>270</y>
          <width>261</width>
          <height>21</height>
         </rect>
@@ -777,7 +777,7 @@
        <property name="geometry">
         <rect>
          <x>200</x>
-         <y>240</y>
+         <y>250</y>
          <width>121</width>
          <height>21</height>
         </rect>
@@ -790,7 +790,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>270</y>
+         <y>280</y>
          <width>351</width>
          <height>20</height>
         </rect>
@@ -1228,7 +1228,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>240</y>
+         <y>250</y>
          <width>121</width>
          <height>20</height>
         </rect>
@@ -1264,7 +1264,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>310</y>
+         <y>320</y>
          <width>351</width>
          <height>21</height>
         </rect>
@@ -1279,11 +1279,11 @@
          <x>10</x>
          <y>70</y>
          <width>351</width>
-         <height>171</height>
+         <height>151</height>
         </rect>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
@@ -1413,7 +1413,7 @@
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>110</y>
+           <y>90</y>
            <width>331</width>
            <height>21</height>
           </rect>
@@ -1450,6 +1450,35 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="UserAPPSelect_pushButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>220</y>
+         <width>171</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>User app stored in /bin</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="UserAPPselectedlineEdit">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>220</y>
+         <width>171</width>
+         <height>21</height>
+        </rect>
        </property>
       </widget>
      </widget>
@@ -2001,35 +2030,6 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="UserAPPSelect_pushButton">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>180</y>
-         <width>171</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>User app stored in /bin</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="UserAPPselectedlineEdit">
-       <property name="geometry">
-        <rect>
-         <x>180</x>
-         <y>180</y>
-         <width>181</width>
-         <height>21</height>
-        </rect>
        </property>
       </widget>
      </widget>

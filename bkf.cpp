@@ -506,6 +506,42 @@ void NOVAembed::on_ThisIsReferenceServer_checkBox_clicked(bool checked)
 
 }
 
+void NOVAembed::on_UserAPPSelect_pushButton_clicked()
+{
+    std::cout << instpath.toStdString()+"/FileSystem/"+FileSystemName.toStdString()+"/output/target/bin" << std::flush;
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Select User app to store in target /bin"), instpath,tr("all (*)"));
+    if (fileName.isEmpty())
+        return;
+    else
+    {
+        QFileInfo fileinfo(fileName);
+        QFile scriptfile("/tmp/script");
+        update_status_bar("Storing user app "+fileinfo.baseName()+" in "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin");
+        ui->UserAPPselectedlineEdit->setText(fileinfo.baseName());
+
+        if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        {
+            update_status_bar("Unable to create /tmp/script");
+            return;
+        }
+        QTextStream out(&scriptfile);
+        out << QString("#!/bin/sh\n");
+        out << QString("cp "+fileinfo.absoluteFilePath()+" "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin/.\n");
+        out << QString("echo \"0\" > /tmp/result\n");
+        out << QString("echo \""+fileinfo.absoluteFilePath()+" stored succesfully\"\n");
+        out << QString("exit 0");
+
+        scriptfile.close();
+        if ( run_script() == 0)
+        {
+            update_status_bar("User app "+fileinfo.baseName()+" successfully written to "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin");
+            on_FileSystemDeploy_pushButton_clicked();
+        }
+        else
+            update_status_bar("User app "+fileinfo.baseName()+" write failed to "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin");
+    }
+}
+
 void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
 {
     if ( ui->FileSystemSelectedlineEdit->text().isEmpty())
@@ -1081,40 +1117,6 @@ void NOVAembed::on_ExtFSBSPFSelect_pushButton_clicked()
 /* External file systems end */
 
 
-void NOVAembed::on_UserAPPSelect_pushButton_clicked()
-{
-    std::cout << instpath.toStdString()+"/FileSystem/"+FileSystemName.toStdString()+"/output/target/bin" << std::flush;
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Select User app to store in target /bin"), instpath,tr("all (*)"));
-    if (fileName.isEmpty())
-        return;
-    else
-    {
-        QFileInfo fileinfo(fileName);
-        QFile scriptfile("/tmp/script");
-        update_status_bar("Storing user app "+fileinfo.baseName()+" in "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin");
-        ui->UserAPPselectedlineEdit->setText(fileinfo.baseName());
-
-        if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
-        {
-            update_status_bar("Unable to create /tmp/script");
-            return;
-        }
-        QTextStream out(&scriptfile);
-        out << QString("#!/bin/sh\n");
-        out << QString("cp "+fileinfo.absoluteFilePath()+" "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin/.\n");
-        out << QString("echo \"0\" > /tmp/result\n");
-        out << QString("echo \""+fileinfo.absoluteFilePath()+" stored succesfully\"\n");
-        out << QString("exit 0");
-
-        scriptfile.close();
-        if ( run_script() == 0)
-        {
-            update_status_bar("User app "+fileinfo.baseName()+" successfully written to "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin");
-        }
-        else
-            update_status_bar("User app "+fileinfo.baseName()+" write failed to "+instpath+"/FileSystem/"+FileSystemName+"/output/target/bin");
-    }
-}
 
 void NOVAembed::on_UserBSPFSelect_pushButton_clicked()
 {
