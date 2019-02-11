@@ -86,12 +86,6 @@ void NOVAembed::on_BootLoaderCompile_pushButton_clicked()
         update_status_bar("Cloning "+a+" boot loader for "+ui->Board_comboBox->currentText()+" ... ");
         system(instpath.toLatin1()+"/Utils/clone_singleboot "+NXP_U_BOOTLOADER+"_2019.01 "+NXP_U_BOOTLOADER);
     }
-    if ( ui->Board_comboBox->currentText() == "N1")
-    {
-        QString a=NXP_N1_BOOTLOADER;
-        update_status_bar("Cloning "+a+" boot loader for "+ui->Board_comboBox->currentText()+" ... ");
-        system(instpath.toLatin1()+"/Utils/clone_singleboot "+NXP_N1_BOOTLOADER+"_2019.01 "+NXP_N1_BOOTLOADER);
-    }
     if ( ui->Board_comboBox->currentText() == "M8")
     {
         QString a=QUALCOMM_BOOTLOADER;
@@ -125,11 +119,6 @@ void NOVAembed::on_BootLoaderCompile_pushButton_clicked()
     {
         out << QString("cd nxp\n");
         out << QString("./umakeU > "+instpath+"/Logs/umakeU.log\n");
-    }
-    if ( ui->Board_comboBox->currentText() == "N1")
-    {
-        out << QString("cd nxp\n");
-        out << QString("./umakeN1 > "+instpath+"/Logs/umakeN1.log\n");
     }
     if ( ui->Board_comboBox->currentText() == "M8")
     {
@@ -187,8 +176,6 @@ void NOVAembed::on_KernelXconfig_pushButton_clicked()
         config_file = NXP_U_DEFCONFIG;
     if ( ui->Board_comboBox->currentText() == "M8")
         config_file = QUALCOMM_DEFCONFIG;
-    if ( ui->Board_comboBox->currentText() == "N1")
-        config_file = NXP_N1_DEFCONFIG;
     if ( ui->Board_comboBox->currentText() == "M7")
         config_file = RK_M7_DEFCONFIG;
 
@@ -209,9 +196,6 @@ void NOVAembed::on_KernelXconfig_pushButton_clicked()
                 KernelValid = "INVALID";
         if ( ui->Board_comboBox->currentText() == "U5")
             if ( !QFile(instpath+"/Blobs/"+NXP_U_BLOB_NAME).exists() )
-                KernelValid = "INVALID";
-        if ( ui->Board_comboBox->currentText() == "N1")
-            if ( !QFile(instpath+"/Blobs/"+NXP_N1_BLOB_NAME).exists() )
                 KernelValid = "INVALID";
         if ( ui->Board_comboBox->currentText() == "M8")
             if ( !QFile(instpath+"/Blobs/"+QUALCOMM_BLOB_NAME).exists() )
@@ -300,13 +284,6 @@ void NOVAembed::on_KernelCompile_pushButton_clicked()
         out << QString("cd "+instpath+"/Utils/rock\n");
         out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
     }
-    if ( ui->Board_comboBox->currentText() == "N1")
-    {
-        out << QString("cd "+instpath+"/Deploy\n");
-        out << QString("rm Image ; ln -s ../Kernel/"+Kernel+"/arch/arm64/boot/Image\n");
-        out << QString("cd "+instpath+"/Utils/nxp\n");
-        out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
-    }
 
     scriptfile.close();
     if ( run_script() == 0)
@@ -358,14 +335,6 @@ void NOVAembed::on_KernelReCompile_pushButton_clicked()
         out << QString("rm zImage ; ln -s ../Kernel/"+Kernel+"/arch/arm/boot/zImage\n");
         out << QString("cd "+instpath+"/Utils/nxp\n");
         config_file = "imx_v7_defconfig";
-        out << QString("./kremake "+Kernel+" "+SourceMeFile+" "+config_file+" >> "+instpath+"/Logs/kremake.log\n");
-    }
-    if ( ui->Board_comboBox->currentText() == "N1")
-    {
-        out << QString("cd "+instpath+"/Deploy\n");
-        out << QString("rm Image ; ln -s ../Kernel/"+Kernel+"/arch/arm/boot/Image\n");
-        out << QString("cd "+instpath+"/Utils/nxp\n");
-        config_file = "NOVAsomN1_defconfig";
         out << QString("./kremake "+Kernel+" "+SourceMeFile+" "+config_file+" >> "+instpath+"/Logs/kremake.log\n");
     }
     if ( ui->Board_comboBox->currentText() == "M8")
@@ -577,8 +546,6 @@ void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
         out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" P > "+instpath+"/Logs/FileSystem_Pmake.log\n");
     if ( ui->Board_comboBox->currentText() == "U5")
         out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" U > "+instpath+"/Logs/FileSystem_Umake.log\n");
-    if ( ui->Board_comboBox->currentText() == "N1")
-        out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" N1 > "+instpath+"/Logs/FileSystem_N1make.log\n");
     if ( ui->Board_comboBox->currentText() == "M8")
         out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" M8 > "+instpath+"/Logs/FileSystem_M8make.log\n");
     if ( ui->Board_comboBox->currentText() == "M7")
@@ -596,8 +563,6 @@ void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
             Last_P_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
         if ( ui->Board_comboBox->currentText() == "U5")
             Last_U_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
-        if ( ui->Board_comboBox->currentText() == "N1")
-            Last_N1_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
         if ( ui->Board_comboBox->currentText() == "M8")
             Last_M8_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
         if ( ui->Board_comboBox->currentText() == "M7")
@@ -613,8 +578,6 @@ void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
             Last_P_FileSystem = "";
         if ( ui->Board_comboBox->currentText() == "U5")
             Last_U_FileSystem = "";
-        if ( ui->Board_comboBox->currentText() == "N1")
-            Last_N1_FileSystem = "";
         if ( ui->Board_comboBox->currentText() == "M8")
             Last_M8_FileSystem = "";
         if ( ui->Board_comboBox->currentText() == "M7")
@@ -734,23 +697,34 @@ void NOVAembed::NOVAsom_Params_helper()
             NOVAsomParamsName = "NOVAsomParams_U5_480x272";
         }
     }
-    if ( ui->Board_comboBox->currentText() == "N1")
-    {
-        NOVAsomParamsName = "NOVAsomParams_N1";
-    }
     if ( ui->Board_comboBox->currentText() == "M7")
     {
         NOVAsomParamsName = "NOVAsomParams_M7";
     }
 }
 
+void qSleep(int ms)
+{
+    struct timespec ts = { ms / 1000, (ms % 1000) * 1000 * 1000 };
+    nanosleep(&ts, NULL);
+}
+
 void NOVAembed::on_Write_uSD_pushButton_clicked()
 {
     /*uSD_Device_comboBox*/
+    if ( NumberOfUserPartitions == "2")
+    {
+        if ((UserPartition1Size == "0") && (UserPartition2Size == "0"))
+            UserPartition1Size = "32";    /* If both are 0 set user1 for 32MB */
+    }
 
+    ui->UserPartition1Size_lineEdit->setText(UserPartition1Size);
+    ui->UserPartition2Size_lineEdit->setText(UserPartition2Size);
+    update_status_bar("uSD size adjusted to "+UserPartition1Size+" "+UserPartition2Size);
+    qSleep(2000);
     uSD_Device = ui->uSD_Device_comboBox->currentText();
     QFile scriptfile("/tmp/script");
-    update_status_bar("Writing uSD with "+FileSystemName+" ...");
+    update_status_bar("Writing uSD with "+FileSystemName);
 
     if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
     {
@@ -760,10 +734,12 @@ void NOVAembed::on_Write_uSD_pushButton_clicked()
 
     NOVAsom_Params_helper();
 
+
     QFileInfo fi(ui->UserBSPFselectedlineEdit->text());
 
     QTextStream out(&scriptfile);
     out << QString("#!/bin/sh\n");
+
 
     if ( ui->Board_comboBox->currentText() == "U5")
     {
@@ -776,13 +752,6 @@ void NOVAembed::on_Write_uSD_pushButton_clicked()
     {
         out << QString("cd "+instpath+"/Utils/nxp\n");
         out << QString("./flashP "+NumberOfUserPartitions+" "+UserPartition1Size+" "+UserPartition2Size+" /dev/"+uSD_Device+" "+"SDL_"+fi.baseName()+".dtb"+" "+"QUAD_"+fi.baseName()+".dtb"+" "+NOVAsomParamsName+" "+ui->initRdSize_lineEdit->text()+" > "+instpath+"/Logs/uSD_Write.log\n");
-        if ( ui->UserAutoRun_checkBox->isChecked())
-            out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write.log\n");
-    }
-    if ( ui->Board_comboBox->currentText() == "N1")
-    {
-        out << QString("cd "+instpath+"/Utils/nxp\n");
-        out << QString("./flashN1 "+NumberOfUserPartitions+" "+UserPartition1Size+" "+UserPartition2Size+" /dev/"+uSD_Device+" "+instpath+"/Kernel/"+NXP_N1_KERNEL+"/arch/arm64/boot/dts/freescale/fsl-ls1012a-frdm.dtb "+NOVAsomParamsName+" "+ui->initRdSize_lineEdit->text()+" > "+instpath+"/Logs/uSD_Write.log\n");
         if ( ui->UserAutoRun_checkBox->isChecked())
             out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write.log\n");
     }

@@ -217,13 +217,6 @@ QString PixMapName="";
         SourceMeFile=NXP_U_SOURCEME;
         PixMapName=":/Icons/NXP-Logo.png";
     }
-    if ( _Board_comboBox == "N1")
-    {
-        Kernel=NXP_N1_KERNEL;
-        SourceMeFile=NXP_N1_SOURCEME;
-        PixMapName=":/Icons/NXP-LayerScapeLogo.png";
-        ui->FileSystemSelectedlineEdit->setText(Last_N1_FileSystem);
-    }
     if ( _Board_comboBox == "M8")
     {
         Kernel=QUALCOMM_KERNEL;
@@ -285,17 +278,6 @@ QString PixMapName="";
     {
         ui->tab->insertTab(2,M7BSP_stab,"M7 BSP Factory");
     }
-    else if ( _Board_comboBox == "N1")
-    {
-        ui->tab->insertTab(2,TOOL_stab,"Tools");
-        return;
-    }
-    /*
-    else if (CurrentBSPF_Tab == "N1 BSP Factory")
-    {
-        //ui->tab->insertTab(2,N1BSP_stab,"N1 BSP Factory");
-    }
-    */
     else
     {
         ui->tab->insertTab(2,PBSP_stab,"P BSP Factory");
@@ -397,12 +379,6 @@ void NOVAembed::compile_NewFileSystemFileSystemConfigurationcomboBox()
         ui->PrimaryVideo_comboBox->setVisible(false);
         ui->VideoVisible_label->setVisible(false);
     }
-    else if (ui->Board_comboBox->currentText() == "N1")
-    {
-        str = "N1Class_Buildroot_*.config";
-        ui->PrimaryVideo_comboBox->setVisible(false);
-        ui->VideoVisible_label->setVisible(false);
-    }
     else
         str = "Buildroot_*.config";
 
@@ -428,8 +404,6 @@ void NOVAembed::compile_ExtFS_comboBox()
         ExternalFileSystemsDir=instpath+"/ExternalFileSystems/M7";
     if ( ui->Board_comboBox->currentText() == "U5")
         ExternalFileSystemsDir=instpath+"/ExternalFileSystems/U5";
-    if ( ui->Board_comboBox->currentText() == "N1")
-        ExternalFileSystemsDir=instpath+"/ExternalFileSystems/N1";
     if ( ui->Board_comboBox->currentText() == "P Series")
         ExternalFileSystemsDir=instpath+"/ExternalFileSystems/P";
 
@@ -695,14 +669,6 @@ QString line;
             ui->brand_label->setPixmap(QPixmap(":/Icons/NXP-Logo.png"));
             line = Last_U_FileSystem;
         }
-        if ( ui->Board_comboBox->currentText() == "N1")
-        {
-            Kernel=NXP_N1_KERNEL;
-            SourceMeFile=NXP_N1_SOURCEME;
-            ui->brand_label->setPixmap(QPixmap(":/Icons/NXP-LayerScapeLogo.png"));
-            ui->FileSystemSelectedlineEdit->setText(Last_N1_FileSystem);
-            line = Last_N1_FileSystem;
-        }
 
         line.replace(QString(instpath), QString(""));
         line.replace(QString("/FileSystem/"), QString(""));
@@ -775,11 +741,6 @@ QString line;
             if ( !QFile(instpath+"/Blobs/"+NXP_U_UBOOT).exists() )
                 BootValid = "INVALID";
         }
-        if ( ui->Board_comboBox->currentText() == "N1")
-        {
-            if ( !QFile(instpath+"/Blobs/"+NXP_N1_UBOOT).exists() )
-                BootValid = "INVALID";
-        }
         if ( ui->Board_comboBox->currentText() == "M8")
             BootValid = "OK";
 
@@ -810,10 +771,6 @@ QString line;
         if ( ui->Board_comboBox->currentText() == "U5")
             if ( !QFile(instpath+"/Blobs/"+NXP_U_BLOB_NAME).exists() )
                 KernelValid = "INVALID";
-        if ( ui->Board_comboBox->currentText() == "N1")
-            if ( !QFile(instpath+"/Blobs/"+NXP_N1_BLOB_NAME).exists() )
-                KernelValid = "INVALID";
-
         if ( ui->Board_comboBox->currentText() == "M8")
             if ( !QFile(instpath+"/Blobs/"+QUALCOMM_BLOB_NAME).exists() )
                 KernelValid = "INVALID";
@@ -852,8 +809,6 @@ QString line;
             ret = check_file_present(Last_P_FileSystem);
         if ( ui->Board_comboBox->currentText() == "U5")
             ret = check_file_present(Last_U_FileSystem);
-        if ( ui->Board_comboBox->currentText() == "N1")
-            ret = check_file_present(Last_N1_FileSystem);
         if ( ui->Board_comboBox->currentText() == "M8")
             ret = check_file_present(Last_M8_FileSystem);
         if ( ui->Board_comboBox->currentText() == "M7")

@@ -450,11 +450,6 @@
         <string>M8</string>
        </property>
       </item>
-      <item>
-       <property name="text">
-        <string>N1</string>
-       </property>
-      </item>
      </widget>
      <widget class="QLabel" name="brand_label">
       <property name="geometry">

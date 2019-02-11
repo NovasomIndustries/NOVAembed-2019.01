@@ -174,43 +174,13 @@ QString file_exists_path;
         ui->BrandNameBKF->setPixmap(QPixmap(":/Icons/RockchipLogo.jpg"));
         ui->BoardNameBKF->setText(arg1);
     }
-    if ( _Board_comboBox == "N1")
-    {
-        ui->FileSystemSelectedlineEdit->setText("");
-        Kernel=NXP_N1_KERNEL;
-        SourceMeFile=NXP_N1_SOURCEME;
-        file_exists_path += NXP_N1_BLOB_NAME;
-        check_file1 = QFileInfo(file_exists_path);
-        if (check_file1.exists() && check_file1.isFile())
-            kernelok=1;
-        else
-            std::cout << "N1 kernel not found\n" << std::flush;
-        check_file1 = QFileInfo(instpath+"/Blobs/N1_u-boot-dtb.bin");
-        if (check_file1.exists() && check_file1.isFile())
-            bootok=1;
-        else
-            std::cout << "N1 uboot not found\n" << std::flush;
-        ui->brand_label->setPixmap(QPixmap(":/Icons/NXP-LayerScapeLogo.png"));
-        ui->BrandNameBKF->setPixmap(QPixmap(":/Icons/NXP-LayerScapeLogo.png"));
-        ui->BoardNameBKF->setText(arg1);
-    }
-
     /* hide Tools for recompose order, remind : N1 has no BSPF tab */
     ui->tab->removeTab(3);
     ui->tab->removeTab(2);
-    if ( _Board_comboBox != "N1")
-    {
-        ui->tab->insertTab(2,current_stab,CurrentBSPF_Tab);
-        /* now show tools again, on 3 if it's not N1 */
-        ui->tab->insertTab(3,TOOL_stab,"Tools");
-        ui->SPIProg_pushButton->setVisible(false);
-    }
-    else
-    {
-        /* on 2 if it's N1 */
-        ui->tab->insertTab(2,TOOL_stab,"Tools");
-        ui->SPIProg_pushButton->setVisible(true);
-    }
+    ui->tab->insertTab(2,current_stab,CurrentBSPF_Tab);
+    ui->tab->insertTab(3,TOOL_stab,"Tools");
+    ui->SPIProg_pushButton->setVisible(false);
+
 
     compile_NewFileSystemFileSystemConfigurationcomboBox();
 
