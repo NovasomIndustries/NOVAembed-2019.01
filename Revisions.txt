@@ -1,8 +1,6 @@
 NOVAembed
-1.0.5.0rc4 03/21/2018
-    Candidate to 1.0.5.0
-    fixed 0000001: Wrong status bar message when writing external file system
-    fixed 0000002: Wrong buttons on NOVAembed start page
-    fixed 0000003: Link tu HUM U5 not present
-1.0.5.0rc3
+2019.1.1
+    Removed N1 support
+    Added M7 BSPF
+2019.1
     Initial version
