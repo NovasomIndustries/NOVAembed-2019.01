@@ -1278,7 +1278,7 @@
         </rect>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
@@ -4722,7 +4722,7 @@ a PCAP/RT touch</string>
         <string>Save and generate .dtb</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="EditBeforeGenerate_checkBox">
+      <widget class="QCheckBox" name="P_EditBeforeGenerate_checkBox">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -51071,7 +51071,7 @@ a PCAP or an external RT touch</string>
         <rect>
          <x>470</x>
          <y>40</y>
-         <width>61</width>
+         <width>71</width>
          <height>21</height>
         </rect>
        </property>
@@ -88396,26 +88396,6 @@ a PCAP or an external RT touch</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QCheckBox" name="M7_PWM2_checkBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>91</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>PWM2 Out</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_152">
        <property name="geometry">
         <rect>
@@ -88460,7 +88440,7 @@ a PCAP or an external RT touch</string>
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>111</width>
+         <width>131</width>
          <height>16</height>
         </rect>
        </property>
@@ -88481,10 +88461,10 @@ a PCAP or an external RT touch</string>
       <widget class="QLabel" name="M7_Current_BSPF_File_label">
        <property name="geometry">
         <rect>
-         <x>130</x>
+         <x>150</x>
          <y>10</y>
-         <width>331</width>
-         <height>16</height>
+         <width>211</width>
+         <height>20</height>
         </rect>
        </property>
        <property name="font">
@@ -88742,7 +88722,7 @@ a PCAP or an external RT touch</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QCheckBox" name="M7_PrimaryVideo_24bit_comboBox">
+      <widget class="QCheckBox" name="M7_PrimaryVideo_24bit_checkBox">
        <property name="geometry">
         <rect>
          <x>360</x>
@@ -88808,7 +88788,7 @@ a PCAP or an external RT touch</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="label_M7GPIO04_IO20_5">
+      <widget class="QLabel" name="label_M7GPIO2_D0">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88825,7 +88805,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO20</string>
+        <string>GPIO2_D0</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_M7GPIO4_IO23_5">
@@ -88845,7 +88825,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO23</string>
+        <string>32K_OUT</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_GND2">
@@ -88871,7 +88851,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO1_IO10_5">
+      <widget class="QLabel" name="label_M7GPIO2_C1">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88888,10 +88868,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO01_IO10</string>
+        <string>GPIO2_C1</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO04_5">
+      <widget class="QLabel" name="label_M7GPIO0_A0">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88908,10 +88888,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO04</string>
+        <string>GPIO0_A0</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO00_5">
+      <widget class="QLabel" name="label_M7GPIO3_A4">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88928,7 +88908,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO00</string>
+        <string>GPIO3_A4</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_UVCC3V32_5">
@@ -88954,7 +88934,7 @@ a PCAP or an external RT touch</string>
         <string>VPERI_3V3</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO07_5">
+      <widget class="QLabel" name="label_M7GPIO3_A1">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88971,10 +88951,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO07</string>
+        <string>GPIO3_A1</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO08_5">
+      <widget class="QLabel" name="label_M7GPIO3_A2">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -88991,10 +88971,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO08</string>
+        <string>GPIO3_A2</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO06_5">
+      <widget class="QLabel" name="label_M7GPIO3_A0">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89011,7 +88991,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO06</string>
+        <string>GPIO3_A0</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_GND3">
@@ -89037,7 +89017,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_PSD3_CLK_7">
+      <widget class="QLabel" name="label_M7SDA_PMIC">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89057,10 +89037,13 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>N.C.</string>
+        <string>SDA_PMIC</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_M7GPIO4_IO21_5">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89077,10 +89060,13 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO21</string>
+        <string>N.C.</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_M7GPIO04_IO10_5">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89097,10 +89083,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO10</string>
+        <string>N.C.</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO18_5">
+      <widget class="QLabel" name="label_M7GPIO2_C7">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89117,10 +89103,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO18</string>
+        <string>GPIO2_C7</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO17_5">
+      <widget class="QLabel" name="label_M7GPIO2_C4">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89137,7 +89123,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO17</string>
+        <string>GPIO2_C4</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_UVCC3V31_5">
@@ -89164,7 +89150,7 @@ a PCAP or an external RT touch</string>
         <string>VPERI_3V3</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO19_5">
+      <widget class="QLabel" name="label_M7GPIO2_D1">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -89185,10 +89171,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO19</string>
+        <string>GPIO2_D1</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M8GPIO04_IO03_5">
+      <widget class="QLabel" name="label_M7GPIO2_C5">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -89209,7 +89195,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO03</string>
+        <string>GPIO2_C5</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_GND6">
@@ -89280,7 +89266,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_UUART5_TXD_5">
+      <widget class="QLabel" name="label_M7UART5_TXD">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89300,10 +89286,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>UART5_TXD</string>
+        <string>UART2_TXD</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_UUART5_RXD_5">
+      <widget class="QLabel" name="label_M7UART2_RXD">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89323,10 +89309,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>UART5_RXD</string>
+        <string>UART2_RXD</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO4_IO22_5">
+      <widget class="QLabel" name="label_M7GPIO3_A3">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89343,7 +89329,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO22</string>
+        <string>GPIO3_A3</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_PECSPI3_SCK_7">
@@ -89369,7 +89355,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO01_5">
+      <widget class="QLabel" name="label_M7GPIO3_A5">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89386,10 +89372,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO01</string>
+        <string>GPIO3_A5</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO02_9">
+      <widget class="QLabel" name="label_M7GPIO3_A6">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89406,7 +89392,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO02</string>
+        <string>GPIO3_A6</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_PECSPI4_MOSI_7">
@@ -89432,7 +89418,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO02_10">
+      <widget class="QLabel" name="label_M7GPIO3_A7">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89449,10 +89435,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO02</string>
+        <string>GPIO3_A7</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO04_IO09_5">
+      <widget class="QLabel" name="label_M7GPIO3_B0">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89469,10 +89455,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO09</string>
+        <string>GPIO3_B0</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO4_IO24_5">
+      <widget class="QLabel" name="label_M7GPIO2_B4">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89489,7 +89475,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO24</string>
+        <string>GPIO2_B4</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_GND4">
@@ -89515,7 +89501,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_M7GPIO01_IO09_5">
+      <widget class="QLabel" name="label_M7GPIO2_B7">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89532,7 +89518,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO01_IO09</string>
+        <string>GPIO2_B7</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_GND5">
@@ -89558,7 +89544,7 @@ a PCAP or an external RT touch</string>
         <string>GND</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_UGPIO01_IO27_5">
+      <widget class="QLabel" name="label_M7GPIO2_C6">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -89575,7 +89561,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO01_IO27</string>
+        <string>GPIO2_C6</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_5V1">
@@ -89626,7 +89612,7 @@ a PCAP or an external RT touch</string>
         <string>VPMIC_5V</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_PGPIO3_IO19_110">
+      <widget class="QLabel" name="label_SCL_PMIC">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -89647,10 +89633,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>N.C.</string>
+        <string>SCL_PMIC</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_UGPIO01_IO00_5">
+      <widget class="QLabel" name="label_M7GPIO2_C0">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -89671,10 +89657,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO01_IO00</string>
+        <string>GPIO2_C0</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_UGPIO01_IO05_5">
+      <widget class="QLabel" name="label_M7GPIO2_C3">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -89695,7 +89681,7 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO01_IO05</string>
+        <string>GPIO2_C3</string>
        </property>
       </widget>
      </widget>
@@ -107238,7 +107224,7 @@ a PCAP or an external RT touch</string>
       <widget class="QCheckBox" name="M7_I2C2_checkBox">
        <property name="geometry">
         <rect>
-         <x>400</x>
+         <x>340</x>
          <y>50</y>
          <width>61</width>
          <height>21</height>
@@ -107253,26 +107239,6 @@ a PCAP or an external RT touch</string>
        </property>
        <property name="text">
         <string>I2C 2</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="M7_UART2_checkBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>71</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>UART 2</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_148">
@@ -107298,12 +107264,12 @@ a PCAP or an external RT touch</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QLineEdit" name="M9_I2C2Speed_lineEdit">
+      <widget class="QLineEdit" name="M7_I2C2Speed_lineEdit">
        <property name="geometry">
         <rect>
-         <x>510</x>
+         <x>490</x>
          <y>50</y>
-         <width>41</width>
+         <width>61</width>
          <height>21</height>
         </rect>
        </property>
@@ -107322,7 +107288,7 @@ a PCAP or an external RT touch</string>
       <widget class="QLabel" name="label_M8I2C2Speed_2">
        <property name="geometry">
         <rect>
-         <x>460</x>
+         <x>430</x>
          <y>50</y>
          <width>41</width>
          <height>20</height>
@@ -107340,7 +107306,7 @@ a PCAP or an external RT touch</string>
         <string>Speed</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="M7_SPIdev4_checkBox">
+      <widget class="QCheckBox" name="M7_SPIdev_checkBox">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -107387,37 +107353,12 @@ a PCAP or an external RT touch</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QLabel" name="label_150">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>401</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <italic>true</italic>
-         <bold>true</bold>
-         <underline>true</underline>
-        </font>
-       </property>
-       <property name="text">
-        <string>UART                                                                              </string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_151">
        <property name="geometry">
         <rect>
-         <x>400</x>
+         <x>340</x>
          <y>30</y>
-         <width>151</width>
+         <width>201</width>
          <height>20</height>
         </rect>
        </property>
@@ -107431,32 +107372,10 @@ a PCAP or an external RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>I2C                           </string>
+        <string>I2C                           _______</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="M9_UART2_4WirescheckBox">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>110</y>
-         <width>171</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <italic>true</italic>
-        </font>
-       </property>
-       <property name="text">
-        <string>UART 2 has 4 Wires</string>
        </property>
       </widget>
      </widget>

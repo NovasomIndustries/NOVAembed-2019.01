@@ -23,8 +23,7 @@ extern  QString Last_P_BSPFactoryFile;
 extern  QString LVDSVideo;
 extern  QString Quad;
 extern  QString instpath;
-
-//QString FileNameNoExtension;
+extern  QString Kernel;
 
 /*****************************************************************************************************************************************************************************************/
 /*                                                                             P BSP Factory                                                                                             */
@@ -186,6 +185,7 @@ void NOVAembed::on_P_DecodeCFGBits_pushButton_clicked()
     }
     else
     {
+
         ui->P_NO_PAD_CTL_checkBox->setChecked(false);
         ui->P_DSE_Disable_checkBox->setEnabled(true);
         ui->P_DSE_frame->setEnabled(true);
@@ -1779,7 +1779,8 @@ void NOVAembed::P_save_helper(QString fileName , QString Processor_model)
 
     file.close();
     update_status_bar("File "+Last_P_BSPFactoryFile+" saved");
-
+    Last_P_BSPFactoryFile = bspfbase;
+    storeNOVAembed_ini();
 }
 
 
@@ -1806,10 +1807,6 @@ QString strKeyFunc("P_IOMUX/");
 QSettings * func_settings = 0;
 
     on_P_Clear_pushButton_clicked();
-
-    Last_P_BSPFactoryFile = fileName;
-    storeNOVAembed_ini();
-
     set_all_io();
     func_settings = new QSettings( fileName, QSettings::IniFormat );
     if ( P_getvalue(strKeyFunc, func_settings , "P_ECSPI1_MISO_comboBox") == "ECSPI1_MISO" )
@@ -2048,30 +2045,41 @@ void NOVAembed::on_P_Save_pushButton_clicked()
     P_save_helper(fileName,"QUAD");
     P_save_helper(fileName,"SDL");
     P_save_helper(fileName,"");
-    Last_P_BSPFactoryFile = fileName;
+    Last_P_BSPFactoryFile = fi.baseName();
     storeNOVAembed_ini();
 }
 
+extern      int skip_filesave_on_Generate_pushButton_clicked;
+
 void NOVAembed::on_P_Generate_pushButton_clicked()
 {
+QFile scriptfile("/tmp/script");
+QString SDL_FileNameNoExtension ;
+QString QUAD_FileNameNoExtension;
+QFileInfo fi;
     if ( CheckIfKernelsPresent() == 1 )
+    {
+        update_status_bar("Kernel "+Kernel+" not present, download it.");
         return;
+    }
     // Save .bspf and Generate .dtb
     QString fileName = QFileDialog::getSaveFileName(this,tr("Save .bspf"), instpath+"/DtbUserWorkArea/PClass_bspf",tr(".bspf (*.bspf)"));
     if ( fileName.isEmpty() )
         return;
-
-    QFile scriptfile("/tmp/script");
-    QFileInfo fi(fileName);
-    ui->P_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
-    ui->P_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
-    P_save_helper(fileName,"QUAD");
-    P_save_helper(fileName,"SDL");
-    P_save_helper(fileName,"");
-    Last_P_BSPFactoryFile = fileName;
-    storeNOVAembed_ini();
-    QString SDL_FileNameNoExtension  = "SDL_"+fi.baseName();
-    QString QUAD_FileNameNoExtension = "QUAD_"+fi.baseName();
+    if ( skip_filesave_on_Generate_pushButton_clicked == 0)
+    {
+        QFile scriptfile("/tmp/script");
+        QFileInfo fi(fileName);
+        ui->P_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
+        ui->P_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
+        P_save_helper(fileName,"QUAD");
+        P_save_helper(fileName,"SDL");
+        P_save_helper(fileName,"");
+        Last_P_BSPFactoryFile = fi.baseName();
+        storeNOVAembed_ini();
+    }
+    SDL_FileNameNoExtension  = "SDL_"+fi.baseName();
+    QUAD_FileNameNoExtension = "QUAD_"+fi.baseName();
 
     update_status_bar("Generating dtb "+SDL_FileNameNoExtension+".dtb and "+QUAD_FileNameNoExtension+" ...");
     if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
@@ -2079,7 +2087,7 @@ void NOVAembed::on_P_Generate_pushButton_clicked()
         update_status_bar("Unable to create /tmp/script");
         return;
     }
-    if ( ui->EditBeforeGenerate_checkBox->isChecked())
+    if ( ui->P_EditBeforeGenerate_checkBox->isChecked())
         update_status_bar("User editing dtsi file");
 
     QTextStream out(&scriptfile);
@@ -2089,11 +2097,11 @@ void NOVAembed::on_P_Generate_pushButton_clicked()
     if ( ui->Board_comboBox->currentText() == "P Series")
     {
         out << QString(instpath+"/Qt/NOVAembed/NOVAembed_P_Parser/bin/Debug/NOVAembed_P_Parser "+instpath+"/DtbUserWorkArea/PClass_bspf/temp/"+SDL_FileNameNoExtension+".bspf > "+instpath+"/Logs/P_bspf.log\n");
-        if ( ui->EditBeforeGenerate_checkBox->isChecked())
+        if ( ui->P_EditBeforeGenerate_checkBox->isChecked())
             out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+SDL_FileNameNoExtension+".dtsi\n");
         out << QString("./user_dtb_compile "+SDL_FileNameNoExtension+" P >> "+instpath+"/Logs/P_bspf.log\n");
         out << QString(instpath+"/Qt/NOVAembed/NOVAembed_P_Parser/bin/Debug/NOVAembed_P_Parser "+instpath+"/DtbUserWorkArea/PClass_bspf/temp/"+QUAD_FileNameNoExtension+".bspf >> "+instpath+"/Logs/P_bspf.log\n");
-        if ( ui->EditBeforeGenerate_checkBox->isChecked())
+        if ( ui->P_EditBeforeGenerate_checkBox->isChecked())
             out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+QUAD_FileNameNoExtension+".dtsi\n");
         out << QString("./user_dtb_compile "+QUAD_FileNameNoExtension+" P >> "+instpath+"/Logs/P_bspf.log\n");
     }

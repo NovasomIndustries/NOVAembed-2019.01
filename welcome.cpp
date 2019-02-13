@@ -64,8 +64,8 @@ QString file_exists_path;
     if ( _Board_comboBox == "U5")
     {
         CurrentBSPF_Tab = "U BSP Factory";
-        current_stab = UBSP_stab;
         Kernel=NXP_U_KERNEL;
+        current_stab = UBSP_stab;
         SourceMeFile=NXP_U_SOURCEME;
         check_file1 = QFileInfo(instpath+"/Blobs/"+NXP_U_BLOB_NAME);
         if (check_file1.exists() && check_file1.isFile())
@@ -85,6 +85,7 @@ QString file_exists_path;
     if ( _Board_comboBox == "P Series")
     {
         ui->FileSystemSelectedlineEdit->setText("");
+        Kernel=NXP_P_KERNEL;
         CurrentBSPF_Tab = "P BSP Factory";
         current_stab = PBSP_stab;
         ui->UserBSPFSelect_pushButton->setVisible(true);
@@ -117,11 +118,11 @@ QString file_exists_path;
     if ( _Board_comboBox == "M8")
     {
         ui->FileSystemSelectedlineEdit->setText("");
+        Kernel=QUALCOMM_KERNEL;
         CurrentBSPF_Tab = "M8 BSP Factory";
         current_stab = M8BSP_stab;
         ui->UserBSPFSelect_pushButton->setVisible(true);
         ui->UserBSPFselectedlineEdit->setVisible(true);
-        Kernel=QUALCOMM_KERNEL;
         SourceMeFile=QUALCOMM_SOURCEME;
         file_exists_path += QUALCOMM_BLOB_NAME;
         check_file1 = QFileInfo(file_exists_path);
@@ -141,6 +142,7 @@ QString file_exists_path;
     if ( _Board_comboBox == "M7")
     {
         ui->FileSystemSelectedlineEdit->setText("");
+        Kernel=RK_M7_KERNEL;
         CurrentBSPF_Tab = "M7 BSP Factory";
         current_stab = M7BSP_stab;
         ui->UserBSPFSelect_pushButton->setVisible(true);

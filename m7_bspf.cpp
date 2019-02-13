@@ -11,7 +11,10 @@
 #include <QUrl>
 #include <QtCore>
 #include <QDesktopServices>
+//#include <QHostInfo>
 #include <QDirIterator>
+#include <QMovie>
+#include <iostream>
 
 
 extern  QString FileSystemName;
@@ -19,10 +22,37 @@ extern  QString DeployedFileSystemName;
 extern  QString FileSystemConfigName;
 extern  QString CfgBitDefaultValue;
 extern  QString _Board_comboBox;
-extern  QString Last_M8_BSPFactoryFile;
+extern  QString Last_M7_BSPFactoryFile;
 extern  QString LVDSVideo;
 extern  QString Quad;
 extern  QString instpath;
+extern  QString Kernel;
+
+QString M7_GPIO2_C1_comboBox="GPIO2_C1";
+QString M7_GPIO0_A0_comboBox="GPIO0_A0";
+QString M7_GPIO3_A4_comboBox="GPIO3_A4";
+QString M7_GPIO2_C7_comboBox="GPIO2_C7";
+QString M7_GPIO2_C4_comboBox="GPIO2_C4";
+QString M7_GPIO2_C5_comboBox="GPIO2_C5";
+QString M7_GPIO2_C0_comboBox="GPIO2_C0";
+QString M7_GPIO2_C3_comboBox="GPIO2_C3";
+QString M7_GPIO2_C6_comboBox="GPIO2_C6";
+QString M7_GPIO2_B7_comboBox="GPIO2_B7";
+QString M7_GPIO3_A6_comboBox="GPIO3_A6";
+QString M7_GPIO3_A5_comboBox="GPIO3_A5";
+QString M7_GPIO3_A3_comboBox="GPIO3_A3";
+QString M7_GPIO2_B4_comboBox="GPIO2_B4";
+QString M7_GPIO3_B0_comboBox="GPIO3_B0";
+QString M7_GPIO3_A1_comboBox="GPIO3_A1";
+QString M7_GPIO3_A2_comboBox="GPIO3_A2";
+QString M7_GPIO3_A0_comboBox="GPIO3_A0";
+QString M7_GPIO2_D1_comboBox="GPIO2_D1";
+QString M7_GPIO2_D0_comboBox="GPIO2_D0";
+QString M7_GPIO3_A7_comboBox="GPIO3_A7";
+
+QString M7_I2C2Speed="100000";
+QString M7_PrimaryVideo_comboBox;
+QString M7_PrimaryVideo_24bit_comboBox;
 
 QString M7_getvalue(QString strKey, QSettings *settings , QString entry)
 {
@@ -31,14 +61,28 @@ QString M7_getvalue(QString strKey, QSettings *settings , QString entry)
 
 void NOVAembed::M7_load_BSPF_File(QString fileName)
 {
-QString strKeyFunc("M8_IOMUX/");
+QString strKeyFunc("M7_IOMUX/");
 QSettings * func_settings = 0;
 
-    on_M8_Clear_pushButton_clicked();
+    std::cout << fileName.toLatin1().constData() << std::flush;
 
-    Last_M8_BSPFactoryFile = fileName;
-
+    on_M7_Clear_pushButton_clicked();
     func_settings = new QSettings( fileName, QSettings::IniFormat );
+    if ( M7_getvalue(strKeyFunc, func_settings , "M7_GPIO3_A1_comboBox") == "SPI_TXD" )
+        on_M7_SPI1_checkBox_toggled(true);
+    if ( M7_getvalue(strKeyFunc, func_settings , "M7_SPIdev_checkBox") == "false" )
+        ui->M7_SPIdev_checkBox->setChecked(false);
+    else
+        ui->M7_SPIdev_checkBox->setChecked(true);
+    if ( M7_getvalue(strKeyFunc, func_settings , "M7_GPIO2_D1_comboBox") == "SDA" )
+    {
+        on_M7_I2C2_checkBox_toggled(true);
+        ui->M7_I2C2Speed_lineEdit->setText(M7_getvalue(strKeyFunc, func_settings , "M7_I2C2Speed"));
+    }
+
+    if ( M7_getvalue(strKeyFunc, func_settings , "M7_PrimaryVideo_24bit_checkBox") == "true" )
+        ui->M7_PrimaryVideo_24bit_checkBox->setChecked(true);
+    ui->M7_PrimaryVideo_comboBox->setCurrentText(M7_getvalue(strKeyFunc, func_settings , "PrimaryVideo_comboBox"));
 }
 
 
@@ -48,7 +92,7 @@ void NOVAembed::M7_save_helper(QString fileName)
     QString bspfbase = fin.baseName();
     QString fullpathname = "";
 
-    fullpathname = instpath+"/DtbUserWorkArea/M8Class_bspf/"+ bspfbase+".bspf";
+    fullpathname = instpath+"/DtbUserWorkArea/M7Class_bspf/"+ bspfbase+".bspf";
 
     QFile file(fullpathname);
     if (!file.open(QIODevice::WriteOnly))
@@ -58,37 +102,278 @@ void NOVAembed::M7_save_helper(QString fileName)
     }
 
     QTextStream out(&file);
-    out << QString("[M8_IOMUX]\n");
-    out << QString("\n[M8_CONF]\n");
-    file.close();
-    update_status_bar("File "+Last_M8_BSPFactoryFile+" saved");
-    Last_M8_BSPFactoryFile = fileName;
-    storeNOVAembed_ini();
+    out << QString("[M7_IOMUX]\n");
 
+    out << QString("M7_GPIO2_C1_comboBox="+M7_GPIO2_C1_comboBox+"\n");
+    out << QString("M7_GPIO0_A0_comboBox="+M7_GPIO0_A0_comboBox+"\n");
+    out << QString("M7_GPIO3_A4_comboBox="+M7_GPIO3_A4_comboBox+"\n");
+    out << QString("M7_GPIO2_C7_comboBox="+M7_GPIO2_C7_comboBox+"\n");
+    out << QString("M7_GPIO2_C4_comboBox="+M7_GPIO2_C4_comboBox+"\n");
+    out << QString("M7_GPIO2_C5_comboBox="+M7_GPIO2_C5_comboBox+"\n");
+    out << QString("M7_GPIO2_C0_comboBox="+M7_GPIO2_C0_comboBox+"\n");
+    out << QString("M7_GPIO2_C3_comboBox="+M7_GPIO2_C3_comboBox+"\n");
+    out << QString("M7_GPIO2_C6_comboBox="+M7_GPIO2_C6_comboBox+"\n");
+    out << QString("M7_GPIO2_B7_comboBox="+M7_GPIO2_B7_comboBox+"\n");
+    out << QString("M7_GPIO3_A6_comboBox="+M7_GPIO3_A6_comboBox+"\n");
+    out << QString("M7_GPIO3_A5_comboBox="+M7_GPIO3_A5_comboBox+"\n");
+    out << QString("M7_GPIO3_A3_comboBox="+M7_GPIO3_A3_comboBox+"\n");
+    out << QString("M7_GPIO2_B4_comboBox="+M7_GPIO2_B4_comboBox+"\n");
+    out << QString("M7_GPIO3_B0_comboBox="+M7_GPIO3_B0_comboBox+"\n");
+
+    out << QString("M7_GPIO3_A1_comboBox="+M7_GPIO3_A1_comboBox+"\n");
+    out << QString("M7_GPIO3_A2_comboBox="+M7_GPIO3_A2_comboBox+"\n");
+    out << QString("M7_GPIO3_A0_comboBox="+M7_GPIO3_A0_comboBox+"\n");
+
+    out << QString("M7_GPIO2_D1_comboBox="+M7_GPIO2_D1_comboBox+"\n");
+    out << QString("M7_GPIO2_D0_comboBox="+M7_GPIO2_D0_comboBox+"\n");
+
+    if ( ui->M7_I2C2Speed_lineEdit->text().isEmpty() )
+        ui->M7_I2C2Speed_lineEdit->setText("100000");
+    M7_I2C2Speed = ui->M7_I2C2Speed_lineEdit->text();
+    out << QString("M7_I2C2Speed="+M7_I2C2Speed+"\n");
+
+    if ( ui->M7_SPI1_checkBox->isChecked() )
+    {
+        if ( ui->M7_SPIdev_checkBox->isChecked() )
+            out << QString("M7_SPIdev_checkBox=true\n");
+        else
+            out << QString("M7_SPIdev_checkBox=false\n");
+    }
+    else
+        out << QString("M7_SPIdev_checkBox=false\n");
+    out << QString("M7_PrimaryVideo_comboBox="+ui->M7_PrimaryVideo_comboBox->currentText()+"\n");
+    if ( ui->M7_PrimaryVideo_24bit_checkBox->isChecked() )
+        out << QString("M7_PrimaryVideo_24bit_checkBox=true\n");
+    else
+        out << QString("M7_PrimaryVideo_24bit_checkBox=false\n");
+
+
+    out << QString("\n[M7_CONF]\n");
+    file.close();
+    update_status_bar("File "+Last_M7_BSPFactoryFile+" saved");
+    Last_M7_BSPFactoryFile = bspfbase;
+    storeNOVAembed_ini();
 }
 
 void NOVAembed::on_M7_Load_pushButton_clicked()
 {
-
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Load BSP Factory File"), instpath+"/DtbUserWorkArea/M7Class_bspf",tr("BSP Factory Files (*.bspf)"));
+    if (fileName.isEmpty())
+        return;
+    else
+    {
+        on_P_Clear_pushButton_clicked();
+        M7_load_BSPF_File(fileName);
+        update_status_bar("File "+Last_M7_BSPFactoryFile+" loaded");
+        QFileInfo fi(fileName);
+        ui->P_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
+        ui->P_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
+    }
 }
 
 
 void NOVAembed::on_M7_Save_pushButton_clicked()
 {
-
+    QString fileName = QFileDialog::getSaveFileName(this,tr("Save .bspf"), instpath+"/DtbUserWorkArea/M7Class_bspf",tr(".bspf (*.bspf)"));
+    if ( fileName.isEmpty() )
+        return;
+    QFileInfo fi(fileName);
+    ui->M7_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
+    ui->M7_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
+    M7_save_helper(fileName);
 }
 
-
-
+extern      int skip_filesave_on_Generate_pushButton_clicked;
 
 void NOVAembed::on_M7_Generate_pushButton_clicked()
 {
+QFile scriptfile("/tmp/script");
+//QString FileNameNoExtension;
+QFileInfo fi;
+    if ( CheckIfKernelsPresent() == 1 )
+    {
+        update_status_bar("Kernel "+Kernel+" not present, download it.");
+        return;
+    }
+    if ( skip_filesave_on_Generate_pushButton_clicked == 0)
+    {
+        // Save .bspf and Generate .dtb
+        QString fileName = QFileDialog::getSaveFileName(this,tr("Save .bspf"), instpath+"/DtbUserWorkArea/M7Class_bspf",tr(".bspf (*.bspf)"));
+        if ( fileName.isEmpty() )
+            return;
+        QFileInfo fiLocal(fileName);
+        fi = fiLocal;
+        ui->M7_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
+        ui->M7_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
+        M7_save_helper(fileName);
+        Last_M7_BSPFactoryFile = fi.baseName();
+//        FileNameNoExtension  = fi.baseName();
+    }
+    else
+    {
+//        FileNameNoExtension = Last_M7_BSPFactoryFile;
+    }
+    std::cout << "Last_M7_BSPFactoryFile is : "<< Last_M7_BSPFactoryFile.toLatin1().constData() << std::flush;
 
+    update_status_bar("Generating dtb "+Last_M7_BSPFactoryFile+".dtb ...");
+    if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
+    {
+        update_status_bar("Unable to create /tmp/script");
+        return;
+    }
+    if ( ui->U_EditBeforeGenerate_checkBox->isChecked())
+        update_status_bar("User editing dtsi file");
+
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("[ ! -d "+instpath+"/DtbUserWorkArea ] && mkdir "+instpath+"/DtbUserWorkArea\n");
+    out << QString("cd "+instpath+"/Utils\n");
+    out << QString(instpath+"/Qt/NOVAembed/NOVAembed_M7_Parser/bin/Debug/NOVAembed_M7_Parser "+instpath+"/DtbUserWorkArea/M7Class_bspf/"+Last_M7_BSPFactoryFile+".bspf > "+instpath+"/Logs/M7_bspf.log\n");
+    if ( ui->M7_EditBeforeGenerate_checkBox->isChecked())
+        out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+Last_M7_BSPFactoryFile+".dts\n");
+    out << QString("./user_dtb_compile "+Last_M7_BSPFactoryFile+" M7 >> "+instpath+"/Logs/M7_bspf.log\n");
+
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar(fi.baseName()+".dtb compiled, dtb is in "+instpath+"/DtbUserWorkArea folder as "+Last_M7_BSPFactoryFile+".dtb");
+        const char *str;
+        QByteArray ba;
+
+        QString syscmd_quad = "cp "+instpath+"/DtbUserWorkArea/"+Last_M7_BSPFactoryFile+".dtb "+instpath+"/Deploy/novasomm7.dtb ; chmod 777 "+instpath+"/Deploy/novasomm7.dtb";
+        ba = syscmd_quad.toLatin1();
+        str = ba.data();
+        system(str);
+        NOVAsom_Params_helper();
+        //storeNOVAembed_ini();
+    }
+    else
+        update_status_bar("Error compiling "+fi.baseName()+".dtb");
 }
-
 
 
 void NOVAembed::on_M7_ViewDtbCompileLog_pushButton_clicked()
 {
+    system("kwrite "+instpath.toLatin1()+"/Logs/M7_bspf.log");
+}
 
+void NOVAembed::on_M7_Clear_pushButton_clicked()
+{
+    M7_GPIO2_C1_comboBox="GPIO2_C1";
+    M7_GPIO0_A0_comboBox="GPIO0_A0";
+    M7_GPIO3_A4_comboBox="GPIO3_A4";
+    M7_GPIO2_C7_comboBox="GPIO2_C7";
+    M7_GPIO2_C4_comboBox="GPIO2_C4";
+    M7_GPIO2_C5_comboBox="GPIO2_C5";
+    M7_GPIO2_C0_comboBox="GPIO2_C0";
+    M7_GPIO2_C3_comboBox="GPIO2_C3";
+    M7_GPIO2_C6_comboBox="GPIO2_C6";
+    M7_GPIO2_B7_comboBox="GPIO2_B7";
+    M7_GPIO3_A6_comboBox="GPIO3_A6";
+    M7_GPIO3_A5_comboBox="GPIO3_A5";
+    M7_GPIO3_A3_comboBox="GPIO3_A3";
+    M7_GPIO2_B4_comboBox="GPIO2_B4";
+    M7_GPIO3_B0_comboBox="GPIO3_B0";
+    M7_GPIO3_A1_comboBox="GPIO3_A1";
+    M7_GPIO3_A2_comboBox="GPIO3_A2";
+    M7_GPIO3_A0_comboBox="GPIO3_A0";
+    M7_GPIO2_D1_comboBox="GPIO2_D1";
+    M7_GPIO2_D0_comboBox="GPIO2_D0";
+    M7_GPIO3_A7_comboBox="GPIO3_A7";
+
+    ui->M7_SPI1_checkBox->setChecked(false);
+    ui->M7_SPIdev_checkBox->setEnabled(false);
+    ui->M7_SPIdev_checkBox->setChecked(false);
+    ui->M7_I2C2_checkBox->setChecked(false);
+    ui->M7_PrimaryVideo_comboBox->setCurrentIndex(0);
+    ui->M7_PrimaryVideo_24bit_checkBox->setChecked(false);
+    ui->M7_I2C2Speed_lineEdit->setText("0");
+
+    ui->label_M7GPIO2_D1->setText(M7_GPIO2_D1_comboBox);
+    ui->label_M7GPIO2_D0->setText(M7_GPIO2_D0_comboBox);
+    ui->label_M7GPIO2_C1->setText(M7_GPIO2_C1_comboBox);
+    ui->label_M7GPIO0_A0->setText(M7_GPIO0_A0_comboBox);
+    ui->label_M7GPIO3_A4->setText(M7_GPIO3_A4_comboBox);
+    ui->label_M7GPIO3_A1->setText(M7_GPIO3_A1_comboBox);
+    ui->label_M7GPIO3_A2->setText(M7_GPIO3_A2_comboBox);
+    ui->label_M7GPIO3_A0->setText(M7_GPIO3_A0_comboBox);
+
+    ui->label_M7GPIO2_C7->setText(M7_GPIO2_C7_comboBox);
+    ui->label_M7GPIO2_C4->setText(M7_GPIO2_C4_comboBox);
+    ui->label_M7GPIO2_C5->setText(M7_GPIO2_C5_comboBox);
+
+    ui->label_M7GPIO2_C0->setText(M7_GPIO2_C0_comboBox);
+    ui->label_M7GPIO2_C3->setText(M7_GPIO2_C3_comboBox);
+    ui->label_M7GPIO2_C6->setText(M7_GPIO2_C6_comboBox);
+
+    ui->label_M7GPIO2_B7->setText(M7_GPIO2_B7_comboBox);
+    ui->label_M7GPIO2_B4->setText(M7_GPIO2_B4_comboBox);
+    ui->label_M7GPIO3_B0->setText(M7_GPIO3_B0_comboBox);
+
+    ui->label_M7GPIO3_A7->setText(M7_GPIO3_A7_comboBox);
+    ui->label_M7GPIO3_A6->setText(M7_GPIO3_A6_comboBox);
+    ui->label_M7GPIO3_A5->setText(M7_GPIO3_A5_comboBox);
+    ui->label_M7GPIO3_A3->setText(M7_GPIO3_A3_comboBox);
+
+}
+
+
+
+void NOVAembed::on_M7_SPI1_checkBox_toggled(bool checked)
+{
+    if ( checked )
+    {
+        ui->M7_SPI1_checkBox->setChecked(true);
+        ui->M7_SPIdev_checkBox->setEnabled(true);
+        ui->label_M7GPIO3_A1->setText("SPI_TXD");
+        ui->label_M7GPIO3_A2->setText("SPI_RXD");
+        ui->label_M7GPIO3_A0->setText("SPI_CLK");
+        ui->label_M7GPIO2_B4->setText("SPI_SS0");
+        ui->label_M7GPIO3_B0->setText("SPI_SS1");
+        M7_GPIO3_A1_comboBox="SPI_TXD";
+        M7_GPIO3_A2_comboBox="SPI_RXD";
+        M7_GPIO3_A0_comboBox="SPI_CLK";
+        M7_GPIO2_B4_comboBox="SPI_SS0";
+        M7_GPIO3_B0_comboBox="SPI_SS1";
+    }
+    else
+    {
+        ui->M7_SPI1_checkBox->setChecked(false);
+        ui->M7_SPIdev_checkBox->setEnabled(false);
+        ui->M7_SPIdev_checkBox->setChecked(false);
+        ui->label_M7GPIO3_A1->setText(M7_GPIO3_A1_comboBox);
+        ui->label_M7GPIO3_A2->setText(M7_GPIO3_A2_comboBox);
+        ui->label_M7GPIO3_A0->setText(M7_GPIO3_A0_comboBox);
+        ui->label_M7GPIO2_B4->setText(M7_GPIO2_B4_comboBox);
+        ui->label_M7GPIO3_B0->setText(M7_GPIO3_B0_comboBox);
+        M7_GPIO3_A1_comboBox="GPIO3_A1";
+        M7_GPIO3_A2_comboBox="GPIO3_A2";
+        M7_GPIO3_A0_comboBox="GPIO3_A0";
+        M7_GPIO2_B4_comboBox="GPIO2_B4";
+        M7_GPIO3_B0_comboBox="GPIO3_B0";
+    }
+}
+
+
+
+void NOVAembed::on_M7_I2C2_checkBox_toggled(bool checked)
+{
+    if ( checked )
+    {
+        ui->M7_I2C2_checkBox->setChecked(true);
+        ui->M7_I2C2Speed_lineEdit->setEnabled(true);
+        ui->label_M7GPIO2_D1->setText("SDA");
+        ui->label_M7GPIO2_D0->setText("SCL");
+        M7_GPIO2_D1_comboBox="SDA";
+        M7_GPIO2_D0_comboBox="SCL";
+    }
+    else
+    {
+        ui->M7_I2C2_checkBox->setChecked(false);
+        ui->M7_I2C2Speed_lineEdit->setEnabled(false);
+        ui->label_M7GPIO2_D1->setText(M7_GPIO2_D1_comboBox);
+        ui->label_M7GPIO2_D0->setText(M7_GPIO2_D0_comboBox);
+        M7_GPIO2_D1_comboBox="GPIO2_D1";
+        M7_GPIO2_D0_comboBox="GPIO2_D0";
+    }
 }

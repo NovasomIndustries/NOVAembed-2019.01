@@ -103,7 +103,7 @@ void NOVAembed::U_save_helper(QString fileName)
     out << QString("U_GPIO04_IO24_cbit="+ui->P_cbit_lineEdit->text()+"\n");
     file.close();
     update_status_bar("File "+Last_U_BSPFactoryFile+" saved");
-    Last_U_BSPFactoryFile = fileName;
+    Last_U_BSPFactoryFile = bspfbase;
     storeNOVAembed_ini();
 
 }
@@ -307,12 +307,7 @@ QString strKeyFunc("U_IOMUX/");
 QSettings * func_settings = 0;
 
     on_U_Clear_pushButton_clicked();
-
-    Last_U_BSPFactoryFile = fileName;
-    //storeNOVAembed_ini();
-
     func_settings = new QSettings( fileName, QSettings::IniFormat );
-
     if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO06_comboBox") == "ECSPI4_SCLK" )
         on_U_SPI4_checkBox_toggled(true);
     if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO19_comboBox") == "I2C2_SDA" )
@@ -348,7 +343,7 @@ void NOVAembed::on_U_Load_pushButton_clicked()
         QFileInfo fi(fileName);
         ui->U_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
         ui->U_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
-        Last_U_BSPFactoryFile = fileName;
+        Last_U_BSPFactoryFile = fi.baseName();
         storeNOVAembed_ini();
     }
 }
@@ -363,25 +358,35 @@ void NOVAembed::on_U_Save_pushButton_clicked()
     ui->U_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
     U_save_helper(fileName);
 }
+
+extern      int skip_filesave_on_Generate_pushButton_clicked;
+
 void NOVAembed::on_U_Generate_pushButton_clicked()
 {
+QFile scriptfile("/tmp/script");
+QFileInfo fi;
+
     if ( CheckIfKernelsPresent() == 1 )
+    {
+        update_status_bar("Kernel "+Kernel+" not present, download it.");
         return;
+    }
     // Save .bspf and Generate .dtb
+    if ( skip_filesave_on_Generate_pushButton_clicked == 0)
+    {
+        QString fileName = QFileDialog::getSaveFileName(this,tr("Save .bspf"), instpath+"/DtbUserWorkArea/UClass_bspf",tr(".bspf (*.bspf)"));
+        if ( fileName.isEmpty() )
+            return;
 
-    QString fileName = QFileDialog::getSaveFileName(this,tr("Save .bspf"), instpath+"/DtbUserWorkArea/UClass_bspf",tr(".bspf (*.bspf)"));
-    if ( fileName.isEmpty() )
-        return;
+        QFileInfo fiLocal(fileName);
+        fi = fiLocal;
+        ui->U_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
+        ui->U_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
+        U_save_helper(fileName);
+        Last_U_BSPFactoryFile = fi.baseName();
+    }
 
-    QFile scriptfile("/tmp/script");
-    QFileInfo fi(fileName);
-    ui->U_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
-    ui->U_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
-    U_save_helper(fileName);
-    Last_U_BSPFactoryFile = fileName;
-    QString FileNameNoExtension  = fi.baseName();
-
-    update_status_bar("Generating dtb "+FileNameNoExtension+".dtb ...");
+    update_status_bar("Generating dtb "+Last_U_BSPFactoryFile+".dtb ...");
     if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
     {
         update_status_bar("Unable to create /tmp/script");
@@ -394,24 +399,23 @@ void NOVAembed::on_U_Generate_pushButton_clicked()
     out << QString("#!/bin/sh\n");
     out << QString("[ ! -d "+instpath+"/DtbUserWorkArea ] && mkdir "+instpath+"/DtbUserWorkArea\n");
     out << QString("cd "+instpath+"/Utils\n");
-    out << QString(instpath+"/Qt/NOVAembed/NOVAembed_U_Parser/bin/Debug/NOVAembed_U_Parser "+instpath+"/DtbUserWorkArea/UClass_bspf/"+FileNameNoExtension+".bspf > "+instpath+"/Logs/U_bspf.log\n");
+    out << QString(instpath+"/Qt/NOVAembed/NOVAembed_U_Parser/bin/Debug/NOVAembed_U_Parser "+instpath+"/DtbUserWorkArea/UClass_bspf/"+Last_U_BSPFactoryFile+".bspf > "+instpath+"/Logs/U_bspf.log\n");
     if ( ui->U_EditBeforeGenerate_checkBox->isChecked())
-        out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+FileNameNoExtension+".dts\n");
-    out << QString("./user_dtb_compile "+FileNameNoExtension+" U >> "+instpath+"/Logs/U_bspf.log\n");
+        out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+Last_U_BSPFactoryFile+".dts\n");
+    out << QString("./user_dtb_compile "+Last_U_BSPFactoryFile+" U >> "+instpath+"/Logs/U_bspf.log\n");
 
     scriptfile.close();
     if ( run_script() == 0)
     {
-        update_status_bar(fi.baseName()+".dtb compiled, dtb is in "+instpath+"/DtbUserWorkArea folder as "+FileNameNoExtension+".dtb");
+        update_status_bar(fi.baseName()+".dtb compiled, dtb is in "+instpath+"/DtbUserWorkArea folder as "+Last_U_BSPFactoryFile+".dtb");
         const char *str;
         QByteArray ba;
 
-        QString syscmd_quad = "cp "+instpath+"/DtbUserWorkArea/"+FileNameNoExtension+".dtb "+instpath+"/Deploy/novasomu.dtb ; chmod 777 "+instpath+"/Deploy/novasomu.dtb";
+        QString syscmd_quad = "cp "+instpath+"/DtbUserWorkArea/"+Last_U_BSPFactoryFile+".dtb "+instpath+"/Deploy/novasomu.dtb ; chmod 777 "+instpath+"/Deploy/novasomu.dtb";
         ba = syscmd_quad.toLatin1();
         str = ba.data();
         system(str);
         NOVAsom_Params_helper();
-        //storeNOVAembed_ini();
     }
     else
         update_status_bar("Error compiling "+fi.baseName()+".dtb");

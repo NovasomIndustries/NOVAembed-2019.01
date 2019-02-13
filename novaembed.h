@@ -22,7 +22,6 @@
 #define RK_M7_KERNEL        "linux-4.4.126_M7"
 #define QUALCOMM_KERNEL     "linux-4.11.0-QualcommLinaro"
 #define NXP_P_KERNEL        "linux-imx_4.1.15_1.2.0_ga"
-
 #define NXP_U_KERNEL        "linux-imx_4.1.43"
 
 #define RK_M7_DEFCONFIG     "NOVAsomM7_defconfig"
@@ -367,7 +366,11 @@ private slots:
 
     void on_UserAPPSelect_pushButton_clicked();
 
-    void on_SPIProg_pushButton_clicked();
+    void on_M7_Clear_pushButton_clicked();
+
+    void on_M7_SPI1_checkBox_toggled(bool checked);
+
+    void on_M7_I2C2_checkBox_toggled(bool checked);
 
 private:
     Ui::NOVAembed *ui;

@@ -19,17 +19,16 @@
 /*                                                                              Global variables                                                                                         */
 /*****************************************************************************************************************************************************************************************/
 
-QString Version = "2019.1";
+QString Version = "2019.1.1";
 QString Configuration = "Standard";
 QString FileSystemName = "";
 QString DeployedFileSystemName = "";
 QString FileSystemConfigName = "";
-QString _Board_comboBox = "";
+QString _Board_comboBox = "P Series";
 QString Last_M8_BSPFactoryFile = "";
 QString Last_M7_BSPFactoryFile = "";
 QString Last_U_BSPFactoryFile = "";
 QString Last_P_BSPFactoryFile = "";
-QString Last_N1_BSPFactoryFile = "";
 
 QString Last_M8_FileSystem = "";
 QString Last_M7_FileSystem = "";
@@ -57,6 +56,8 @@ QString CurrentSplashName =  "NOVAsomP800x480";
 QString Kernel =  NXP_P_KERNEL;
 QString SourceMeFile =  NXP_P_SOURCEME;
 QString instpath = INSTALLATION_PATH;
+
+int skip_filesave_on_Generate_pushButton_clicked = 0;
 
 extern  void storeNOVAembed_ini();
 QWidget *PBSP_stab,*UBSP_stab,*M8BSP_stab,*M7BSP_stab,*TOOL_stab,*TOOL_devel;
@@ -112,6 +113,11 @@ QString PixMapName="";
         system("mkdir -p "+instpath.toLatin1()+"/DtbUserWorkArea/M8Class_bspf/temp");
         copy_required_files = 1;
     }
+    if ( ! QDir(instpath+"/DtbUserWorkArea/M7Class_bspf").exists() )
+    {
+        system("mkdir -p "+instpath.toLatin1()+"/DtbUserWorkArea/M7Class_bspf/temp");
+        copy_required_files = 1;
+    }
 
     if ( copy_required_files == 1 )
     {
@@ -152,13 +158,11 @@ QString PixMapName="";
         Last_M8_BSPFactoryFile = settings->value( strKeySettings + "Last_M8_BSPFactoryFile", "r").toString();
         Last_P_BSPFactoryFile = settings->value( strKeySettings + "Last_P_BSPFactoryFile", "r").toString();
         Last_U_BSPFactoryFile = settings->value( strKeySettings + "Last_U_BSPFactoryFile", "r").toString();
-        Last_N1_BSPFactoryFile = settings->value( strKeySettings + "Last_N1_BSPFactoryFile", "r").toString();
 
         Last_M8_FileSystem = settings->value( strKeySettings + "Last_M8_FileSystem", "r").toString();
         Last_M7_FileSystem = settings->value( strKeySettings + "Last_M7_FileSystem", "r").toString();
         Last_U_FileSystem = settings->value( strKeySettings + "Last_U_FileSystem", "r").toString();
         Last_P_FileSystem = settings->value( strKeySettings + "Last_P_FileSystem", "r").toString();
-        Last_N1_FileSystem = settings->value( strKeySettings + "Last_N1_FileSystem", "r").toString();
 
         CfgBitDefaultValue = settings->value( strKeySettings + "CfgBitDefaultValue", "r").toString();
         if ( CfgBitDefaultValue == "r" )
@@ -323,13 +327,10 @@ void NOVAembed::storeNOVAembed_ini()
     out << QString("Last_M7_BSPFactoryFile="+Last_M7_BSPFactoryFile+"\n");
     out << QString("Last_P_BSPFactoryFile="+Last_P_BSPFactoryFile+"\n");
     out << QString("Last_U_BSPFactoryFile="+Last_U_BSPFactoryFile+"\n");
-    out << QString("Last_N1_BSPFactoryFile="+Last_N1_BSPFactoryFile+"\n");
-
     out << QString("Last_M8_FileSystem="+Last_M8_FileSystem+"\n");
     out << QString("Last_M7_FileSystem="+Last_M7_FileSystem+"\n");
     out << QString("Last_U_FileSystem="+Last_U_FileSystem+"\n");
     out << QString("Last_P_FileSystem="+Last_P_FileSystem+"\n");
-    out << QString("Last_N1_FileSystem="+Last_N1_FileSystem+"\n");
 
     out << QString("CfgBitDefaultValue="+CfgBitDefaultValue+"\n");
     out << QString("NumberOfUserPartitions="+NumberOfUserPartitions+"\n");
@@ -345,6 +346,17 @@ void NOVAembed::storeNOVAembed_ini()
     out << QString("FSValid="+FSValid+"\n");
     out << QString("KernelValid="+KernelValid+"\n");
     out << QString("CurrentSplashName="+CurrentSplashName+"\n");
+    /*
+    if ( ui->Board_comboBox->currentText() == "U5")
+        Kernel=NXP_U_KERNEL;
+    if ( ui->Board_comboBox->currentText() == "M8")
+        Kernel=QUALCOMM_KERNEL;
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        Kernel=NXP_P_KERNEL;
+    if ( ui->Board_comboBox->currentText() == "M7")
+        Kernel=RK_M7_KERNEL;
+    */
+
     out << QString("Kernel="+Kernel+"\n");
     out << QString("CurrentDevelopment="+CurrentDevelopment+"\n");
 
@@ -589,7 +601,7 @@ QString line;
             }
             else
             {
-                QFileInfo fileinfo(Last_M7_BSPFactoryFile);
+                QFileInfo fileinfo(instpath+"/DtbUserWorkArea/M7Class_bspf/"+Last_M7_BSPFactoryFile);
                 ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
             }
             ui->FileSystemSelectedlineEdit->setText(Last_M7_FileSystem);
@@ -613,7 +625,7 @@ QString line;
             }
             else
             {
-                QFileInfo fileinfo(Last_M8_BSPFactoryFile);
+                QFileInfo fileinfo(instpath+"/DtbUserWorkArea/M8Class_bspf/"+Last_M8_BSPFactoryFile);
                 ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
             }
             ui->FileSystemSelectedlineEdit->setText(Last_M8_FileSystem);
@@ -637,8 +649,7 @@ QString line;
             }
             else
             {
-                P_load_BSPF_File(Last_P_BSPFactoryFile);
-                QFileInfo fileinfo(Last_P_BSPFactoryFile);
+                QFileInfo fileinfo(instpath+"/DtbUserWorkArea/PClass_bspf/"+Last_P_BSPFactoryFile);
                 ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
             }
             ui->FileSystemSelectedlineEdit->setText(Last_P_FileSystem);
@@ -662,7 +673,7 @@ QString line;
             }
             else
             {
-                QFileInfo fileinfo(Last_U_BSPFactoryFile);
+                QFileInfo fileinfo(instpath+"/DtbUserWorkArea/UClass_bspf/"+Last_U_BSPFactoryFile);
                 ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
             }
             ui->FileSystemSelectedlineEdit->setText(Last_U_FileSystem);
@@ -844,7 +855,7 @@ QString line;
 
             ui->P_cbit_lineEdit->setText(CfgBitDefaultValue);
             ui->P_Decoded_CFG_Bits_lineEdit->setText("0x00000000");
-            QFileInfo fi(Last_P_BSPFactoryFile);
+            QFileInfo fi(instpath+"/DtbUserWorkArea/PClass_bspf/"+Last_P_BSPFactoryFile+".bspf");
             if ( ! fi.exists())
             {
                 update_status_bar("BSP Factory : File "+fi.baseName()+".bspf not found, reverting to default");
@@ -854,14 +865,14 @@ QString line;
                 QString base = fi.baseName();
                 if ( base != "" )
                     ui->P_Current_BSPF_File_label->setText(base+".bspf");
-                P_load_BSPF_File(Last_P_BSPFactoryFile);
+                P_load_BSPF_File(instpath+"/DtbUserWorkArea/PClass_bspf/"+Last_P_BSPFactoryFile);
                 ui->P_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
-                update_status_bar("BSP Factory : Loaded file "+Last_P_BSPFactoryFile);
+                update_status_bar("BSP Factory : Loaded file "+Last_P_BSPFactoryFile+".dtb");
             }
         }
         if (CurrentBSPF_Tab == "U BSP Factory")
         {
-            QFileInfo fi(Last_U_BSPFactoryFile);
+            QFileInfo fi(instpath+"/DtbUserWorkArea/UClass_bspf/"+Last_U_BSPFactoryFile+".bspf");
             if ( ! fi.exists())
             {
                 update_status_bar("BSP Factory : File "+fi.baseName()+".bspf not found, reverting to default");
@@ -871,16 +882,16 @@ QString line;
                 QString base = fi.baseName();
                 if ( base != "" )
                     ui->U_Current_BSPF_File_label->setText(base+".bspf");
-                U_load_BSPF_File(Last_U_BSPFactoryFile);
+                U_load_BSPF_File(instpath+"/DtbUserWorkArea/UClass_bspf/"+Last_U_BSPFactoryFile);
                 ui->U_I2C2Speed_lineEdit->setText("100000");
 
                 ui->U_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
-                update_status_bar("BSP Factory : Loaded file "+Last_U_BSPFactoryFile);
+                update_status_bar("BSP Factory : Loaded file "+Last_U_BSPFactoryFile+".dtb");
             }
         }
         if (CurrentBSPF_Tab == "M8 BSP Factory")
         {
-            QFileInfo fi(Last_M8_BSPFactoryFile);
+            QFileInfo fi(instpath+"/DtbUserWorkArea/M8Class_bspf/"+Last_M8_BSPFactoryFile+".bspf");
             if ( ! fi.exists())
             {
                 update_status_bar("BSP Factory : File "+fi.baseName()+".bspf not found, reverting to default");
@@ -890,30 +901,30 @@ QString line;
                 QString base = fi.baseName();
                 if ( base != "" )
                     ui->M8_Current_BSPF_File_label->setText(base+".bspf");
-                M8_load_BSPF_File(Last_M8_BSPFactoryFile);
+                M8_load_BSPF_File(instpath+"/DtbUserWorkArea/M8Class_bspf/"+Last_M8_BSPFactoryFile);
                 ui->M8_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
-                update_status_bar("BSP Factory : Loaded file "+Last_M8_BSPFactoryFile);
+                update_status_bar("BSP Factory : Loaded file "+Last_M8_BSPFactoryFile+".dtb");
             }
-        }
-        if (CurrentBSPF_Tab == "N1 BSP Factory")
-        {
-                update_status_bar("BSP Factory : N1 has no BSP factory options");
         }
         if (CurrentBSPF_Tab == "M7 BSP Factory")
         {
-            QFileInfo fi(Last_M7_BSPFactoryFile);
+            QFileInfo fi(instpath+"/DtbUserWorkArea/M7Class_bspf/"+Last_M7_BSPFactoryFile+".bspf");
             if ( ! fi.exists())
             {
-                update_status_bar("BSP Factory : File "+fi.baseName()+".bspf not found, reverting to default");
+                std::cout << fi.absoluteFilePath().toLatin1().constData() << std::flush;
+
+                update_status_bar("BSP Factory : File "+fi.absoluteFilePath()+".bspf not found, reverting to default");
             }
             else
             {
                 QString base = fi.baseName();
                 if ( base != "" )
                     ui->M7_Current_BSPF_File_label->setText(base+".bspf");
-                M7_load_BSPF_File(Last_M7_BSPFactoryFile);
+                std::cout << Last_M7_BSPFactoryFile.toLatin1().constData() << std::flush;
+
+                M7_load_BSPF_File(instpath+"/DtbUserWorkArea/M7Class_bspf/"+Last_M7_BSPFactoryFile);
                 ui->M7_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
-                update_status_bar("BSP Factory : Loaded file "+Last_M7_BSPFactoryFile);
+                update_status_bar("BSP Factory : Loaded file "+Last_M7_BSPFactoryFile+".dtb");
             }
         }
         break;
@@ -988,3 +999,4 @@ void NOVAembed::on_actionVersion_triggered()
         tr(msg1)
     );
 }
+

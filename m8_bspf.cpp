@@ -23,9 +23,7 @@ extern  QString Last_M8_BSPFactoryFile;
 extern  QString LVDSVideo;
 extern  QString Quad;
 extern  QString instpath;
-
-//QString FileNameNoExtension;
-
+extern  QString Kernel;
 
 QString M8_getvalue(QString strKey, QSettings *settings , QString entry)
 {
@@ -34,14 +32,8 @@ QString M8_getvalue(QString strKey, QSettings *settings , QString entry)
 
 void NOVAembed::M8_load_BSPF_File(QString fileName)
 {
-//QString strKeyFunc("M8_IOMUX/");
-//QSettings * func_settings = 0;
-
     on_M8_Clear_pushButton_clicked();
-
     Last_M8_BSPFactoryFile = fileName;
-
-    //func_settings = new QSettings( fileName, QSettings::IniFormat );
 }
 
 
@@ -65,7 +57,7 @@ void NOVAembed::M8_save_helper(QString fileName)
     out << QString("\n[M8_CONF]\n");
     file.close();
     update_status_bar("File "+Last_M8_BSPFactoryFile+" saved");
-    Last_M8_BSPFactoryFile = fileName;
+    Last_M8_BSPFactoryFile = bspfbase;
     storeNOVAembed_ini();
 
 }
@@ -81,22 +73,33 @@ void NOVAembed::on_M8_Save_pushButton_clicked()
         M8_save_helper(fileName);
 }
 
+extern      int skip_filesave_on_Generate_pushButton_clicked;
+
 void NOVAembed::on_M8_Generate_pushButton_clicked()
 {
+QFile scriptfile("/tmp/script");
+QString FileNameNoExtension;
+QFileInfo fi;
     if ( CheckIfKernelsPresent() == 1 )
+    {
+        update_status_bar("Kernel "+Kernel+" not present, download it.");
         return;
-    // Save .bspf and Generate .dtb
-    QString fileName = QFileDialog::getSaveFileName(this,tr("Save .bspf"), instpath+"/DtbUserWorkArea/M8Class_bspf",tr(".bspf (*.bspf)"));
-    if ( fileName.isEmpty() )
-        return;
+    }
+    if ( skip_filesave_on_Generate_pushButton_clicked == 0)
+    {
+        // Save .bspf and Generate .dtb
+        QString fileName = QFileDialog::getSaveFileName(this,tr("Save .bspf"), instpath+"/DtbUserWorkArea/M8Class_bspf",tr(".bspf (*.bspf)"));
+        if ( fileName.isEmpty() )
+            return;
 
-    QFile scriptfile("/tmp/script");
-    QFileInfo fi(fileName);
-    ui->M8_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
-    ui->M8_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
-    M8_save_helper(fileName);
-    Last_M8_BSPFactoryFile = fileName;
-    QString FileNameNoExtension  = fi.baseName();
+        QFileInfo fiLocal(fileName);
+        fi = fiLocal;
+        ui->M8_Current_BSPF_File_label->setText(fi.baseName()+".bspf");
+        ui->M8_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
+        M8_save_helper(fileName);
+        Last_M8_BSPFactoryFile = fi.baseName();
+        FileNameNoExtension  = fi.baseName();
+    }
 
     update_status_bar("Generating dtb "+FileNameNoExtension+".dtb ...");
     if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )

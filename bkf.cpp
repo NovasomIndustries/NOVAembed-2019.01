@@ -1085,15 +1085,48 @@ void NOVAembed::on_ExtFSBSPFSelect_pushButton_clicked()
 
 /* External file systems end */
 
-
+extern      int skip_filesave_on_Generate_pushButton_clicked;
 
 void NOVAembed::on_UserBSPFSelect_pushButton_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/PClass_bspf",tr("BSPF (*.bspf)"));
+    QString fileName;
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/PClass_bspf",tr("BSPF (*.bspf)"));
+    if ( ui->Board_comboBox->currentText() == "U5")
+        fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/UClass_bspf",tr("BSPF (*.bspf)"));
+    if ( ui->Board_comboBox->currentText() == "M8")
+        fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/M8Class_bspf",tr("BSPF (*.bspf)"));
+    if ( ui->Board_comboBox->currentText() == "M7")
+        fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/M7Class_bspf",tr("BSPF (*.bspf)"));
     if (fileName.isEmpty())
         return;
     else
     {
+        skip_filesave_on_Generate_pushButton_clicked = 1;
+        if ( ui->Board_comboBox->currentText() == "P Series")
+        {
+            ui->P_EditBeforeGenerate_checkBox->setChecked(false);
+            on_P_Generate_pushButton_clicked();
+        }
+        if ( ui->Board_comboBox->currentText() == "U5")
+        {
+            ui->U_EditBeforeGenerate_checkBox->setChecked(false);
+            on_U_Generate_pushButton_clicked();
+        }
+        if ( ui->Board_comboBox->currentText() == "M8")
+        {
+            ui->M8_EditBeforeGenerate_checkBox->setChecked(false);
+            on_M8_Generate_pushButton_clicked();
+
+        }
+        if ( ui->Board_comboBox->currentText() == "M7")
+        {
+            ui->M7_EditBeforeGenerate_checkBox->setChecked(false);
+            on_M7_Generate_pushButton_clicked();
+
+        }
+        skip_filesave_on_Generate_pushButton_clicked = 0;
+
         QFileInfo fileinfo(fileName);
         fileinfo.baseName();
         ui->UserBSPFselectedlineEdit->setText(fileinfo.baseName());
@@ -1103,6 +1136,8 @@ void NOVAembed::on_UserBSPFSelect_pushButton_clicked()
             Last_P_BSPFactoryFile = ui->UserBSPFselectedlineEdit->text();
         if ( ui->Board_comboBox->currentText() == "U5")
             Last_U_BSPFactoryFile = ui->UserBSPFselectedlineEdit->text();
+        if ( ui->Board_comboBox->currentText() == "M7")
+            Last_M7_BSPFactoryFile = ui->UserBSPFselectedlineEdit->text();
         storeNOVAembed_ini();
     }
 }
