@@ -181,8 +181,6 @@ QString file_exists_path;
     ui->tab->removeTab(2);
     ui->tab->insertTab(2,current_stab,CurrentBSPF_Tab);
     ui->tab->insertTab(3,TOOL_stab,"Tools");
-    ui->SPIProg_pushButton->setVisible(false);
-
 
     compile_NewFileSystemFileSystemConfigurationcomboBox();
 
