@@ -283,6 +283,10 @@ void NOVAembed::on_KernelCompile_pushButton_clicked()
     {
         out << QString("cd "+instpath+"/Utils/rock\n");
         out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
+        out << QString("if [ -d "+instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+" ]; then\n");
+        out << QString("    ./modules_install "+instpath+"/Kernel/"+Kernel+" "+instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
+        out << QString("    ./rebuild_fs "+instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+" >> "+instpath+"/Logs/kmake.log\n");
+        out << QString("fi\n");
     }
 
     scriptfile.close();

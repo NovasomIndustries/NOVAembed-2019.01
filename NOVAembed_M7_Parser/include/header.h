@@ -6,8 +6,7 @@
 / {\n\
 	model = \"Rockchip RK3328 EVB\";\n\
 	compatible = \"rockchip,rk3328-evb\", \"rockchip,rk3328\";\n\
-\n\
-	chosen {\n\
+    chosen {\n\
 		bootargs = \"rockchip_jtag earlyprintk=uart8250-32bit,0xff130000\";\n\
 	};\n\
 \n\
@@ -16,31 +15,35 @@
 		rockchip,serial-id = <2>;\n\
 		rockchip,signal-irq = <159>;\n\
 		rockchip,wake-irq = <0>;\n\
-		/* If enable uart uses irq instead of fiq */ \n\
+		/* If enable uart uses irq instead of fiq */\n\
 		rockchip,irq-mode-enable = <0>;\n\
-		rockchip,baudrate = <115200>;  /* Only 115200 and 1500000 */ \n\
+		rockchip,baudrate = <115200>;  /* Only 115200 and 1500000 */\n\
 		interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;\n\
 		status = \"okay\";\n\
 	};\n\
 \n\
+	leds {\n\
+		compatible = \"gpio-leds\";\n\
+		wlan-green {\n\
+			label = \"wlan\";\n\
+			gpios = <&rk805 2 GPIO_ACTIVE_LOW>;\n\
+			linux,default-trigger = \"heartbeat\";\n\
+			default-state = \"off\";\n\
+			mode = <0x05>;\n\
+		};\n\
+	};\n\
+\n\
 	gmac_clkin: external-gmac-clock {\n\
-		compatible = \"fixed-clock\"; \n\
-		clock-frequency = <125000000>; \n\
-		clock-output-names = \"gmac_clkin\"; \n\
+		compatible = \"fixed-clock\";\n\
+		clock-frequency = <125000000>;\n\
+		clock-output-names = \"gmac_clkin\";\n\
 		#clock-cells = <0>;\n\
 	};\n\
 \n\
 	sdio_pwrseq: sdio-pwrseq {\n\
-		compatible = \"mmc-pwrseq-simple\"; \n\
-		pinctrl-names = \"default\"; \n\
+		compatible = \"mmc-pwrseq-simple\";\n\
+		pinctrl-names = \"default\";\n\
 		pinctrl-0 = <&wifi_enable_h>;\n\
-\n\
-		/* \n\
-		 * On the module itself this is one of these (depending\n\
-		 * on the actual card populated):\n\
-		 * - SDIO_RESET_L_WL_REG_ON\n\
-		 * - PDN (power down when low)\n\
-		 */\n\
 		reset-gpios = <&gpio1 18 GPIO_ACTIVE_LOW>;\n\
 	};\n\
 \n\
@@ -126,12 +129,28 @@
 		vin-supply = <&vcc_io>;\n\
 	};\n\
 \n\
+	wireless-bluetooth {\n\
+                compatible = \"bluetooth-platdata\";\n\
+                clocks = <&rk805 1>;\n\
+                clock-names = \"ext_clock\";\n\
+                uart_rts_gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;\n\
+                pinctrl-names = \"default\", \"rts_gpio\";\n\
+                pinctrl-0 = <&uart0_rts>;\n\
+                pinctrl-1 = <&uart0_gpios>;\n\
+                BT,power_gpio = <&gpio1 21 GPIO_ACTIVE_HIGH>;\n\
+                BT,wake_host_irq = <&gpio1 26 GPIO_ACTIVE_HIGH>;\n\
+                status = \"okay\";\n\
+	};\n\
+\n\
 	wireless-wlan {\n\
 		compatible = \"wlan-platdata\";\n\
 		rockchip,grf = <&grf>;\n\
-		wifi_chip_type = \"ap6354\";\n\
-		sdio_vref = <1800>;\n\
+		wifi_chip_type = \"rtl8723bs\";\n\
+		sdio_vref = <3300>;\n\
+		WIFI,host_poweren_gpio = <&gpio1 18 GPIO_ACTIVE_HIGH>;\n\
 		WIFI,host_wake_irq = <&gpio1 19 GPIO_ACTIVE_HIGH>;\n\
+		pinctrl-names = \"default\";\n\
+		pinctrl-0 = <&bt_clk>;\n\
 		status = \"okay\";\n\
 	};\n\
 };\n\
@@ -145,7 +164,12 @@
 	cpu-supply = <&vdd_arm>;\n\
 };\n\
 \n\
-&display_subsystem {\n\
+&dfi {\n\
+	status = \"okay\";\n\
+};\n\
+\n\
+&dmc {\n\
+	center-supply = <&vdd_logic>;\n\
 	status = \"okay\";\n\
 };\n\
 \n\
@@ -163,18 +187,6 @@
 };\n\
 \n\
 &gmac2io {\n\
-	phy-supply = <&vcc_phy>;\n\
-	phy-mode = \"rgmii\";\n\
-	clock_in_out = \"input\";\n\
-	snps,reset-gpio = <&gpio1 RK_PC2 GPIO_ACTIVE_LOW>;\n\
-	snps,reset-active-low;\n\
-	snps,reset-delays-us = <0 10000 50000>;\n\
-	assigned-clocks = <&cru SCLK_MAC2IO>, <&cru SCLK_MAC2IO_EXT>;\n\
-	assigned-clock-parents = <&gmac_clkin>, <&gmac_clkin>;\n\
-	pinctrl-names = \"default\";\n\
-	pinctrl-0 = <&rgmiim1_pins>;\n\
-	tx_delay = <0x26>;\n\
-	rx_delay = <0x11>;\n\
 	status = \"disabled\";\n\
 };\n\
 \n\
@@ -215,20 +227,27 @@
 		interrupts = <6 IRQ_TYPE_LEVEL_LOW>;\n\
 		pinctrl-names = \"default\";\n\
 		pinctrl-0 = <&pmic_int_l>;\n\
-		rockchip,system-power-controller;\n\
 		wakeup-source;\n\
 		gpio-controller;\n\
 		#gpio-cells = <2>;\n\
 		#clock-cells = <1>;\n\
-		clock-output-names = \"xin32k\", \"rk805-clkout2\";\n\
+		clock-output-names = \"rk805-clkout1\", \"rk805-clkout2\";\n\
 \n\
 		rtc {\n\
-			status = \"disabled\";\n\
+			status = \"okay\";\n\
 		};\n\
 \n\
 		pwrkey {\n\
 			status = \"disabled\";\n\
 		};\n\
+\n\
+        rk805_default: pinmux {\n\
+            gpio01 {\n\
+                pins = \"gpio0\", \"gpio1\";\n\
+                function = \"gpio\";\n\
+                output-high;\n\
+                };\n\
+        };\n\
 \n\
 		gpio {\n\
 			status = \"okay\";\n\
@@ -259,6 +278,7 @@
 			vdd_arm: RK805_DCDC2 {\n\
 				regulator-compatible = \"RK805_DCDC2\";\n\
 				regulator-name = \"vdd_arm\";\n\
+				regulator-init-microvolt = <1225000>;\n\
 				regulator-min-microvolt = <712500>;\n\
 				regulator-max-microvolt = <1450000>;\n\
 				regulator-initial-mode = <0x1>;\n\
@@ -356,6 +376,14 @@
 	status = \"okay\";\n\
 };\n\
 \n\
+&iep {\n\
+	status = \"okay\";\n\
+};\n\
+\n\
+&iep_mmu {\n\
+	status = \"okay\";\n\
+};\n\
+\n\
 &io_domains {\n\
 	status = \"okay\";\n\
 \n\
@@ -369,10 +397,16 @@
 };\n\
 \n\
 &pinctrl {\n\
+        clkout32k {\n\
+                bt_clk: bt-clk {\n\
+                rockchip,pins =\n\
+                        <1 RK_PD4 RK_FUNC_1 &pcfg_pull_up>;\n\
+                };\n\
+        }; \n\
 	pmic {\n\
 		pmic_int_l: pmic-int-l {\n\
 		rockchip,pins =\n\
-			<2 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>;	/* gpio2_a6 */\n\
+			<2 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>;\n\
 		};\n\
 	};\n\
 \n\
@@ -392,6 +426,19 @@
 		otg_vbus_drv: otg-vbus-drv {\n\
 			rockchip,pins =\n\
 				<0 RK_PD3 RK_FUNC_GPIO &pcfg_pull_none>;\n\
+		};\n\
+	};\n\
+\n\
+	bt-clock {\n\
+		blue_tooth_clock: blue-tooth-clock {\n\
+		rockchip,pins =\n\
+			<1 RK_PD4 RK_FUNC_2 &pcfg_pull_none>;\n\
+		};\n\
+	};\n\
+	wireless-bluetooth {\n\
+		uart0_gpios: uart0-gpios {\n\
+		rockchip,pins =\n\
+			<1 10 RK_FUNC_GPIO &pcfg_pull_none>;\n\
 		};\n\
 	};\n\
 };\n\
@@ -433,31 +480,37 @@
 	ir_key2 {\n\
 		rockchip,usercode = <0xff00>;\n\
 		rockchip,key_table =\n\
-			<0x39	KEY_POWER>,\n\
-			<0x73	KEY_MUTE>,\n\
-			<0xa4	KEY_PLAYPAUSE>,\n\
-			<0x75	KEY_VOLUMEDOWN>,\n\
-			<0x77	KEY_VOLUMEUP>,\n\
-			<0x7d	KEY_MENU>,\n\
 			<0xf9	KEY_HOME>,\n\
-			<0x5f	KEY_BACK>,\n\
+			<0xbf	KEY_BACK>,\n\
+			<0xfb	KEY_MENU>,\n\
+			<0xaa	KEY_REPLY>,\n\
 			<0xb9	KEY_UP>,\n\
 			<0xe9	KEY_DOWN>,\n\
 			<0xb8	KEY_LEFT>,\n\
 			<0xea	KEY_RIGHT>,\n\
-			<0xaa	KEY_REPLY>,\n\
-			<0x55	KEY_1>,\n\
-			<0x5b	KEY_2>,\n\
-			<0xf8	KEY_3>,\n\
-			<0x57	KEY_4>,\n\
-			<0xed	KEY_5>,\n\
-			<0xee	KEY_6>,\n\
-			<0x59	KEY_7>,\n\
-			<0xf1	KEY_8>,\n\
-			<0xf2	KEY_9>,\n\
-			<0xe0	KEY_BACKSPACE>,\n\
-			<0x79	KEY_0>,\n\
-			<0xa4	KEY_SETUP>;\n\
+			<0xeb	KEY_VOLUMEDOWN>,\n\
+			<0xef	KEY_VOLUMEUP>,\n\
+			<0xf7	KEY_MUTE>,\n\
+			<0xe7	KEY_POWER>,\n\
+			<0xfc	KEY_POWER>,\n\
+			<0xa9	KEY_VOLUMEDOWN>,\n\
+			<0xa8	KEY_PLAYPAUSE>,\n\
+			<0xe0	KEY_VOLUMEDOWN>,\n\
+			<0xa5	KEY_VOLUMEDOWN>,\n\
+			<0xab	183>,\n\
+			<0xb7	388>,\n\
+			<0xe8	388>,\n\
+			<0xf8	184>,\n\
+			<0xaf	185>,\n\
+			<0xed	KEY_VOLUMEDOWN>,\n\
+			<0xee	186>,\n\
+			<0xb3	KEY_VOLUMEDOWN>,\n\
+			<0xf1	KEY_VOLUMEDOWN>,\n\
+			<0xf2	KEY_VOLUMEDOWN>,\n\
+			<0xf3	KEY_SEARCH>,\n\
+			<0xb4	KEY_VOLUMEDOWN>,\n\
+			<0xa4	KEY_SETUP>,\n\
+			<0xbe	KEY_SEARCH>;\n\
 	};\n\
 \n\
 	ir_key3 {\n\
@@ -493,7 +546,19 @@
 	};\n\
 };\n\
 \n\
+&rga {\n\
+	status = \"okay\";\n\
+};\n\
+\n\
 &rkvdec {\n\
+	status = \"okay\";\n\
+	vcodec-supply = <&vdd_logic>;\n\
+	/* COMMENT */\n\
+};\n\
+\n\
+&uart0 {\n\
+	pinctrl-names = \"default\";\n\
+	pinctrl-0 = <&uart0_xfer &uart0_cts>;\n\
 	status = \"okay\";\n\
 };\n\
 \n\
@@ -503,13 +568,15 @@
 	cap-sdio-irq;\n\
 	disable-wp;\n\
 	keep-power-in-suspend;\n\
-	max-frequency = <150000000>;\n\
+	max-frequency = <25000000>;\n\
 	mmc-pwrseq = <&sdio_pwrseq>;\n\
 	non-removable;\n\
 	num-slots = <1>;\n\
 	pinctrl-names = \"default\";\n\
 	pinctrl-0 = <&sdmmc1_bus4 &sdmmc1_cmd &sdmmc1_clk>;\n\
 	supports-sdio;\n\
+    broken-cd;	\n\
+	sd-uhs-sdr104;\n\
 	status = \"okay\";\n\
 };\n\
 \n\
@@ -529,10 +596,29 @@
 \n\
 &spdif {\n\
 	#sound-dai-cells = <0>;\n\
+	pinctrl-names = \"default\";\n\
+	pinctrl-0 = <&spdifm2_tx>;\n\
 	status = \"okay\";\n\
 };\n\
 \n\
+&threshold {\n\
+	temperature = <90000>; /* millicelsius */\n\
+};\n\
+\n\
+&target {\n\
+	temperature = <105000>; /* millicelsius */\n\
+};\n\
+\n\
+&soc_crit {\n\
+	temperature = <110000>; /* millicelsius */\n\
+};\n\
+\n\
 &tsadc {\n\
+	rockchip,hw-tshut-temp = <120000>;\n\
+	status = \"okay\";\n\
+};\n\
+\n\
+&tve {\n\
 	status = \"okay\";\n\
 };\n\
 \n\
@@ -599,17 +685,12 @@
 };\n\
 "
 
-#define dts_footer "\n\
-};\n\
-"
-
 #define i2c2_defs_top "\n\
 &i2c2 {\n\
 	status = \"okay\";\n\
 "
 
-#define i2c2_defs_bottom "\
-\
+#define i2c2_defs_bottom "\n\
         polytouch1: eeti@04 {\n\
                 compatible = \"eeti,egalax_ts\";\n\
                 reg = <0x04>;\n\
@@ -678,9 +759,9 @@
 "
 
 #define spi_pins "\n\
-/* PLACEHOLDER : spi is enabled */ \n\
+/* PLACEHOLDER PLACEHOLDER : spi is enabled PLACEHOLDER PLACEHOLDER*/ \n\
 "
 
-
-
-
+#define dts_footer "\n\
+};\n\
+"

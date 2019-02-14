@@ -227,25 +227,25 @@ QFileInfo fi;
     QTextStream out(&scriptfile);
     out << QString("#!/bin/sh\n");
     out << QString("[ ! -d "+instpath+"/DtbUserWorkArea ] && mkdir "+instpath+"/DtbUserWorkArea\n");
+    out << QString("rm -f "+instpath+"/DtbUserWorkArea/m7_dtb.dtb\n");
     out << QString("cd "+instpath+"/Utils\n");
     out << QString(instpath+"/Qt/NOVAembed/NOVAembed_M7_Parser/bin/Debug/NOVAembed_M7_Parser "+instpath+"/DtbUserWorkArea/M7Class_bspf/"+Last_M7_BSPFactoryFile+".bspf > "+instpath+"/Logs/M7_bspf.log\n");
     if ( ui->M7_EditBeforeGenerate_checkBox->isChecked())
         out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+Last_M7_BSPFactoryFile+".dts\n");
     out << QString("./user_dtb_compile "+Last_M7_BSPFactoryFile+" M7 >> "+instpath+"/Logs/M7_bspf.log\n");
+    out << QString("if [ -f "+instpath+"/DtbUserWorkArea/"+Last_M7_BSPFactoryFile+".dtb ]; then\n");
+    out << QString("    rm "+instpath+"/Deploy/m7_dtb.dtb\n");
+    out << QString("    cp "+instpath+"/DtbUserWorkArea/"+Last_M7_BSPFactoryFile+".dtb "+instpath+"/Deploy/m7_dtb.dtb\n");
+    out << QString("    echo 0 > /tmp/result\n");
+    out << QString("else\n");
+    out << QString("    echo 1 > /tmp/result\n");
+    out << QString("fi\n");
 
     scriptfile.close();
     if ( run_script() == 0)
     {
         update_status_bar(fi.baseName()+".dtb compiled, dtb is in "+instpath+"/DtbUserWorkArea folder as "+Last_M7_BSPFactoryFile+".dtb");
-        const char *str;
-        QByteArray ba;
-
-        QString syscmd_quad = "cp "+instpath+"/DtbUserWorkArea/"+Last_M7_BSPFactoryFile+".dtb "+instpath+"/Deploy/novasomm7.dtb ; chmod 777 "+instpath+"/Deploy/novasomm7.dtb";
-        ba = syscmd_quad.toLatin1();
-        str = ba.data();
-        system(str);
         NOVAsom_Params_helper();
-        //storeNOVAembed_ini();
     }
     else
         update_status_bar("Error compiling "+fi.baseName()+".dtb");
