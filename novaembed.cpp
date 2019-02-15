@@ -73,6 +73,7 @@ NOVAembed::NOVAembed(QWidget *parent) :
 int     copy_required_files = 0;
 QString PixMapName="";
     std::cout << "Starting now\n" << std::flush;
+    system("rm -f /tmp/script");
     /* Initialize user area */
     if ( ! QDir(instpath+"/Blobs").exists() )
         system("mkdir -p "+instpath.toLatin1()+"/Blobs");
@@ -206,8 +207,6 @@ QString PixMapName="";
         Kernel=NXP_P_KERNEL;
         SourceMeFile=NXP_P_SOURCEME;
         PixMapName=":/Icons/NXP-Logo.png";
-        //ui->FileSystemSelectedlineEdit->setText(Last_P_FileSystem);
-
     }
     if ( _Board_comboBox == "P Series")
     {
@@ -250,7 +249,6 @@ QString PixMapName="";
     ui->UserPartition_comboBox->setCurrentText(NumberOfUserPartitions);
     ui->VersionLabel->setText(Version);
     PBSP_stab=ui->tabBSPFP;
-    //SBSP_stab=ui->tabBSPFS;
     UBSP_stab=ui->tabBSPFU;
     M8BSP_stab=ui->tabBSPFM8;
     M7BSP_stab=ui->tabBSPFM7;
@@ -260,25 +258,19 @@ QString PixMapName="";
     ui->tab->removeTab(3);
     ui->tab->removeTab(2);
 
-    /* std::cout << CurrentBSPF_Tab.toLatin1().constData() << std::flush; */
-
     if ( _Board_comboBox == "P Series")
-//    if (CurrentBSPF_Tab == "P BSP Factory")
     {
         ui->tab->insertTab(2,PBSP_stab,"P BSP Factory");
     }
     else if ( _Board_comboBox == "M8")
-    //else if (CurrentBSPF_Tab == "M8 BSP Factory")
     {
         ui->tab->insertTab(2,M8BSP_stab,"M8 BSP Factory");
     }
     else if ( _Board_comboBox == "U5")
-    //else if (CurrentBSPF_Tab == "U BSP Factory")
     {
         ui->tab->insertTab(2,UBSP_stab,"U BSP Factory");
     }
     else if ( _Board_comboBox == "M7")
-    //else if (CurrentBSPF_Tab == "M7 BSP Factory")
     {
         ui->tab->insertTab(2,M7BSP_stab,"M7 BSP Factory");
     }
@@ -288,6 +280,14 @@ QString PixMapName="";
         CurrentBSPF_Tab = "P BSP Factory";
     }
     ui->tab->insertTab(3,TOOL_stab,"Tools");
+    /*
+    std::cout << "CheckForUpdates\n" << std::flush;
+    int a = CheckForUpdates();
+    if ( a == 0 )
+        std::cout << "No updates" << std::flush;
+    else
+        std::cout << "Updates found" << std::flush;
+        */
 }
 
 NOVAembed::~NOVAembed()
@@ -346,17 +346,6 @@ void NOVAembed::storeNOVAembed_ini()
     out << QString("FSValid="+FSValid+"\n");
     out << QString("KernelValid="+KernelValid+"\n");
     out << QString("CurrentSplashName="+CurrentSplashName+"\n");
-    /*
-    if ( ui->Board_comboBox->currentText() == "U5")
-        Kernel=NXP_U_KERNEL;
-    if ( ui->Board_comboBox->currentText() == "M8")
-        Kernel=QUALCOMM_KERNEL;
-    if ( ui->Board_comboBox->currentText() == "P Series")
-        Kernel=NXP_P_KERNEL;
-    if ( ui->Board_comboBox->currentText() == "M7")
-        Kernel=RK_M7_KERNEL;
-    */
-
     out << QString("Kernel="+Kernel+"\n");
     out << QString("CurrentDevelopment="+CurrentDevelopment+"\n");
 
@@ -481,12 +470,47 @@ int NOVAembed::run_background_script(void)
     this->setCursor(Qt::ArrowCursor);
     return content.toInt();
 }
+
+/*
+int NOVAembed::CheckForUpdates()
+{
+    QProcess *process = new QProcess(this);
+    QString program = "CheckUpdatedRepo";
+    QString folder = instpath+"/Utils";
+    process->start(program, QStringList() << folder);
+}
+{
+QFile scriptfile("/tmp/script");
+
+    QTextStream out(&scriptfile);
+    out << QString("#!/bin/sh\n");
+    out << QString("cd "+instpath+"/Utils\n");
+    out << QString("./CheckUpdatedRepo > /tmp/repo_to_update\n");
+    out << QString("echo 0 > /tmp/result\n");
+    out << QString("return 0\n");
+    scriptfile.close();
+    if ( run_script() == 0)
+    {
+        update_status_bar("Update checked");
+        QFile file("/tmp/repo_to_update");
+        while( file.open(QIODevice::ReadOnly) == false )
+            local_sleep(100);
+        QTextStream stream(&file);
+        QString content = stream.readAll();
+        file.close();
+        content.chop(1);
+        this->setCursor(Qt::ArrowCursor);
+        return content.toInt();
+    }
+    return 0;
+}
+*/
+
 int NOVAembed::update_status_bar(QString StatusBarContent)
 {
     ui->statusBar->showMessage(StatusBarContent);
     return 0;
 }
-
 
 int NOVAembed::CheckIfKernelsPresent()
 {
@@ -975,16 +999,12 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
     {
             update_status_bar("View Log to see the updates found");
     }
-
 }
 
 void NOVAembed::on_ViewUpdatesLog_pushButton_clicked()
 {
     system("kwrite "+instpath.toLatin1()+"/Logs/update.log");
 }
-
-
-
 
 void NOVAembed::on_actionVersion_triggered()
 {
