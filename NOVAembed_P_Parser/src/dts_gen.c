@@ -11,7 +11,7 @@ char    gpio_hogs[2048];
 void create_dts_file(void)
 {
 FILE    *fpout_dts;
-char    tstr[128];
+char    tstr[256];
     if ( strstr(file_contents,"Processor=QUAD"))
     {
         sprintf(dtsfile_dump,dts_defs_part1_QUAD);
@@ -485,6 +485,11 @@ int     speed;
         strcat(dtsifile_dump,t);
     }
 
+    if ( iomux->uart2_2 == 0 )
+    {
+        sprintf(t,uart2_2_defs);
+        strcat(dtsifile_dump,t);
+    }
     if ( iomux->uart4_4 == 1 )
     {
         sprintf(t,uart4_4_defs);
@@ -663,8 +668,11 @@ void apply_spwg_jeida_pri(char *ldb)
     }
     printf("%s\n",ldb);
 }
+
 void apply_spwg_jeida_sec(char *ldb)
 {
+char * pch;
+int secjeida=0;
     if (strstr(file_contents,"P_SecVideo_spwg_checkBox=true"))
     {
         char * pch;
@@ -676,12 +684,24 @@ void apply_spwg_jeida_sec(char *ldb)
     else
     {
         printf("P_SecVideo_spwg_checkBox=false!\n");
-        char * pch;
         pch = strstr (ldb,"\"spwg\" ;");
         if ( pch != NULL )
         {
             strncpy (pch,"\"jeida\" ;",7);
+            secjeida=1;
+            /*
+            char * pch1;
+            pch1 = strstr (ldb,"fsl,data-width = <18>;");
+            if ( pch1 != NULL )
+                strncpy (pch,"fsl,data-width = <24>;",22);
+                */
             printf("Found!\n");
+        }
+        if ( secjeida )
+        {
+            pch = strstr (ldb,"fsl,data-width = <18>;");
+            if ( pch != NULL )
+                strncpy (pch,"fsl,data-width = <24>;",22);
         }
         printf("SecVideo : jeida\n");
     }
@@ -932,8 +952,8 @@ int     i;
         if ( file_name_noext[i] == '.')
             file_name_noext[i]=0;
     }
-    sprintf(file_name_dts,"/Devel/NOVAsdk2019.01/DtbUserWorkArea/%s.dts",file_name_noext);
-    sprintf(file_name_dtsi,"/Devel/NOVAsdk2019.01/DtbUserWorkArea/%s.dtsi",file_name_noext);
+    sprintf(file_name_dts,"/Devel/NOVAsom_SDK/DtbUserWorkArea/%s.dts",file_name_noext);
+    sprintf(file_name_dtsi,"/Devel/NOVAsom_SDK/DtbUserWorkArea/%s.dtsi",file_name_noext);
 
     printf("Input File Name       :  %s\n",file_in);
     printf("Output DTS  File Name : %s\n",file_name_dts);

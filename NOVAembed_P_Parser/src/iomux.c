@@ -297,6 +297,25 @@ void process_uart2_2(void)
     return;
 }
 
+void process_uart2_2aux(void)
+{
+//char *t1;
+    uart2_2 = calloc(1,sizeof(iomux_uart_2));
+    sprintf(uart2_2->grp_name,"uart2grp");
+    sprintf(uart2_2->pinctrl0_name,"pinctrl_uart2");
+    sprintf(uart2_2->uart_txd_pin_name,"MX6QDL_PAD_EIM_D26__UART2_TX_DATA");
+    sprintf(uart2_2->uart_rxd_pin_name,"MX6QDL_PAD_EIM_D27__UART2_RX_DATA");
+    sprintf(uart2_2->pin_config[0],"1b0b1");
+    sprintf(uart2_2->pin_config[1],"1b0b1");
+    /*
+    if ((t1 = strstr(file_contents,"P_SD3_DATA5_cbit=")))
+        copy_and_resize(uart2_2->pin_config[0],t1+sizeof("P_SD3_DATA5_cbit"));
+    if ((t1 = strstr(file_contents,"P_SD3_DATA4_cbit=")))
+        copy_and_resize(uart2_2->pin_config[1],t1+sizeof("P_SD3_DATA4_cbit"));
+    */
+    return;
+}
+
 void process_uart2_4(void)
 {
 //char *t1;
@@ -681,6 +700,11 @@ void parse_special_iomux(void)
             iomux->uart2_2 = 1;
             process_uart2_2();
         }
+    }
+    else
+    {
+        iomux->uart2_2 = 1;
+        process_uart2_2aux();
     }
 
     /* On J9 */
