@@ -30,14 +30,29 @@
 			linux,default-trigger = \"heartbeat\";\n\
 			default-state = \"off\";\n\
 			mode = <0x05>;\n\
+		}; /* \"rc-feedback\" */\n\
+		ir-fbk {\n\
+            label = \"rc-feedback\";\n\
+            gpios = <&gpio2 18 GPIO_ACTIVE_LOW>;\n\
+            linux,default-trigger = \"rc-feedback\";\n\
+            pinctrl-names = \"default\";\n\
+            pinctrl-0 = <&ir_fbk>;\n\
+            default-state = \"off\";\n\
 		};\n\
 	};\n\
 \n\
+    ir: ir-receiver {\n\
+        compatible = \"gpio-ir-receiver\";\n\
+        gpios = <&gpio2 2 GPIO_ACTIVE_LOW>;\n\
+        pinctrl-names = \"default\";\n\
+        pinctrl-0 = <&ir_int>;\n\
+    };\n\
+\n\
 	gmac_clkin: external-gmac-clock {\n\
-		compatible = \"fixed-clock\";\n\
-		clock-frequency = <125000000>;\n\
-		clock-output-names = \"gmac_clkin\";\n\
-		#clock-cells = <0>;\n\
+        compatible = \"fixed-clock\";\n\
+        clock-frequency = <125000000>;\n\
+        clock-output-names = \"gmac_clkin\";\n\
+        #clock-cells = <0>;\n\
 	};\n\
 \n\
 	sdio_pwrseq: sdio-pwrseq {\n\
