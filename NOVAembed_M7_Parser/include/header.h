@@ -36,6 +36,13 @@
 		reset-gpios = <&gpio1 18 GPIO_ACTIVE_LOW>;\n\
 	};\n\
 \n\
+        ir-receiver {\n\
+                compatible = \"gpio-ir-receiver\";\n\
+                pinctrl-0 = <&ir_int>;\n\
+                pinctrl-names = \"default\";\n\
+                status = \"okay\";\n\
+        };\n\
+\n\
 	sound {\
 		compatible = \"simple-audio-card\";\n\
 		simple-audio-card,format = \"i2s\";\n\
@@ -48,8 +55,8 @@
 			sound-dai = <&codec>;\n\
 		};\n\
 	};\n\
-\
-	hdmi-sound {\
+\n\
+	hdmi-sound {\n\
 		compatible = \"simple-audio-card\";\n\
 		simple-audio-card,format = \"i2s\";\n\
 		simple-audio-card,mclk-fs = <128>;\n\
@@ -62,7 +69,7 @@
 		};\n\
 	};\n\
 \n\
-	spdif-sound {\
+	spdif-sound {\n\
 		compatible = \"simple-audio-card\";\n\
 		simple-audio-card,name = \"rockchip,spdif\";\n\
 		simple-audio-card,cpu {\
@@ -73,12 +80,12 @@
 		};\n\
 	};\n\
 \n\
-	spdif_out: spdif-out {\
+	spdif_out: spdif-out {\n\
 		compatible = \"linux,spdif-dit\";\n\
 		#sound-dai-cells = <0>;\n\
 	};\n\
 \n\
-	vcc_host_vbus: host-vbus-regulator {\
+	vcc_host_vbus: host-vbus-regulator {\n\
 		compatible = \"regulator-fixed\";\n\
 		gpio = <&gpio0 RK_PA0 GPIO_ACTIVE_HIGH>;\n\
 		pinctrl-names = \"default\";\n\
@@ -88,8 +95,8 @@
 		regulator-max-microvolt = <5000000>;\n\
 		enable-active-high;\n\
 	};\n\
-\
-	vcc_otg_vbus: otg-vbus-regulator {\
+\n\
+	vcc_otg_vbus: otg-vbus-regulator {\n\
 		compatible = \"regulator-fixed\";\n\
 		gpio = <&gpio0 RK_PD3 GPIO_ACTIVE_HIGH>;\n\
 		pinctrl-names = \"default\";\n\
@@ -99,15 +106,13 @@
 		regulator-max-microvolt = <5000000>;\n\
 		enable-active-high;\n\
 	};\n\
-\
 	vcc_phy: vcc-phy-regulator {\n\
 		compatible = \"regulator-fixed\";\n\
 		regulator-name = \"vcc_phy\";\n\
 		regulator-always-on;\n\
 		regulator-boot-on;\n\
 	};\n\
-\
-	vcc_sd: sdmmc-regulator {\
+	vcc_sd: sdmmc-regulator {\n\
 		compatible = \"regulator-fixed\";\n\
 		gpio = <&gpio0 30 GPIO_ACTIVE_LOW>;\n\
 		pinctrl-names = \"default\";\n\
@@ -117,7 +122,7 @@
 		regulator-max-microvolt = <3300000>;\n\
 		vin-supply = <&vcc_io>;\n\
 	};\n\
-        wireless-bluetooth {\
+        wireless-bluetooth {\n\
                 compatible = \"bluetooth-platdata\";\n\
                 clocks = <&rk805 1>;\n\
                 clock-names = \"ext_clock\";\n\
@@ -129,8 +134,8 @@
                 BT,wake_host_irq = <&gpio1 26 GPIO_ACTIVE_HIGH>;\n\
                 status = \"okay\";\n\
         };\n\
-\
-        wireless-wlan {\
+\n\
+        wireless-wlan {\n\
                 compatible = \"wlan-platdata\";\n\
                 rockchip,grf = <&grf>;\n\
                 wifi_chip_type = \"rtl8723bs\";\n\
@@ -143,20 +148,20 @@
         };\n\
 };\n\
 \
-&codec {\
+&codec {\n\
 	#sound-dai-cells = <0>;\n\
 	status = \"okay\";\n\
 };\n\
 \n\
-&cpu0 {\
+&cpu0 {\n\
 	cpu-supply = <&vdd_arm>;\n\
 };\n\
 \n\
-&display_subsystem {\
+&display_subsystem {\n\
 	status = \"okay\";\n\
 };\n\
 \n\
-&emmc {\
+&emmc {\n\
 	bus-width = <8>;\n\
 	cap-mmc-highspeed;\n\
 	mmc-hs200-1_8v;\n\
@@ -169,7 +174,7 @@
 	status = \"okay\";\n\
 };\n\
 \n\
-&gmac2io {\
+&gmac2io {\n\
 	phy-supply = <&vcc_phy>;\n\
 	phy-mode = \"rgmii\";\n\
 	clock_in_out = \"input\";\n\
@@ -185,7 +190,7 @@
 	status = \"disabled\";\n\
 };\n\
 \n\
-&gmac2phy {\
+&gmac2phy {\n\
 	phy-supply = <&vcc_phy>;\n\
 	clock_in_out = \"output\";\n\
 	assigned-clocks = <&cru SCLK_MAC2PHY_SRC>;\n\
@@ -378,6 +383,12 @@
 		rockchip,pins =<2 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>;\n\
 		};\n\
 	};\n\
+\n\
+    ir {\n\
+            ir_int: ir-int {\n\
+                    rockchip,pins = <2 2 RK_FUNC_GPIO &pcfg_pull_none>;\n\
+            };\n\
+    };\n\
 \n\
 	sdio-pwrseq {\n\
 		wifi_enable_h: wifi-enable-h {\n\
