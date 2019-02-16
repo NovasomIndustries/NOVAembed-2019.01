@@ -258,10 +258,10 @@ void NOVAembed::on_KernelCompile_pushButton_clicked()
         out << QString("cd "+instpath+"/Utils/nxp\n");
         out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
         QString this_kernel=NXP_P_KERNEL;
-        out << QString("if [ -f ../../FileSystem/"+ui->FileSystemSelectedlineEdit->text()+"/output/images/rootfs.ext2.gz ]; then\n");
+        out << QString("if [ -f ../../FileSystem/"+FileSystemName+"/output/images/rootfs.ext2.gz ]; then\n");
         out << QString("    if [ -f ../../Kernel/"+this_kernel+"/vmlinux ]; then\n");
         out << QString("        cd ../../Kernel/"+this_kernel+"\n");
-        out << QString("        ./install_modules_local "+ui->FileSystemSelectedlineEdit->text()+" >> "+instpath+"/Logs/kmake.log\n");
+        out << QString("        ./install_modules_local "+FileSystemName+" >> "+instpath+"/Logs/kmake.log\n");
         out << QString("    fi\n");
         out << QString("fi\n");
     }
@@ -283,12 +283,12 @@ void NOVAembed::on_KernelCompile_pushButton_clicked()
     {
         out << QString("cd "+instpath+"/Utils/rock\n");
         out << QString("./kmake "+Kernel+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
-        out << QString("if [ -d "+instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+" ]; then\n");
-        out << QString("    ./modules_install "+instpath+"/Kernel/"+Kernel+" "+instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
-        out << QString("    ./rebuild_fs "+instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+" >> "+instpath+"/Logs/kmake.log\n");
+        out << QString("if [ -d "+instpath+"/FileSystem/"+FileSystemName+"/output/target ]; then\n");
+        out << QString("    rm -rf "+instpath+"/FileSystem/"+FileSystemName+"/output/target/lib/modules/*\n");
+        out << QString("    ./modules_install "+instpath+"/Kernel/"+Kernel+" "+instpath+"/FileSystem/"+FileSystemName+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
+        out << QString("    ./rebuild_fs "+instpath+"/FileSystem/"+FileSystemName+" >> "+instpath+"/Logs/kmake.log\n");
         out << QString("fi\n");
     }
-
     scriptfile.close();
     if ( run_script() == 0)
     {
@@ -716,7 +716,8 @@ void qSleep(int ms)
 void NOVAembed::on_Write_uSD_pushButton_clicked()
 {
     /*uSD_Device_comboBox*/
-    if ( NumberOfUserPartitions == "2")
+    NumberOfUserPartitions = ui->UserPartition_comboBox->currentText();
+    if ( ui->UserPartition_comboBox->currentText() == "2")
     {
         if ((UserPartition1Size == "0") && (UserPartition2Size == "0"))
             UserPartition1Size = "32";    /* If both are 0 set user1 for 32MB */
@@ -724,8 +725,6 @@ void NOVAembed::on_Write_uSD_pushButton_clicked()
 
     ui->UserPartition1Size_lineEdit->setText(UserPartition1Size);
     ui->UserPartition2Size_lineEdit->setText(UserPartition2Size);
-    update_status_bar("uSD size adjusted to "+UserPartition1Size+" "+UserPartition2Size);
-    qSleep(2000);
     uSD_Device = ui->uSD_Device_comboBox->currentText();
     QFile scriptfile("/tmp/script");
     update_status_bar("Writing uSD with "+FileSystemName);
