@@ -518,6 +518,22 @@
 	status = \"okay\";\n\
 };\n\
 \n\
+&uart0 {\n\
+        pinctrl-names = \"default\";\n\
+        pinctrl-0 = <&uart0_xfer &uart0_cts>;\n\
+        status = \"okay\";\n\
+};\n\
+\n\
+&uart1 {\n\
+        status = \"okay\";\n\
+};\n\
+&uart2 {\n\
+        status = \"okay\";\n\
+};\n\
+&uart3 {\n\
+        status = \"okay\";\n\
+};\n\
+\n\
 &sdio {\n\
 	bus-width = <4>;\n\
 	cap-sd-highspeed;\n\
