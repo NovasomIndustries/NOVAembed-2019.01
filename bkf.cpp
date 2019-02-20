@@ -287,6 +287,13 @@ void NOVAembed::on_KernelCompile_pushButton_clicked()
         out << QString("    rm -rf "+instpath+"/FileSystem/"+FileSystemName+"/output/target/lib/modules/*\n");
         out << QString("    ./modules_install "+instpath+"/Kernel/"+Kernel+" "+instpath+"/FileSystem/"+FileSystemName+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
         out << QString("    ./rebuild_fs "+instpath+"/FileSystem/"+FileSystemName+" >> "+instpath+"/Logs/kmake.log\n");
+        if ( ui->UserBSPFselectedlineEdit->text() != "" )
+        {
+            out << QString("    if [ -f "+instpath+"/DtbUserWorkArea/"+ui->UserBSPFselectedlineEdit->text()+".dtb ]; then\n");
+            out << QString("        rm -rf "+instpath+"/Deploy/m7_dtb.dtb\n");
+            out << QString("        cp "+instpath+"/DtbUserWorkArea/"+ui->UserBSPFselectedlineEdit->text()+".dtb "+instpath+"/Deploy/m7_dtb.dtb\n");
+            out << QString("    fi\n");
+        }
         out << QString("fi\n");
     }
     scriptfile.close();
@@ -356,6 +363,18 @@ void NOVAembed::on_KernelReCompile_pushButton_clicked()
         out << QString("cd "+instpath+"/Utils/rock\n");
         config_file = "NOVAsomM7_defconfig";
         out << QString("./kremake "+Kernel+" "+SourceMeFile+" "+config_file+" >> "+instpath+"/Logs/kremake.log\n");
+        out << QString("if [ -d "+instpath+"/FileSystem/"+FileSystemName+"/output/target ]; then\n");
+        out << QString("    rm -rf "+instpath+"/FileSystem/"+FileSystemName+"/output/target/lib/modules/*\n");
+        out << QString("    ./modules_install "+instpath+"/Kernel/"+Kernel+" "+instpath+"/FileSystem/"+FileSystemName+" "+SourceMeFile+" >> "+instpath+"/Logs/kmake.log\n");
+        out << QString("    ./rebuild_fs "+instpath+"/FileSystem/"+FileSystemName+" >> "+instpath+"/Logs/kmake.log\n");
+        if ( ui->UserBSPFselectedlineEdit->text() != "" )
+        {
+            out << QString("    if [ -f "+instpath+"/DtbUserWorkArea/"+ui->UserBSPFselectedlineEdit->text()+".dtb ]; then\n");
+            out << QString("        rm -rf "+instpath+"/Deploy/m7_dtb.dtb\n");
+            out << QString("        cp "+instpath+"/DtbUserWorkArea/"+ui->UserBSPFselectedlineEdit->text()+".dtb "+instpath+"/Deploy/m7_dtb.dtb\n");
+            out << QString("    fi\n");
+        }
+
     }
     scriptfile.close();
     if ( run_script() == 0)
