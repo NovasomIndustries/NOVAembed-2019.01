@@ -918,7 +918,7 @@ QString Qcmd;
 
     update_status_bar("Downloading External File System List");
 
-    Qcmd = "cd /tmp; rm nova_os*.* ;wget http://"+repo_server+"/OS/"+currentboard+"/nova_os.txt";
+    Qcmd = "cd /tmp; rm nova_os*.* ;wget --tries=2 --timeout=10 http://"+repo_server+"/OS/"+currentboard+"/nova_os.txt";
     update_status_bar("Trying "+repo_server);
     ba = Qcmd.toLatin1();
     cmd = ba.data();
@@ -927,7 +927,7 @@ QString Qcmd;
     QFile file("/tmp/nova_os.txt");
     if ( file.size() < 10 )
     {
-        Qcmd = "cd /tmp; rm nova_os*.* ;wget http://"+backup_repo_server+"/OS/"+currentboard+"/nova_os.txt";
+        Qcmd = "cd /tmp; rm nova_os*.* ;wget --tries=2 --timeout=10 http://"+backup_repo_server+"/OS/"+currentboard+"/nova_os.txt";
         update_status_bar("Trying "+backup_repo_server);
         ba = Qcmd.toLatin1();
         cmd = ba.data();
@@ -939,10 +939,14 @@ QString Qcmd;
             return;
         }
         else
+        {
             update_status_bar("External File System List retrieved from "+backup_repo_server);
+        }
     }
     else
+    {
         update_status_bar("External File System List retrieved from "+repo_server);
+    }
     if (file.open(QIODevice::ReadOnly))
     {
         QTextStream stream(&file);
@@ -1030,6 +1034,7 @@ void NOVAembed::on_ExtFS_DownloadSelected_FS_pushButton_clicked()
 {
     QFile scriptfile("/tmp/script");
     QString repo_server=FS_REPO_SERVER;
+    QString backup_repo_server=BKP_FS_REPO_SERVER;
     QString currentboard=ui->Board_comboBox->currentText();
     if ( ui->Board_comboBox->currentText() == "P Series")
         currentboard="P";
@@ -1040,10 +1045,19 @@ void NOVAembed::on_ExtFS_DownloadSelected_FS_pushButton_clicked()
     }
     QTextStream out(&scriptfile);
     out << QString("#!/bin/sh\n");
+    out << QString("! [ -d "+instpath+"/ExternalFileSystems/"+currentboard+" ] && mkdir -p "+instpath+"/ExternalFileSystems/"+currentboard+"\n");
     out << QString("cd "+instpath+"/ExternalFileSystems/"+currentboard+"\n");
-    out << QString("wget http://"+repo_server+"/OS/"+currentboard+"/"+ui->ExtFSFileName_lineEdit->text()+"\n");
+    out << QString("wget --tries=2 --timeout=10 http://"+repo_server+"/OS/"+currentboard+"/"+ui->ExtFSFileName_lineEdit->text()+"\n");
+    out << QString("if ! [ \"$?\" = \"0\" ]; then\n");
+    out << QString("    wget --tries=2 --timeout=10 http://"+backup_repo_server+"/OS/"+currentboard+"/"+ui->ExtFSFileName_lineEdit->text()+"\n");
+    out << QString("    if ! [ \"$?\" = \"0\" ]; then\n");
+    out << QString("        echo 1 > /tmp/result\n");
+    out << QString("        return 1\n");
+    out << QString("    fi\n");
+    out << QString("fi\n");
     out << QString("echo 0 > /tmp/result\n");
     out << QString("return 0\n");
+
     scriptfile.close();
     if ( run_script() == 0)
     {
@@ -1081,7 +1095,12 @@ void NOVAembed::on_ExtFS_Write_uSD_pushButton_clicked()
     if ( ui->ExtFSBSPFselectedlineEdit->text() == "")
         out << QString("./flash_extfs /dev/"+ui->ExtFS_uSD_Device_comboBox->currentText()+"  "+full_path+" > "+instpath+"/Logs/extfs.log \n");
     else
-        out << QString("./flash_extfs /dev/"+ui->ExtFS_uSD_Device_comboBox->currentText()+" "+full_path+" "+"SDL_"+fi.baseName()+".dtb"+" "+"QUAD_"+fi.baseName()+".dtb"+" > "+instpath+"/Logs/extfs.log \n");
+    {
+        if ( ui->Board_comboBox->currentText() == "P Series")
+            out << QString("./flash_extfs /dev/"+ui->ExtFS_uSD_Device_comboBox->currentText()+" "+full_path+" "+"SDL_"+fi.baseName()+".dtb"+" "+"QUAD_"+fi.baseName()+".dtb"+" > "+instpath+"/Logs/extfs.log \n");
+        else
+            out << QString("./flash_extfs /dev/"+ui->ExtFS_uSD_Device_comboBox->currentText()+" "+full_path+" "+fi.baseName()+".dtb"+" > "+instpath+"/Logs/extfs.log \n");
+    }
     scriptfile.close();
     update_status_bar("Writing image "+ui->ExtFS_comboBox->currentText()+" ...");
     if ( run_script() == 0)
@@ -1094,7 +1113,16 @@ void NOVAembed::on_ExtFS_Write_uSD_pushButton_clicked()
 
 void NOVAembed::on_ExtFSBSPFSelect_pushButton_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/PClass_bspf",tr("BSPF (*.bspf)"));
+    QString fileName;
+
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/PClass_bspf",tr("BSPF (*.bspf)"));
+    if ( ui->Board_comboBox->currentText() == "U5")
+        fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/UClass_bspf",tr("BSPF (*.bspf)"));
+    if ( ui->Board_comboBox->currentText() == "M8")
+        fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/M8Class_bspf",tr("BSPF (*.bspf)"));
+    if ( ui->Board_comboBox->currentText() == "M7")
+        fileName = QFileDialog::getOpenFileName(this,tr("Select BSPF"), instpath+"/DtbUserWorkArea/M7Class_bspf",tr("BSPF (*.bspf)"));
     if (fileName.isEmpty())
         return;
     else
