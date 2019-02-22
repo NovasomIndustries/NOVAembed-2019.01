@@ -48,6 +48,9 @@ extern  QWidget *PBSP_stab,*UBSP_stab,*SBSP_stab,*M8BSP_stab,*M9BSP_stab,*TOOL_s
 
 extern QString BootValid , FSValid , KernelValid , uSDwriteValid;
 
+extern  QString repo_server;
+extern  QString backup_repo_server;
+
 int initrd_size;
 
 QWidget *current_stab;
@@ -903,8 +906,6 @@ void NOVAembed::on_ExtFS_CheckAvailable_FS_pushButton_clicked()
 {
 const char *cmd;
 QByteArray ba;
-QString repo_server=FS_REPO_SERVER;
-QString backup_repo_server=BKP_FS_REPO_SERVER;
 QString currentboard=ui->Board_comboBox->currentText();
 QString content;
 QString ExternalFileSystemsFile;
@@ -1033,8 +1034,6 @@ void NOVAembed::on_ExtFS_Available_comboBox_currentIndexChanged(const QString &a
 void NOVAembed::on_ExtFS_DownloadSelected_FS_pushButton_clicked()
 {
     QFile scriptfile("/tmp/script");
-    QString repo_server=FS_REPO_SERVER;
-    QString backup_repo_server=BKP_FS_REPO_SERVER;
     QString currentboard=ui->Board_comboBox->currentText();
     if ( ui->Board_comboBox->currentText() == "P Series")
         currentboard="P";

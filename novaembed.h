@@ -51,8 +51,8 @@
 #define NXP_U_BOOTLOADER    "u-boot-novasomU-2016.03"
 #define QUALCOMM_BOOTLOADER "u-boot-novasomM8-2017.11"
 
-#define FS_REPO_SERVER      "93.41.190.216"
-#define BKP_FS_REPO_SERVER  "93.41.190.216"
+#define SYSTEM_REPO_SERVER      "93.41.190.216"
+#define BKP_SYSTEM_REPO_SERVER  "93.41.190.216"
 #define HUM_P               "NI150316-HUM-P-V1.1.pdf"
 #define QSG_P               "NI150316-QSG-P-V1.0.pdf"
 #define HUM_U5              "N.U-200417-HUM-U5-V1.2.pdf"

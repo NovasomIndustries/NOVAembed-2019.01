@@ -57,6 +57,12 @@ QString Kernel =  NXP_P_KERNEL;
 QString SourceMeFile =  NXP_P_SOURCEME;
 QString instpath = INSTALLATION_PATH;
 
+QString repo_server=SYSTEM_REPO_SERVER;
+QString backup_repo_server=BKP_SYSTEM_REPO_SERVER;
+
+QString network_connected="none";
+QString updates_found="none";
+
 int skip_filesave_on_Generate_pushButton_clicked = 0;
 
 extern  void storeNOVAembed_ini();
@@ -72,8 +78,52 @@ NOVAembed::NOVAembed(QWidget *parent) :
 {
 int     copy_required_files = 0;
 QString PixMapName="";
+
     std::cout << "Starting now\n" << std::flush;
     system("rm -f /tmp/script");
+    /* Check for network presence */
+    QFile nwpresent("/tmp/network_connected");
+    system("ping -c 1 github.com > /tmp/network_connected\n");
+    if ( nwpresent.size() < 10 )
+    {
+        network_connected="none";
+        std::cout << "Network is down\n" << std::flush;
+    }
+    else
+    {
+        network_connected="OKAY";
+        std::cout << "Network is up\n" << std::flush;
+    }
+    std::cout << network_connected.toLatin1().constData() << "\n" << std::flush;
+
+    if ( network_connected=="OKAY")
+    {
+        const char *cmd;
+        QString Qcmd = "rm -rf /tmp/SDK_Version; cd /tmp; git clone https://github.com/NovasomIndustries/SDK_Version.git ";
+        QString fileName = "/tmp/SDK_Version/CurrentVersion";
+        QFile file(fileName);
+        QByteArray ba = Qcmd.toLatin1();
+        cmd = ba.data();
+        system(cmd);
+        if ( file.size() > 4 )
+        {
+            QString strKeyConf("NOVAembed Remote Configuration/");
+            QSettings * config = 0;
+            config = new QSettings( fileName, QSettings::IniFormat );
+            Configuration = config->value( strKeyConf + "Version", "r").toString();
+            if ( Configuration !=  Version )
+            {
+                updates_found="UPDATES_FOUND";
+                std::cout << updates_found.toLatin1().constData() << "\n" << std::flush;
+            }
+            repo_server = config->value( strKeyConf + "SystemRepoServer", "r").toString();
+            backup_repo_server = config->value( strKeyConf + "BackupSystemRepoServer", "r").toString();
+            std::cout << updates_found.toLatin1().constData() << "\n" << std::flush;
+            std::cout << repo_server.toLatin1().constData() << "\n" << std::flush;
+            std::cout << backup_repo_server.toLatin1().constData() << "\n" << std::flush;
+        }
+    }
+
     /* Initialize user area */
     if ( ! QDir(instpath+"/Blobs").exists() )
         system("mkdir -p "+instpath.toLatin1()+"/Blobs");
@@ -280,14 +330,12 @@ QString PixMapName="";
         CurrentBSPF_Tab = "P BSP Factory";
     }
     ui->tab->insertTab(3,TOOL_stab,"Tools");
-    /*
-    std::cout << "CheckForUpdates\n" << std::flush;
-    int a = CheckForUpdates();
-    if ( a == 0 )
-        std::cout << "No updates" << std::flush;
+
+    if ( updates_found == "UPDATES_FOUND" )
+        ui->CheckUpdate_pushButton->setVisible(true);
     else
-        std::cout << "Updates found" << std::flush;
-        */
+        ui->CheckUpdate_pushButton->setVisible(false);
+
 }
 
 NOVAembed::~NOVAembed()
