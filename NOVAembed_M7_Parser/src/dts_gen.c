@@ -22,20 +22,21 @@ char    t[1024];
 int     speed;
     if ( iomux->i2c2 == 1 )
     {
-        sprintf(t,i2c2_defs_top);
+        sprintf(t,i2c0_defs_top);
         strcat(dtsfile_dump,t);
         speed = extract_speed(strstr(file_contents,"M7_I2C2Speed="));
         sprintf(t,"        clock-frequency = <%d>;\n",speed);
         strcat(dtsfile_dump,t);
-        /*
-        strcat(dtsfile_dump,i2c2_defs_bottom);
-        */
-        sprintf(t,i2c2_footer);
+        sprintf(t,i2c0_footer);
         strcat(dtsfile_dump,t);
     }
     if ( iomux->spi == 1 )
     {
-        sprintf(t,spi_pins);
+        sprintf(t,spi_defs);
+        strcat(dtsfile_dump,t);
+        sprintf(t,spidev_defs);
+        strcat(dtsfile_dump,t);
+        sprintf(t,spi_footer);
         strcat(dtsfile_dump,t);
     }
 }

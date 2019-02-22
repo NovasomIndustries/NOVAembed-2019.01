@@ -19,7 +19,7 @@
 /*                                                                              Global variables                                                                                         */
 /*****************************************************************************************************************************************************************************************/
 
-QString Version = "2019.1.01";
+QString Version = "2019.1.02";
 QString Configuration = "Standard";
 QString FileSystemName = "";
 QString DeployedFileSystemName = "";

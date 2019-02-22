@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1550063236 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_M7_Parser/src/dts_gen.c
+1550848471 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_M7_Parser/src/dts_gen.c
 	"../include/NOVAembed_M7_parser.h"
 	"../include/header.h"
 
@@ -10,10 +10,10 @@
 	<string.h>
 	<libgen.h>
 
-1550682005 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_M7_Parser/include/header.h
+1550848526 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_M7_Parser/include/header.h
 	<dt-bindings/input/input.h>
 
-1550062191 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_M7_Parser/src/iomux.c
+1550847985 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_M7_Parser/src/iomux.c
 	"../include/NOVAembed_M7_parser.h"
 
 1550062273 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_M7_Parser/src/main.c

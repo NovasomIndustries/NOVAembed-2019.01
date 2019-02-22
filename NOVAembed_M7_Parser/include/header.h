@@ -544,25 +544,31 @@
 };\n\
 "
 
-#define i2c2_defs_top "\n\
-&i2c2 {\n\
+#define i2c0_defs_top "\n\
+&i2c0 {\n\
 	status = \"okay\";\n\
 "
-#define i2c2_defs_bottom "\n\
-\n\
-"
 
-#define i2c2_footer "\n\
+#define i2c0_footer "\
 };\n\
 "
+
 #define spi_defs "\n\
-&spi {\n\n\
+&spi0 {\n\
         status = \"okay\";\n\
-};\n\
+        max-freq = <48000000>; /* spi internal clk, don't modify */\n\
 "
 
-#define spi_pins "\n\
-/* PLACEHOLDER PLACEHOLDER : spi is enabled PLACEHOLDER PLACEHOLDER*/ \n\
+#define spidev_defs "\n\
+        spi_dev@0 {\n\
+                compatible = \"rockchip,spidev\";\n\
+                reg = <0>;\n\
+                spi-max-frequency = <12000000>;\n\
+                spi-lsb-first;\n\
+        };\n\
+"
+#define spi_footer "\n\
+};\n\
 "
 
 #define dts_footer "\n\
