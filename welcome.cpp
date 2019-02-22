@@ -206,13 +206,15 @@ QString file_exists_path;
 
 void NOVAembed::on_HUM_pushButton_clicked()
 {
-    QString syscmd,filename;
+    QString syscmd,filename,command=SYSTEM_PDFVIEWER;
 
     if ( ui->Board_comboBox->currentText() == "P Series")
         filename = HUM_P;
     if ( ui->Board_comboBox->currentText() == "U5")
         filename = HUM_U5;
-    syscmd = "qpdfview "+instpath+"/Doc/"+filename;
+    if ( ui->Board_comboBox->currentText() == "M7")
+        filename = HUM_M7;
+    syscmd = command+" "+instpath+"/Doc/"+filename;
     QByteArray ba = syscmd.toLatin1();
     const char *str = ba.data();
     system(str);
@@ -221,23 +223,24 @@ void NOVAembed::on_HUM_pushButton_clicked()
 
 void NOVAembed::on_QSG_pushButton_clicked()
 {
-    QString syscmd,filename;
+    QString syscmd,filename,command=SYSTEM_PDFVIEWER;
 
         if ( ui->Board_comboBox->currentText() == "P Series")
             filename = QSG_P;
         if ( ui->Board_comboBox->currentText() == "U5")
             filename = HUM_U5;
-        syscmd = "qpdfview "+instpath+"/Doc/"+filename;
+        if ( ui->Board_comboBox->currentText() == "M7")
+            filename = HUM_M7;
+        syscmd = command+" "+instpath+"/Doc/"+filename;
         QByteArray ba = syscmd.toLatin1();
         const char *str = ba.data();
         system(str);
 }
 
-
-
-
 void NOVAembed::on_NovaEmbedM_pushButton_clicked()
 {
-    system("qpdfview "+instpath.toLatin1()+"/Doc/SUM-NOVAembed-V1.0.pdf");
+    QString command=SYSTEM_PDFVIEWER;
+
+    system(command.toLatin1()+" "+instpath.toLatin1()+"/Doc/SUM-NOVAembed-V1.0.pdf");
 }
 
