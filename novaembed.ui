@@ -5094,7 +5094,7 @@ a PCAP/RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>Current BSPF file :</string>
+        <string>Current BSPF</string>
        </property>
       </widget>
       <widget class="QLabel" name="P_Current_BSPF_File_label">

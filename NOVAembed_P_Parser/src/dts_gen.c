@@ -28,12 +28,14 @@ char    tstr[256];
         strcat(dtsfile_dump,tstr);
         strcat(dtsfile_dump,dts_defs_part2_QUAD);
     }
-
+    printf("Writing %s\n",file_name_dts);
     if ( (fpout_dts = fopen(file_name_dts,"w" ) ))
     {
         fwrite(dtsfile_dump, strlen(dtsfile_dump), 1, fpout_dts);
         fclose(fpout_dts);
     }
+    else
+    printf("Error\n");
 }
 
 void process_sf(void)
@@ -952,8 +954,8 @@ int     i;
         if ( file_name_noext[i] == '.')
             file_name_noext[i]=0;
     }
-    sprintf(file_name_dts,"/Devel/NOVAsom_SDK/DtbUserWorkArea/%s.dts",file_name_noext);
-    sprintf(file_name_dtsi,"/Devel/NOVAsom_SDK/DtbUserWorkArea/%s.dtsi",file_name_noext);
+    sprintf(file_name_dts,"/Devel/NOVAsdk2019.01/DtbUserWorkArea/%s.dts",file_name_noext);
+    sprintf(file_name_dtsi,"/Devel/NOVAsdk2019.01/DtbUserWorkArea/%s.dtsi",file_name_noext);
 
     printf("Input File Name       :  %s\n",file_in);
     printf("Output DTS  File Name : %s\n",file_name_dts);

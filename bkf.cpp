@@ -842,7 +842,11 @@ void NOVAembed::on_GenerateFileSystem_pushButton_clicked()
     QTextStream out(&scriptfile);
     out << QString("#!/bin/sh\n");
     out << QString("cd "+instpath+"/Utils\n");
-    out << QString("./SetupFs "+ui->NewFileSystemSelectedlineEdit->text()+" \""+ui->Board_comboBox->currentText()+"\" "+ ui->NewFileSystemConfigurationcomboBox->currentText()+"\n");
+    if ( ui->Board_comboBox->currentText() == "P Series")
+        out << QString("./SetupFs "+ui->NewFileSystemSelectedlineEdit->text()+" P "+ ui->NewFileSystemConfigurationcomboBox->currentText()+"\n");
+    else
+        out << QString("./SetupFs "+ui->NewFileSystemSelectedlineEdit->text()+" \""+ui->Board_comboBox->currentText()+"\" "+ ui->NewFileSystemConfigurationcomboBox->currentText()+"\n");
+
     scriptfile.close();
     if ( run_script() == 0)
     {
