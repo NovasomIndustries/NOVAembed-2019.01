@@ -19,7 +19,9 @@
 /*                                                                              Global variables                                                                                         */
 /*****************************************************************************************************************************************************************************************/
 
-QString Version = "2019.1.02";
+QString Version = "2019.1.01";
+QString ToolsVersion="2019.1.001";
+
 QString Configuration = "Standard";
 QString FileSystemName = "";
 QString DeployedFileSystemName = "";
@@ -62,6 +64,8 @@ QString backup_repo_server=BKP_SYSTEM_REPO_SERVER;
 
 QString network_connected="none";
 QString updates_found="none";
+QString gitVersion = Version;
+QString gitToolsVersion=ToolsVersion;
 
 int skip_filesave_on_Generate_pushButton_clicked = 0;
 
@@ -94,11 +98,17 @@ QString PixMapName="";
         network_connected="OKAY";
         std::cout << "Network is up\n" << std::flush;
     }
-    std::cout << network_connected.toLatin1().constData() << "\n" << std::flush;
 
     if ( network_connected=="OKAY")
     {
         const char *cmd;
+        /* Retrieve tools version*/
+        QString strKeyConfTool("Tools Version/");
+        QSettings * configTool = 0;
+        configTool = new QSettings( instpath+"/Utils/tool_version", QSettings::IniFormat );
+        ToolsVersion = configTool->value( strKeyConfTool + "Tools", "r").toString();
+        std::cout << "ToolsVersion : " << ToolsVersion.toLatin1().constData() << "\n" << std::flush;
+        /*Retrieve SDK_Version*/
         QString Qcmd = "rm -rf /tmp/SDK_Version; cd /tmp; git clone https://github.com/NovasomIndustries/SDK_Version.git ";
         QString fileName = "/tmp/SDK_Version/CurrentVersion";
         QFile file(fileName);
@@ -110,15 +120,21 @@ QString PixMapName="";
             QString strKeyConf("NOVAembed Remote Configuration/");
             QSettings * config = 0;
             config = new QSettings( fileName, QSettings::IniFormat );
-            Configuration = config->value( strKeyConf + "Version", "r").toString();
-            if ( Configuration !=  Version )
+            gitVersion = config->value( strKeyConf + "Version", "r").toString();
+            if ( gitVersion !=  Version )
             {
                 updates_found="UPDATES_FOUND";
                 std::cout << updates_found.toLatin1().constData() << "\n" << std::flush;
             }
+
+            gitToolsVersion = config->value( strKeyConf + "ToolsVersion", "r").toString();
             repo_server = config->value( strKeyConf + "SystemRepoServer", "r").toString();
             backup_repo_server = config->value( strKeyConf + "BackupSystemRepoServer", "r").toString();
-            std::cout << updates_found.toLatin1().constData() << "\n" << std::flush;
+
+            std::cout << "Version : " << Version.toLatin1().constData() << "\n" << std::flush;
+            std::cout << "gitVersion : " << gitVersion.toLatin1().constData() << "\n" << std::flush;
+            std::cout << "Tools : " << ToolsVersion.toLatin1().constData() << "\n" << std::flush;
+            std::cout << "gitToolVersion : " << gitToolsVersion.toLatin1().constData() << "\n" << std::flush;
             std::cout << repo_server.toLatin1().constData() << "\n" << std::flush;
             std::cout << backup_repo_server.toLatin1().constData() << "\n" << std::flush;
         }
@@ -331,11 +347,34 @@ QString PixMapName="";
     }
     ui->tab->insertTab(3,TOOL_stab,"Tools");
 
-    if ( updates_found == "UPDATES_FOUND" )
-        ui->CheckUpdate_pushButton->setVisible(true);
-    else
-        ui->CheckUpdate_pushButton->setVisible(false);
 
+    if ( network_connected=="OKAY")
+    {
+        ui->CheckUpdate_pushButton->setVisible(false);
+        if (( gitVersion != Version ) || ( gitToolsVersion != ToolsVersion ))
+        {
+            if ( gitVersion != Version )
+            {
+                update_status_bar("Found NOVAembed updates");
+                ui->CheckUpdate_pushButton->setVisible(true);
+            }
+            if ( gitToolsVersion != ToolsVersion )
+            {
+                update_status_bar("Found Tools updates");
+                ui->CheckUpdate_pushButton->setVisible(true);
+            }
+            if (( gitVersion != Version ) && ( gitToolsVersion != ToolsVersion ))
+            {
+                update_status_bar("Found NOVAembed and Tools updates");
+                ui->CheckUpdate_pushButton->setVisible(true);
+            }
+        }
+        else
+        {
+            update_status_bar("No updates found");
+            ui->CheckUpdate_pushButton->setVisible(false);
+        }
+    }
 }
 
 NOVAembed::~NOVAembed()
@@ -519,40 +558,6 @@ int NOVAembed::run_background_script(void)
     return content.toInt();
 }
 
-/*
-int NOVAembed::CheckForUpdates()
-{
-    QProcess *process = new QProcess(this);
-    QString program = "CheckUpdatedRepo";
-    QString folder = instpath+"/Utils";
-    process->start(program, QStringList() << folder);
-}
-{
-QFile scriptfile("/tmp/script");
-
-    QTextStream out(&scriptfile);
-    out << QString("#!/bin/sh\n");
-    out << QString("cd "+instpath+"/Utils\n");
-    out << QString("./CheckUpdatedRepo > /tmp/repo_to_update\n");
-    out << QString("echo 0 > /tmp/result\n");
-    out << QString("return 0\n");
-    scriptfile.close();
-    if ( run_script() == 0)
-    {
-        update_status_bar("Update checked");
-        QFile file("/tmp/repo_to_update");
-        while( file.open(QIODevice::ReadOnly) == false )
-            local_sleep(100);
-        QTextStream stream(&file);
-        QString content = stream.readAll();
-        file.close();
-        content.chop(1);
-        this->setCursor(Qt::ArrowCursor);
-        return content.toInt();
-    }
-    return 0;
-}
-*/
 
 int NOVAembed::update_status_bar(QString StatusBarContent)
 {
@@ -1011,8 +1016,8 @@ QString line;
 
 void NOVAembed::on_CheckUpdate_pushButton_clicked()
 {
-    update_status_bar("Checking updates");
 
+    update_status_bar("Checking updates");
     QFile scriptfile("/tmp/script");
     if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
     {
@@ -1020,13 +1025,27 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
         return;
     }
     QTextStream out(&scriptfile);
-    out << QString("#!/bin/sh\n");
-    out << QString("cd "+instpath+"/Utils\n");
-    out << QString("echo 0 > /tmp/result\n");
-    out << QString("echo \"**********************************************\" >> "+instpath+"/Logs/update.log\n");
-    out << QString("echo \"Update started on `date`\" >> "+instpath+"/Logs/update.log\n");
-    out << QString("echo \"**********************************************\"  >> "+instpath+"/Logs/update.log\n");
-    out << QString("./update_all >> "+instpath+"/Logs/update.log\n");
+    if ( gitVersion != Version )
+    {
+        out << QString("#!/bin/sh\n");
+        out << QString("cd "+instpath+"/Utils\n");
+        out << QString("echo 0 > /tmp/result\n");
+        out << QString("echo \"**********************************************\" >> "+instpath+"/Logs/update.log\n");
+        out << QString("echo \"Update started on `date`\" >> "+instpath+"/Logs/update.log\n");
+        out << QString("echo \"**********************************************\"  >> "+instpath+"/Logs/update.log\n");
+        out << QString("./update_all >> "+instpath+"/Logs/update.log\n");
+    }
+
+    if ( gitToolsVersion != ToolsVersion )
+    {
+        out << QString("#!/bin/sh\n");
+        out << QString("cd "+instpath+"/Utils\n");
+        out << QString("echo 0 > /tmp/result\n");
+        out << QString("echo \"**********************************************\" >> "+instpath+"/Logs/update.log\n");
+        out << QString("echo \"Tools Update started on `date`\" >> "+instpath+"/Logs/update.log\n");
+        out << QString("echo \"**********************************************\"  >> "+instpath+"/Logs/update.log\n");
+        out << QString("./update_components >> "+instpath+"/Logs/update.log\n");
+    }
 
     scriptfile.close();
     int result = run_script();
