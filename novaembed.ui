@@ -51179,9 +51179,9 @@ a PCAP/RT touch</string>
       <widget class="QLabel" name="VideoVisible_label_5">
        <property name="geometry">
         <rect>
-         <x>390</x>
+         <x>380</x>
          <y>80</y>
-         <width>161</width>
+         <width>171</width>
          <height>51</height>
         </rect>
        </property>
