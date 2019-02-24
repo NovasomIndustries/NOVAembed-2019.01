@@ -201,7 +201,7 @@ QFileInfo fi;
     QFile dtc_compiler(dtc_file);
     if ( ! dtc_compiler.exists() )
     {
-        update_status_bar("Kernel "+Kernel+" has not yet compiled, please compile it.");
+        update_status_bar("dtc executable not present, probably "+Kernel+" has not yet compiled. Please compile it.");
         return;
     }
     if ( skip_filesave_on_Generate_pushButton_clicked == 0)
