@@ -188,11 +188,20 @@ extern      int skip_filesave_on_Generate_pushButton_clicked;
 void NOVAembed::on_M7_Generate_pushButton_clicked()
 {
 QFile scriptfile("/tmp/script");
-//QString FileNameNoExtension;
+QString dtc_file;
 QFileInfo fi;
+
     if ( CheckIfKernelsPresent() == 1 )
     {
-        update_status_bar("Kernel "+Kernel+" not present, download it.");
+        update_status_bar("Kernel "+Kernel+" not present, please download it.");
+        return;
+    }
+
+    dtc_file= instpath+"/Kernel/"+Kernel.toLatin1()+"/scripts/dtc/dtc";
+    QFile dtc_compiler(dtc_file);
+    if ( ! dtc_compiler.exists() )
+    {
+        update_status_bar("Kernel "+Kernel+" has not yet compiled, please compile it.");
         return;
     }
     if ( skip_filesave_on_Generate_pushButton_clicked == 0)
@@ -207,14 +216,7 @@ QFileInfo fi;
         ui->M7_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");
         M7_save_helper(fileName);
         Last_M7_BSPFactoryFile = fi.baseName();
-//        FileNameNoExtension  = fi.baseName();
     }
-    else
-    {
-//        FileNameNoExtension = Last_M7_BSPFactoryFile;
-    }
-    std::cout << "Last_M7_BSPFactoryFile is : "<< Last_M7_BSPFactoryFile.toLatin1().constData() << std::flush;
-
     update_status_bar("Generating dtb "+Last_M7_BSPFactoryFile+".dtb ...");
     if ( ! scriptfile.open(QIODevice::WriteOnly | QIODevice::Text) )
     {
