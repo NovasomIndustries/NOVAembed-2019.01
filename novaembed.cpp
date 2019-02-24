@@ -85,6 +85,24 @@ QString PixMapName="";
 
     std::cout << "Starting now\n" << std::flush;
     system("rm -f /tmp/script");
+
+    /* Retrieve NOVAembed version*/
+    QString strKeyLocalVersion("NOVAembed Configuration/");
+    QSettings * configNe = 0;
+    configNe = new QSettings( instpath+"/Qt/NOVAembed/version", QSettings::IniFormat );
+    Version = configNe->value( strKeyLocalVersion + "Version", "r").toString();
+    repo_server = configNe->value( strKeyLocalVersion + "SystemRepoServer", "r").toString();
+    backup_repo_server = configNe->value( strKeyLocalVersion + "BackupSystemRepoServer", "r").toString();
+    std::cout << "Version : " << Version.toLatin1().constData() << "\n" << std::flush;
+    std::cout << "repo_server : " << repo_server.toLatin1().constData() << "\n" << std::flush;
+    std::cout << "backup_repo_server : " << backup_repo_server.toLatin1().constData() << "\n" << std::flush;
+    /* Retrieve tools version*/
+    QString strKeyConfTool("Tools Version/");
+    QSettings * configTool = 0;
+    configTool = new QSettings( instpath+"/Utils/tool_version", QSettings::IniFormat );
+    ToolsVersion = configTool->value( strKeyConfTool + "Tools", "r").toString();
+    std::cout << "ToolsVersion : " << ToolsVersion.toLatin1().constData() << "\n" << std::flush;
+
     /* Check for network presence */
     QFile nwpresent("/tmp/network_connected");
     system("ping -c 1 github.com > /tmp/network_connected\n");
@@ -99,15 +117,10 @@ QString PixMapName="";
         std::cout << "Network is up\n" << std::flush;
     }
 
+
     if ( network_connected=="OKAY")
     {
         const char *cmd;
-        /* Retrieve tools version*/
-        QString strKeyConfTool("Tools Version/");
-        QSettings * configTool = 0;
-        configTool = new QSettings( instpath+"/Utils/tool_version", QSettings::IniFormat );
-        ToolsVersion = configTool->value( strKeyConfTool + "Tools", "r").toString();
-        std::cout << "ToolsVersion : " << ToolsVersion.toLatin1().constData() << "\n" << std::flush;
         /*Retrieve SDK_Version*/
         QString Qcmd = "rm -rf /tmp/SDK_Version; cd /tmp; git clone https://github.com/NovasomIndustries/SDK_Version.git ";
         QString fileName = "/tmp/SDK_Version/CurrentVersion";
@@ -210,7 +223,9 @@ QString PixMapName="";
         Configuration = config->value( strKeyConf + "Configuration", "r").toString();
         if ( Configuration !=  Version )
         {
-            std::cout << "Configuration !=  Version !!" << std::flush;
+            std::cout << "Configuration !=  Version !!\n" << std::flush;
+            std::cout << "Configuration : " << Configuration.toLatin1().constData() << "\n" << std::flush;
+            std::cout << "Version : " << Version.toLatin1().constData() << "\n" << std::flush;
             storeNOVAembed_ini();
         }
         QString strKeySettings("NOVAembed General Settings/");
@@ -314,6 +329,7 @@ QString PixMapName="";
 
     ui->UserPartition_comboBox->setCurrentText(NumberOfUserPartitions);
     ui->VersionLabel->setText(Version);
+    ui->ToolsLabel->setText(ToolsVersion);
     PBSP_stab=ui->tabBSPFP;
     UBSP_stab=ui->tabBSPFU;
     M8BSP_stab=ui->tabBSPFM8;
