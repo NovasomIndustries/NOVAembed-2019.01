@@ -503,7 +503,6 @@ void NOVAembed::on_ThisIsReferenceServer_checkBox_clicked(bool checked)
 
 void NOVAembed::on_UserAPPSelect_pushButton_clicked()
 {
-    std::cout << instpath.toStdString()+"/FileSystem/"+FileSystemName.toStdString()+"/output/target/bin" << std::flush;
     QString fileName = QFileDialog::getOpenFileName(this,tr("Select User app to store in target /bin"), instpath,tr("all (*)"));
     if (fileName.isEmpty())
         return;
@@ -593,7 +592,6 @@ void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
             Last_M8_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
         if ( ui->Board_comboBox->currentText() == "M7")
             Last_M7_FileSystem = instpath+"/FileSystem/"+FileSystemName+"/output/images/uInitrd";
-        std::cout << FileSystemName.toLatin1().constData() << std::flush;
     }
     else
     {

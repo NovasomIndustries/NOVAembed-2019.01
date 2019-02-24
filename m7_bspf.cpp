@@ -64,8 +64,6 @@ void NOVAembed::M7_load_BSPF_File(QString fileName)
 QString strKeyFunc("M7_IOMUX/");
 QSettings * func_settings = 0;
 
-    std::cout << fileName.toLatin1().constData() << std::flush;
-
     on_M7_Clear_pushButton_clicked();
     func_settings = new QSettings( fileName, QSettings::IniFormat );
     if ( M7_getvalue(strKeyFunc, func_settings , "M7_GPIO3_A1_comboBox") == "SPI_TXD" )
