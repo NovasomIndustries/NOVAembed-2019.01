@@ -19,8 +19,10 @@
 /*                                                                              Global variables                                                                                         */
 /*****************************************************************************************************************************************************************************************/
 
-QString Version = "2019.1.01";
-QString ToolsVersion="2019.1.001";
+QString Version = "";
+QString ToolsVersion="";
+QString gitVersion = Version;
+QString gitToolsVersion=ToolsVersion;
 
 QString Configuration = "Standard";
 QString FileSystemName = "";
@@ -64,8 +66,6 @@ QString backup_repo_server=BKP_SYSTEM_REPO_SERVER;
 
 QString network_connected="none";
 QString updates_found="none";
-QString gitVersion = Version;
-QString gitToolsVersion=ToolsVersion;
 
 int skip_filesave_on_Generate_pushButton_clicked = 0;
 
@@ -86,7 +86,7 @@ QString PixMapName="";
     std::cout << "Starting now\n" << std::flush;
     system("rm -f /tmp/script");
 
-    /* Retrieve NOVAembed version*/
+    /* Get NOVAembed version*/
     QString strKeyLocalVersion("NOVAembed Configuration/");
     QSettings * configNe = 0;
     configNe = new QSettings( instpath+"/Qt/NOVAembed/version", QSettings::IniFormat );
@@ -96,7 +96,7 @@ QString PixMapName="";
     std::cout << "Version : " << Version.toLatin1().constData() << "\n" << std::flush;
     std::cout << "repo_server : " << repo_server.toLatin1().constData() << "\n" << std::flush;
     std::cout << "backup_repo_server : " << backup_repo_server.toLatin1().constData() << "\n" << std::flush;
-    /* Retrieve tools version*/
+    /* Get tools version*/
     QString strKeyConfTool("Tools Version/");
     QSettings * configTool = 0;
     configTool = new QSettings( instpath+"/Utils/tool_version", QSettings::IniFormat );
@@ -390,6 +390,11 @@ QString PixMapName="";
             update_status_bar("No updates found");
             ui->CheckUpdate_pushButton->setVisible(false);
         }
+    }
+    else
+    {
+        update_status_bar("No network connection, unable to check for updates");
+        ui->CheckUpdate_pushButton->setVisible(false);
     }
 }
 
