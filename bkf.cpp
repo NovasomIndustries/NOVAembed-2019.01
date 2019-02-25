@@ -1255,8 +1255,8 @@ void NOVAembed::on_ViewBootLog_pushButton_clicked()
         system("kwrite "+instpath.toLatin1()+"/Logs/umakeU.log");
     if ( ui->Board_comboBox->currentText() == "M8")
         system("kwrite "+instpath.toLatin1()+"/Logs/umakeM8.log");
-    if ( ui->Board_comboBox->currentText() == "M9")
-        system("kwrite "+instpath.toLatin1()+"/Logs/umakeM9.log");
+    if ( ui->Board_comboBox->currentText() == "M7" )
+        system("kwrite "+instpath.toLatin1()+"/Logs/umakeM7.log");
 }
 
 void NOVAembed::on_ViewFSLog_pushButton_clicked()
@@ -1267,8 +1267,8 @@ void NOVAembed::on_ViewFSLog_pushButton_clicked()
         system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_Umake.log");
     if ( ui->Board_comboBox->currentText() == "M8")
         system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_M8make.log");
-    if ( ui->Board_comboBox->currentText() == "M9")
-        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_M9make.log");
+    if ( ui->Board_comboBox->currentText() == "M7")
+        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_M7make.log");
 }
 
 void NOVAembed::on_ViewKernelLog_pushButton_clicked()
