@@ -1094,7 +1094,12 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
 
 void NOVAembed::on_ViewUpdatesLog_pushButton_clicked()
 {
-    system("kwrite "+instpath.toLatin1()+"/Logs/update.log");
+    QString fileName = instpath.toLatin1()+"/Logs/update.log";
+    QFile file(fileName);
+    if (!file.exists() )
+        update_status_bar("No logs present");
+    else
+        system("kwrite "+instpath.toLatin1()+"/Logs/update.log");
 }
 
 void NOVAembed::on_actionVersion_triggered()
