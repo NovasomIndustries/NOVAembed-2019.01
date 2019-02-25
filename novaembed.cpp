@@ -160,6 +160,9 @@ QString PixMapName="";
         system("mkdir -p "+instpath.toLatin1()+"/Logs");
     if ( ! QDir(instpath+"/Deploy").exists() )
         system("mkdir -p "+instpath.toLatin1()+"/Deploy");
+    if ( ! QDir(instpath+"/FileSystem").exists() )
+        system("mkdir -p "+instpath.toLatin1()+"/FileSystem");
+
     if ( ! QDir(instpath+"/ExternalFileSystems").exists() )
     {
         QMessageBox::information(this, tr("ExternalFileSystems"),"ExternalFileSystems not found. Creating a new one!");
