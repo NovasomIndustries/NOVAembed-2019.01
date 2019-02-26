@@ -437,9 +437,6 @@
         status = \"okay\";\n\
 };\n\
 \n\
-&uart1 {\n\
-        status = \"okay\";\n\
-};\n\
 &uart2 {\n\
         status = \"okay\";\n\
 };\n\
@@ -568,6 +565,21 @@
         };\n\
 "
 #define spi_footer "\n\
+};\n\
+"
+
+
+#define uart1_defs "\n\
+&uart1 {\n\
+        status = \"okay\";\n\
+        pinctrl-names = \"default\";\n\
+};\n\
+"
+#define uart1_4wires_defs "\n\
+&uart1 {\n\
+        status = \"okay\";\n\
+        pinctrl-names = \"default\";\n\
+        pinctrl-0 = <&uart1_xfer &uart1_cts>;\n\
 };\n\
 "
 

@@ -30,7 +30,7 @@ extern  QString Kernel;
 
 QString M7_GPIO2_C1_comboBox="GPIO2_C1";
 QString M7_GPIO0_A0_comboBox="GPIO0_A0";
-QString M7_GPIO3_A4_comboBox="GPIO3_A4";
+QString M7_GPIO3_A4_comboBox="GPIO3_A4";    //UART1 TX
 QString M7_GPIO2_C7_comboBox="GPIO2_C7";
 QString M7_GPIO2_C4_comboBox="GPIO2_C4";
 QString M7_GPIO2_C5_comboBox="GPIO2_C5";
@@ -38,8 +38,8 @@ QString M7_GPIO2_C0_comboBox="GPIO2_C0";
 QString M7_GPIO2_C3_comboBox="GPIO2_C3";
 QString M7_GPIO2_C6_comboBox="GPIO2_C6";
 QString M7_GPIO2_B7_comboBox="GPIO2_B7";
-QString M7_GPIO3_A6_comboBox="GPIO3_A6";
-QString M7_GPIO3_A5_comboBox="GPIO3_A5";
+QString M7_GPIO3_A6_comboBox="GPIO3_A6";    // UART1 RX
+QString M7_GPIO3_A5_comboBox="GPIO3_A5";    // UART1 RTS
 QString M7_GPIO3_A3_comboBox="GPIO3_A3";
 QString M7_GPIO2_B4_comboBox="GPIO2_B4";
 QString M7_GPIO3_B0_comboBox="GPIO3_B0";
@@ -48,7 +48,7 @@ QString M7_GPIO3_A2_comboBox="GPIO3_A2";
 QString M7_GPIO3_A0_comboBox="GPIO3_A0";
 QString M7_GPIO2_D1_comboBox="GPIO2_D1";
 QString M7_GPIO2_D0_comboBox="GPIO2_D0";
-QString M7_GPIO3_A7_comboBox="GPIO3_A7";
+QString M7_GPIO3_A7_comboBox="GPIO3_A7";    // UART1 CTS
 
 QString M7_I2C2Speed="100000";
 QString M7_PrimaryVideo_comboBox;
@@ -64,20 +64,42 @@ void NOVAembed::M7_load_BSPF_File(QString fileName)
 QString strKeyFunc("M7_IOMUX/");
 QSettings * func_settings = 0;
 
+    std::cout << fileName.toLatin1().constData() << "\n" << std::flush;
+
     on_M7_Clear_pushButton_clicked();
-    func_settings = new QSettings( fileName, QSettings::IniFormat );
+    func_settings = new QSettings( fileName+".bspf", QSettings::IniFormat );
     if ( M7_getvalue(strKeyFunc, func_settings , "M7_GPIO3_A1_comboBox") == "SPI_TXD" )
+    {
         on_M7_SPI1_checkBox_toggled(true);
-    if ( M7_getvalue(strKeyFunc, func_settings , "M7_SPIdev_checkBox") == "false" )
-        ui->M7_SPIdev_checkBox->setChecked(false);
+        if ( M7_getvalue(strKeyFunc, func_settings , "M7_SPIdev_checkBox") == "false" )
+            ui->M7_SPIdev_checkBox->setChecked(false);
+        else
+            ui->M7_SPIdev_checkBox->setChecked(true);
+    }
     else
-        ui->M7_SPIdev_checkBox->setChecked(true);
+    {
+        ui->M7_SPIdev_checkBox->setChecked(false);
+        ui->M7_SPIdev_checkBox->setEnabled(false);
+    }
     if ( M7_getvalue(strKeyFunc, func_settings , "M7_GPIO2_D1_comboBox") == "SDA" )
     {
         on_M7_I2C2_checkBox_toggled(true);
+        QString speed = M7_getvalue(strKeyFunc, func_settings , "M7_I2C2Speed");
+        std::cout << speed.toLatin1().constData() << "\n" << std::flush;
+
         ui->M7_I2C2Speed_lineEdit->setText(M7_getvalue(strKeyFunc, func_settings , "M7_I2C2Speed"));
     }
-
+    if ( M7_getvalue(strKeyFunc, func_settings , "M7_GPIO3_A4_comboBox") == "UART1_TX" )
+    {
+        ui->M7_UART1_checkBox->setChecked(true);
+        if ( M7_getvalue(strKeyFunc, func_settings , "M7_GPIO3_A5_comboBox") == "UART1_RTS" )
+            ui->M7_UART1_4WirescheckBox->setChecked(true);
+    }
+    else
+    {
+        ui->M7_UART1_checkBox->setChecked(false);
+        ui->M7_UART1_4WirescheckBox->setChecked(false);
+    }
     if ( M7_getvalue(strKeyFunc, func_settings , "M7_PrimaryVideo_24bit_checkBox") == "true" )
         ui->M7_PrimaryVideo_24bit_checkBox->setChecked(true);
     ui->M7_PrimaryVideo_comboBox->setCurrentText(M7_getvalue(strKeyFunc, func_settings , "PrimaryVideo_comboBox"));
@@ -124,6 +146,7 @@ void NOVAembed::M7_save_helper(QString fileName)
 
     out << QString("M7_GPIO2_D1_comboBox="+M7_GPIO2_D1_comboBox+"\n");
     out << QString("M7_GPIO2_D0_comboBox="+M7_GPIO2_D0_comboBox+"\n");
+    out << QString("M7_GPIO3_A7_comboBox="+M7_GPIO3_A7_comboBox+"\n");
 
     if ( ui->M7_I2C2Speed_lineEdit->text().isEmpty() )
         ui->M7_I2C2Speed_lineEdit->setText("100000");
@@ -285,9 +308,12 @@ void NOVAembed::on_M7_Clear_pushButton_clicked()
     ui->M7_SPIdev_checkBox->setEnabled(false);
     ui->M7_SPIdev_checkBox->setChecked(false);
     ui->M7_I2C2_checkBox->setChecked(false);
+    ui->M7_UART1_checkBox->setChecked(false);
+    ui->M7_UART1_4WirescheckBox->setChecked(false);
+    ui->M7_UART1_4WirescheckBox->setEnabled(false);
     ui->M7_PrimaryVideo_comboBox->setCurrentIndex(0);
     ui->M7_PrimaryVideo_24bit_checkBox->setChecked(false);
-    ui->M7_I2C2Speed_lineEdit->setText("0");
+    ui->M7_I2C2Speed_lineEdit->setText("100000");
 
     ui->label_M7GPIO2_D1->setText(M7_GPIO2_D1_comboBox);
     ui->label_M7GPIO2_D0->setText(M7_GPIO2_D0_comboBox);
@@ -349,8 +375,6 @@ void NOVAembed::on_M7_SPI1_checkBox_toggled(bool checked)
     ui->label_M7GPIO3_B0->setText(M7_GPIO3_B0_comboBox);
 }
 
-
-
 void NOVAembed::on_M7_I2C2_checkBox_toggled(bool checked)
 {
     if ( checked )
@@ -370,3 +394,50 @@ void NOVAembed::on_M7_I2C2_checkBox_toggled(bool checked)
     ui->label_M7GPIO2_D1->setText(M7_GPIO2_D1_comboBox);
     ui->label_M7GPIO2_D0->setText(M7_GPIO2_D0_comboBox);
 }
+
+void NOVAembed::on_M7_UART1_checkBox_toggled(bool checked)
+{
+    if ( checked )
+    {
+        ui->M7_UART1_checkBox->setChecked(true);
+        ui->M7_UART1_4WirescheckBox->setEnabled(true);
+        M7_GPIO3_A4_comboBox="UART1_TX";
+        M7_GPIO3_A6_comboBox="UART1_RX";
+    }
+    else
+    {
+        ui->M7_UART1_checkBox->setChecked(false);
+        ui->M7_UART1_4WirescheckBox->setChecked(false);
+        ui->M7_UART1_4WirescheckBox->setEnabled(false);
+        M7_GPIO3_A4_comboBox="GPIO3_A4";
+        M7_GPIO3_A6_comboBox="GPIO3_A6";
+    }
+    ui->label_M7GPIO3_A4->setText(M7_GPIO3_A4_comboBox);
+    ui->label_M7GPIO3_A6->setText(M7_GPIO3_A6_comboBox);
+}
+
+
+
+void NOVAembed::on_M7_UART1_4WirescheckBox_toggled(bool checked)
+{
+    if ( checked )
+    {
+        ui->M7_UART1_4WirescheckBox->setChecked(true);
+        M7_GPIO3_A5_comboBox="UART1_RTS";
+        M7_GPIO3_A7_comboBox="UART1_CTS";
+    }
+    else
+    {
+        ui->M7_UART1_4WirescheckBox->setChecked(false);
+        M7_GPIO3_A5_comboBox="GPIO3_A5";
+        M7_GPIO3_A7_comboBox="GPIO3_A7";
+    }
+    ui->label_M7GPIO3_A5->setText(M7_GPIO3_A5_comboBox);
+    ui->label_M7GPIO3_A7->setText(M7_GPIO3_A7_comboBox);
+}
+/*
+QString M7_GPIO3_A4_comboBox="GPIO3_A4";    //UART1 TX
+QString M7_GPIO3_A6_comboBox="GPIO3_A6";    // UART1 RX
+QString M7_GPIO3_A5_comboBox="GPIO3_A5";    // UART1 RTS
+QString M7_GPIO3_A7_comboBox="GPIO3_A7";    // UART1 CTS
+*/

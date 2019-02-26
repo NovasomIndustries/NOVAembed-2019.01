@@ -11,6 +11,8 @@ typedef struct _iomux_cfg
     int spi_dev;
     int spi;
     int i2c2;
+    int uart1;
+    int uart1_4wires;
 } iomux_cfg;
 
 

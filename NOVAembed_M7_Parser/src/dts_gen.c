@@ -39,6 +39,19 @@ int     speed;
         sprintf(t,spi_footer);
         strcat(dtsfile_dump,t);
     }
+    if ( iomux->uart1 == 1 )
+    {
+        if ( iomux->uart1_4wires == 1 )
+        {
+            sprintf(t,uart1_4wires_defs);
+            strcat(dtsfile_dump,t);
+        }
+        else
+        {
+            sprintf(t,uart1_defs);
+            strcat(dtsfile_dump,t);
+        }
+    }
 }
 
 void create_dts_file(void)
@@ -48,7 +61,6 @@ FILE    *fpout_dts;
     sprintf(dtsfile_dump,dts_header);
     printf("After sprintf %s\n",dtsfile_dump);
     process_peripherals();
-    printf("After process_peripherals\n");
     printf("file_name_dts : %s\n",file_name_dts);
     if ( (fpout_dts = fopen(file_name_dts,"w" ) ))
     {

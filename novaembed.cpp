@@ -1019,7 +1019,6 @@ QString line;
                 QString base = fi.baseName();
                 if ( base != "" )
                     ui->M7_Current_BSPF_File_label->setText(base+".bspf");
-                std::cout << Last_M7_BSPFactoryFile.toLatin1().constData() << std::flush;
 
                 M7_load_BSPF_File(instpath+"/DtbUserWorkArea/M7Class_bspf/"+Last_M7_BSPFactoryFile);
                 ui->M7_Generate_pushButton->setText("Save and Generate "+fi.baseName()+".dtb");

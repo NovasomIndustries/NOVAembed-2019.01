@@ -921,6 +921,7 @@ QString currentboard=ui->Board_comboBox->currentText();
 QString content;
 QString ExternalFileSystemsFile;
 QString Qcmd;
+QString ShowName = "NotShown";
 
     ui->ExtFS_Available_comboBox->clear();
     ui->ExtFS_Available_comboBox->setCurrentIndex(0);
@@ -995,22 +996,17 @@ QString Qcmd;
                     ExternalFileSystemsFile=instpath+"/ExternalFileSystems/P/"+extfsfilename;
                 QFileInfo check_file(ExternalFileSystemsFile);
                 if ( ! check_file.exists() )
-                    ui->ExtFS_Available_comboBox->addItem(extfsname);
-                QString locextfsname = content.split(" ").at(1);
-                if ( locextfsname == ui->ExtFS_Available_comboBox->currentText())
                 {
-                    extfsname = content.split(" ").at(1);
-                    extfsfilename = content.split(" ").at(0);
-                    extfsboard = content.split(" ").at(2);
-                    extfsversion = content.split(" ").at(3);
-                    ui->ExtFSName_lineEdit->setText(extfsname);
-                    ui->ExtFSFileName_lineEdit->setText(extfsfilename);
-                    ui->ExtFSVersion_lineEdit->setText(extfsversion);
-                    ui->ExtFSBoard_lineEdit->setText(extfsboard);
+                    if ( ShowName == "NotShown")
+                        ShowName = extfsname;
+                    ui->ExtFS_Available_comboBox->addItem(extfsname);
+                    on_ExtFS_Available_comboBox_currentIndexChanged(extfsname);
                 }
             }
         }
         file.close();
+        if ( ShowName != "NotShown")
+            on_ExtFS_Available_comboBox_currentIndexChanged(ShowName);
     }
 }
 
@@ -1062,11 +1058,11 @@ void NOVAembed::on_ExtFS_DownloadSelected_FS_pushButton_clicked()
     out << QString("    wget --tries=2 --timeout=10 http://"+backup_repo_server+"/OS/"+currentboard+"/"+ui->ExtFSFileName_lineEdit->text()+"\n");
     out << QString("    if ! [ \"$?\" = \"0\" ]; then\n");
     out << QString("        echo 1 > /tmp/result\n");
-    out << QString("        return 1\n");
+    out << QString("        exit 1\n");
     out << QString("    fi\n");
     out << QString("fi\n");
     out << QString("echo 0 > /tmp/result\n");
-    out << QString("return 0\n");
+    out << QString("exit 0\n");
 
     scriptfile.close();
     if ( run_script() == 0)

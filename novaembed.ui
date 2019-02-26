@@ -88892,9 +88892,9 @@ a PCAP or an external RT touch</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>10</y>
+         <y>-5</y>
          <width>131</width>
-         <height>16</height>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
@@ -88915,9 +88915,9 @@ a PCAP or an external RT touch</string>
        <property name="geometry">
         <rect>
          <x>150</x>
-         <y>10</y>
+         <y>-11</y>
          <width>211</width>
-         <height>20</height>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
@@ -107735,7 +107735,7 @@ a PCAP or an external RT touch</string>
         <string>000000</string>
        </property>
        <property name="text">
-        <string>0</string>
+        <string>100000</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_M8I2C2Speed_2">
@@ -107765,7 +107765,7 @@ a PCAP or an external RT touch</string>
        </property>
        <property name="geometry">
         <rect>
-         <x>80</x>
+         <x>90</x>
          <y>50</y>
          <width>121</width>
          <height>21</height>
@@ -107829,6 +107829,48 @@ a PCAP or an external RT touch</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="M7_UART1_checkBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>81</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>UART 1</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="M7_UART1_4WirescheckBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>80</y>
+         <width>87</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string>4 Wires</string>
        </property>
       </widget>
      </widget>
