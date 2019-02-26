@@ -1012,8 +1012,6 @@ QString line;
             QFileInfo fi(instpath+"/DtbUserWorkArea/M7Class_bspf/"+Last_M7_BSPFactoryFile+".bspf");
             if ( ! fi.exists())
             {
-                std::cout << fi.absoluteFilePath().toLatin1().constData() << std::flush;
-
                 update_status_bar("BSP Factory : File "+fi.absoluteFilePath()+".bspf not found, reverting to default");
             }
             else

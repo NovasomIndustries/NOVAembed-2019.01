@@ -325,11 +325,6 @@ void NOVAembed::on_M7_SPI1_checkBox_toggled(bool checked)
     {
         ui->M7_SPI1_checkBox->setChecked(true);
         ui->M7_SPIdev_checkBox->setEnabled(true);
-        ui->label_M7GPIO3_A1->setText("SPI_TXD");
-        ui->label_M7GPIO3_A2->setText("SPI_RXD");
-        ui->label_M7GPIO3_A0->setText("SPI_CLK");
-        ui->label_M7GPIO2_B4->setText("SPI_SS0");
-        ui->label_M7GPIO3_B0->setText("SPI_SS1");
         M7_GPIO3_A1_comboBox="SPI_TXD";
         M7_GPIO3_A2_comboBox="SPI_RXD";
         M7_GPIO3_A0_comboBox="SPI_CLK";
@@ -341,17 +336,17 @@ void NOVAembed::on_M7_SPI1_checkBox_toggled(bool checked)
         ui->M7_SPI1_checkBox->setChecked(false);
         ui->M7_SPIdev_checkBox->setEnabled(false);
         ui->M7_SPIdev_checkBox->setChecked(false);
-        ui->label_M7GPIO3_A1->setText(M7_GPIO3_A1_comboBox);
-        ui->label_M7GPIO3_A2->setText(M7_GPIO3_A2_comboBox);
-        ui->label_M7GPIO3_A0->setText(M7_GPIO3_A0_comboBox);
-        ui->label_M7GPIO2_B4->setText(M7_GPIO2_B4_comboBox);
-        ui->label_M7GPIO3_B0->setText(M7_GPIO3_B0_comboBox);
         M7_GPIO3_A1_comboBox="GPIO3_A1";
         M7_GPIO3_A2_comboBox="GPIO3_A2";
         M7_GPIO3_A0_comboBox="GPIO3_A0";
         M7_GPIO2_B4_comboBox="GPIO2_B4";
         M7_GPIO3_B0_comboBox="GPIO3_B0";
     }
+    ui->label_M7GPIO3_A1->setText(M7_GPIO3_A1_comboBox);
+    ui->label_M7GPIO3_A2->setText(M7_GPIO3_A2_comboBox);
+    ui->label_M7GPIO3_A0->setText(M7_GPIO3_A0_comboBox);
+    ui->label_M7GPIO2_B4->setText(M7_GPIO2_B4_comboBox);
+    ui->label_M7GPIO3_B0->setText(M7_GPIO3_B0_comboBox);
 }
 
 
@@ -362,8 +357,6 @@ void NOVAembed::on_M7_I2C2_checkBox_toggled(bool checked)
     {
         ui->M7_I2C2_checkBox->setChecked(true);
         ui->M7_I2C2Speed_lineEdit->setEnabled(true);
-        ui->label_M7GPIO2_D1->setText("SDA");
-        ui->label_M7GPIO2_D0->setText("SCL");
         M7_GPIO2_D1_comboBox="SDA";
         M7_GPIO2_D0_comboBox="SCL";
     }
@@ -371,9 +364,9 @@ void NOVAembed::on_M7_I2C2_checkBox_toggled(bool checked)
     {
         ui->M7_I2C2_checkBox->setChecked(false);
         ui->M7_I2C2Speed_lineEdit->setEnabled(false);
-        ui->label_M7GPIO2_D1->setText(M7_GPIO2_D1_comboBox);
-        ui->label_M7GPIO2_D0->setText(M7_GPIO2_D0_comboBox);
         M7_GPIO2_D1_comboBox="GPIO2_D1";
         M7_GPIO2_D0_comboBox="GPIO2_D0";
     }
+    ui->label_M7GPIO2_D1->setText(M7_GPIO2_D1_comboBox);
+    ui->label_M7GPIO2_D0->setText(M7_GPIO2_D0_comboBox);
 }

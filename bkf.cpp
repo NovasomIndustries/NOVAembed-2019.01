@@ -1259,44 +1259,55 @@ void NOVAembed::on_Write_AutoRun_pushButton_clicked()
 void NOVAembed::on_ViewBootLog_pushButton_clicked()
 {
     if ( ui->Board_comboBox->currentText() == "P Series")
-        system("kwrite "+instpath.toLatin1()+"/Logs/umakeP.log");
+        if ( QFile(instpath+"/Logs/umakeP.log").exists() )
+            system("kwrite "+instpath.toLatin1()+"/Logs/umakeP.log");
     if ( ui->Board_comboBox->currentText() == "U5")
-        system("kwrite "+instpath.toLatin1()+"/Logs/umakeU.log");
+        if ( QFile(instpath+"/Logs/umakeU.log").exists() )
+            system("kwrite "+instpath.toLatin1()+"/Logs/umakeU.log");
     if ( ui->Board_comboBox->currentText() == "M8")
-        system("kwrite "+instpath.toLatin1()+"/Logs/umakeM8.log");
+        if ( QFile(instpath+"/Logs/umakeM8.log").exists() )
+            system("kwrite "+instpath.toLatin1()+"/Logs/umakeM8.log");
     if ( ui->Board_comboBox->currentText() == "M7" )
-        system("kwrite "+instpath.toLatin1()+"/Logs/umakeM7.log");
+        if ( QFile(instpath+"/Logs/umakeM7.log").exists() )
+            system("kwrite "+instpath.toLatin1()+"/Logs/umakeM7.log");
 }
 
 void NOVAembed::on_ViewFSLog_pushButton_clicked()
 {
     if ( ui->Board_comboBox->currentText() == "P Series")
-        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_Pmake.log");
+        if ( QFile(instpath+"/Logs/FileSystem_Pmake.log").exists() )
+            system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_Pmake.log");
     if ( ui->Board_comboBox->currentText() == "U5")
-        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_Umake.log");
+        if ( QFile(instpath+"/Logs/FileSystem_Umake.log").exists() )
+            system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_Umake.log");
     if ( ui->Board_comboBox->currentText() == "M8")
-        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_M8make.log");
+        if ( QFile(instpath+"/Logs/FileSystem_M8make.log").exists() )
+            system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_M8make.log");
     if ( ui->Board_comboBox->currentText() == "M7")
-        system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_M7make.log");
+        if ( QFile(instpath+"/Logs/FileSystem_M7make.log").exists() )
+            system("kwrite "+instpath.toLatin1()+"/Logs/FileSystem_M7make.log");
 }
 
 void NOVAembed::on_ViewKernelLog_pushButton_clicked()
 {
-    system("kwrite "+instpath.toLatin1()+"/Logs/kmake.log");
+    if ( QFile(instpath+"/Logs/kmake.log").exists() )
+        system("kwrite "+instpath.toLatin1()+"/Logs/kmake.log");
 }
 
 
 
 void NOVAembed::on_ViewuSDwriteLog_pushButton_clicked()
 {
-    system("kwrite "+instpath.toLatin1()+"/Logs/uSD_Write.log");
+    if ( QFile(instpath+"/Logs/uSD_Write.log").exists() )
+        system("kwrite "+instpath.toLatin1()+"/Logs/uSD_Write.log");
 }
 
 
 
 void NOVAembed::on_ViewPreCompiledLog_pushButton_clicked()
 {
-    system("kwrite "+instpath.toLatin1()+"/Logs/extfs.log");
+    if ( QFile(instpath+"/Logs/extfs.log").exists() )
+        system("kwrite "+instpath.toLatin1()+"/Logs/extfs.log");
 }
 
 
