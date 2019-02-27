@@ -32,5 +32,6 @@
         <file>Icons/allwinnerlogo.png</file>
         <file>Icons/NXP-LayerScapeLogo.png</file>
         <file>Icons/RockchipLogo.jpg</file>
+        <file>Icons/nindlogo.png</file>
     </qresource>
 </RCC>
