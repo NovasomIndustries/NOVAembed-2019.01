@@ -31,6 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="include/NOVAembed_M7_parser.h" />
 		<Unit filename="include/header.h" />
 		<Unit filename="src/dts_gen.c">
 			<Option compilerVar="CC" />
