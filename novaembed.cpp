@@ -1068,24 +1068,16 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
     }
 
     scriptfile.close();
-    int result = run_script();
-
-    if (  result > 0)
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "NOVAembed will be Updated!" ,"NOVAembed will be updated. After the updates the application NOVAembed will shut down and must be manually restarted.\nIf you have unsaved work press \"No\" and save your work, but remember to restart NOVAembed.\n\nDo you want to shut down NOVAembed?", QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::Yes)
     {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, "NOVAembed Updated!" ,"NOVAembed has been updated. Due to this now the application NOVAembed will shut down and must be manually restarted.\nIf you have unsaved work press \"No\" and save your work, but remember to restart NOVAembed.\n\nDo you want to shut down NOVAembed?", QMessageBox::Yes|QMessageBox::No);
-        if (reply == QMessageBox::Yes)
-        {
+        update_status_bar("Updating NOVAembed");
+        int result = run_script();
+        if (  result > 0)
             exit(0);
-        }
-        else
-        {
-                update_status_bar("Remember to restart NOVAembed");
-        }
     }
     else
-    {
-            update_status_bar("View Log to see the updates found");
-    }
+        update_status_bar("Update cancelled by user");
 }
 
 void NOVAembed::on_ViewUpdatesLog_pushButton_clicked()
