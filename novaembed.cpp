@@ -117,7 +117,6 @@ QString PixMapName="";
         std::cout << "Network is up\n" << std::flush;
     }
 
-
     if ( network_connected=="OKAY")
     {
         const char *cmd;
@@ -130,7 +129,7 @@ QString PixMapName="";
         system(cmd);
         if ( file.size() > 4 )
         {
-            QString strKeyConf("NOVAembed Remote Configuration/");
+            QString strKeyConf("NOVAembed 2019.1 Remote Configuration/");
             QSettings * config = 0;
             config = new QSettings( fileName, QSettings::IniFormat );
             gitVersion = config->value( strKeyConf + "Version", "r").toString();
