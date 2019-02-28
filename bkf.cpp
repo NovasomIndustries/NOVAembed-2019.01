@@ -582,11 +582,6 @@ void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
     if ( ui->Board_comboBox->currentText() == "M7")
     {
         out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" M7 > "+instpath+"/Logs/FileSystem_M7make.log\n");
-        if ( KernelValid == "OK" )
-        {
-            out << QString("cd rock ; ./modules_install "+instpath+"/Kernel"+ Kernel+" "+instpath+"/FileSystem/" + ui->FileSystemSelectedlineEdit->text()+" "+RK_M7_SOURCEME + " > "+instpath+"/Logs/FileSystem_M7make.log\n");
-        }
-
     }
     out << QString("cp "+instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+"/.config "+instpath+"/Deploy/"+ui->FileSystemSelectedlineEdit->text()+".buildroot.config\n");
 
