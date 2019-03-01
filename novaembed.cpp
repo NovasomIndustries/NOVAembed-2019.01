@@ -1088,7 +1088,7 @@ void NOVAembed::on_CheckUpdate_pushButton_clicked()
     {
         update_status_bar("Updating NOVAembed");
         int result = run_script();
-        if (  result > 0)
+        if (  result > 1)
             exit(0);
     }
     else
