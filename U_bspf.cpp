@@ -15,6 +15,7 @@
 
 extern  QString Last_U_BSPFactoryFile;
 extern  QString Kernel;
+extern  QString system_editor;
 
 QString U_GPIO01_IO09_comboBox="GPIO01_IO09";
 QString U_GPIO01_IO10_comboBox="GPIO01_IO10";
@@ -401,7 +402,7 @@ QFileInfo fi;
     out << QString("cd "+instpath+"/Utils\n");
     out << QString(instpath+"/Qt/NOVAembed/NOVAembed_U_Parser/bin/Debug/NOVAembed_U_Parser "+instpath+"/DtbUserWorkArea/UClass_bspf/"+Last_U_BSPFactoryFile+".bspf > "+instpath+"/Logs/U_bspf.log\n");
     if ( ui->U_EditBeforeGenerate_checkBox->isChecked())
-        out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+Last_U_BSPFactoryFile+".dts\n");
+        out << QString(system_editor+" "+instpath+"/DtbUserWorkArea/"+Last_U_BSPFactoryFile+".dts\n");
     out << QString("./user_dtb_compile "+Last_U_BSPFactoryFile+" U >> "+instpath+"/Logs/U_bspf.log\n");
 
     scriptfile.close();
@@ -423,5 +424,5 @@ QFileInfo fi;
 
 void NOVAembed::on_U_ViewDtbCompileLog_pushButton_clicked()
 {
-    system("kwrite "+instpath.toLatin1()+"/Logs/U_bspf.log");
+    system(system_editor.toLatin1()+" "+instpath.toLatin1()+"/Logs/U_bspf.log");
 }

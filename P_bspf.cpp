@@ -24,6 +24,7 @@ extern  QString Last_P_BSPFactoryFile;
 extern  QString LVDSVideo;
 extern  QString Quad;
 extern  QString instpath;
+extern  QString system_editor;
 extern  QString Kernel;
 
 /*****************************************************************************************************************************************************************************************/
@@ -2098,11 +2099,11 @@ QString QUAD_FileNameNoExtension;
     {
         out << QString(instpath+"/Qt/NOVAembed/NOVAembed_P_Parser/bin/Debug/NOVAembed_P_Parser "+instpath+"/DtbUserWorkArea/PClass_bspf/temp/"+SDL_FileNameNoExtension+".bspf > "+instpath+"/Logs/P_bspf.log\n");
         if ( ui->P_EditBeforeGenerate_checkBox->isChecked())
-            out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+SDL_FileNameNoExtension+".dtsi\n");
+            out << QString(system_editor+" "+instpath+"/DtbUserWorkArea/"+SDL_FileNameNoExtension+".dtsi\n");
         out << QString("./user_dtb_compile "+SDL_FileNameNoExtension+" P >> "+instpath+"/Logs/P_bspf.log\n");
         out << QString(instpath+"/Qt/NOVAembed/NOVAembed_P_Parser/bin/Debug/NOVAembed_P_Parser "+instpath+"/DtbUserWorkArea/PClass_bspf/temp/"+QUAD_FileNameNoExtension+".bspf >> "+instpath+"/Logs/P_bspf.log\n");
         if ( ui->P_EditBeforeGenerate_checkBox->isChecked())
-            out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+QUAD_FileNameNoExtension+".dtsi\n");
+            out << QString(system_editor+" "+instpath+"/DtbUserWorkArea/"+QUAD_FileNameNoExtension+".dtsi\n");
         out << QString("./user_dtb_compile "+QUAD_FileNameNoExtension+" P >> "+instpath+"/Logs/P_bspf.log\n");
     }
 
@@ -2133,7 +2134,7 @@ QString QUAD_FileNameNoExtension;
 
 void NOVAembed::on_ViewDtbCompileLog_pushButton_clicked()
 {
-   system("kwrite "+instpath.toLatin1()+"/Logs/P_bspf.log");
+   system(system_editor.toLatin1()+" "+instpath.toLatin1()+"/Logs/P_bspf.log");
 }
 
 

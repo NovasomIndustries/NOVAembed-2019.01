@@ -60,6 +60,8 @@ QString CurrentSplashName =  "NOVAsomP800x480";
 QString Kernel =  NXP_P_KERNEL;
 QString SourceMeFile =  NXP_P_SOURCEME;
 QString instpath = INSTALLATION_PATH;
+QString system_editor = SYSTEM_EDITOR;
+QString system_pdf_viewer = SYSTEM_PDFVIEWER;
 
 QString repo_server=SYSTEM_REPO_SERVER;
 QString backup_repo_server=BKP_SYSTEM_REPO_SERVER;
@@ -151,6 +153,14 @@ QString PixMapName="";
             std::cout << backup_repo_server.toLatin1().constData() << "\n" << std::flush;
         }
     }
+    if ( QFile("/usr/bin/kwrite").exists())
+        system_editor = "kwrite";
+    if ( QFile("/usr/bin/xedit").exists())
+        system_editor = "xedit";
+    if ( QFile("/usr/bin/okular").exists())
+        system_pdf_viewer = "okular";
+    if ( QFile("/usr/bin/evince").exists())
+        system_pdf_viewer = "evince";
 
     /* Initialize user area */
     if ( ! QDir(instpath+"/Blobs").exists() )
@@ -161,7 +171,12 @@ QString PixMapName="";
         system("mkdir -p "+instpath.toLatin1()+"/Deploy");
     if ( ! QDir(instpath+"/FileSystem").exists() )
         system("mkdir -p "+instpath.toLatin1()+"/FileSystem");
-
+    if ( ! QDir(instpath+"/Kernel").exists() )
+        system("mkdir -p "+instpath.toLatin1()+"/Kernel");
+    if ( ! QDir(instpath+"/Bootloader").exists() )
+        system("mkdir -p "+instpath.toLatin1()+"/Bootloader");
+    if ( ! QDir(instpath+"/Codeblocks").exists() )
+        system("mkdir -p "+instpath.toLatin1()+"/Codeblocks");
     if ( ! QDir(instpath+"/ExternalFileSystems").exists() )
     {
         QMessageBox::information(this, tr("ExternalFileSystems"),"ExternalFileSystems not found. Creating a new one!");
@@ -1087,7 +1102,7 @@ void NOVAembed::on_ViewUpdatesLog_pushButton_clicked()
     if (!file.exists() )
         update_status_bar("No logs present");
     else
-        system("kwrite "+instpath.toLatin1()+"/Logs/update.log");
+        system(system_editor.toLatin1()+" "+instpath.toLatin1()+"/Logs/update.log");
 }
 
 void NOVAembed::on_actionVersion_triggered()

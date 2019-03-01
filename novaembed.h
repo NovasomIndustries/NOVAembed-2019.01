@@ -60,6 +60,7 @@
 #define HUM_M7              "N.M7-250518-HUM-M7.pdf"
 #define QSG_M7              "N.M7-250518-HUM-M7.pdf"
 
+#define SYSTEM_EDITOR       "kwrite"
 #define SYSTEM_PDFVIEWER    "okular"
 
 namespace Ui {

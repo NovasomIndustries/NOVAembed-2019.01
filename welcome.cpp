@@ -35,6 +35,7 @@ extern  QString AutoRunFolder;
 extern  QString Kernel;
 extern  QString SourceMeFile;
 extern  QWidget *PBSP_stab,*UBSP_stab,*SBSP_stab,*M8BSP_stab,*M7BSP_stab,*N1BSP_stab,*TOOL_stab;
+extern  QString system_pdf_viewer;
 
 extern QString BootValid , FSValid , KernelValid , uSDwriteValid;
 
@@ -206,7 +207,7 @@ QString file_exists_path;
 
 void NOVAembed::on_HUM_pushButton_clicked()
 {
-    QString syscmd,filename,command=SYSTEM_PDFVIEWER;
+    QString syscmd,filename;
 
     if ( ui->Board_comboBox->currentText() == "P Series")
         filename = HUM_P;
@@ -214,7 +215,7 @@ void NOVAembed::on_HUM_pushButton_clicked()
         filename = HUM_U5;
     if ( ui->Board_comboBox->currentText() == "M7")
         filename = HUM_M7;
-    syscmd = command+" "+instpath+"/Doc/"+filename;
+    syscmd = system_pdf_viewer+" "+instpath+"/Doc/"+filename;
     QByteArray ba = syscmd.toLatin1();
     const char *str = ba.data();
     system(str);
@@ -223,7 +224,7 @@ void NOVAembed::on_HUM_pushButton_clicked()
 
 void NOVAembed::on_QSG_pushButton_clicked()
 {
-    QString syscmd,filename,command=SYSTEM_PDFVIEWER;
+    QString syscmd,filename;
 
         if ( ui->Board_comboBox->currentText() == "P Series")
             filename = QSG_P;
@@ -231,7 +232,7 @@ void NOVAembed::on_QSG_pushButton_clicked()
             filename = HUM_U5;
         if ( ui->Board_comboBox->currentText() == "M7")
             filename = HUM_M7;
-        syscmd = command+" "+instpath+"/Doc/"+filename;
+        syscmd = system_pdf_viewer+" "+instpath+"/Doc/"+filename;
         QByteArray ba = syscmd.toLatin1();
         const char *str = ba.data();
         system(str);
@@ -239,8 +240,6 @@ void NOVAembed::on_QSG_pushButton_clicked()
 
 void NOVAembed::on_NovaEmbedM_pushButton_clicked()
 {
-    QString command=SYSTEM_PDFVIEWER;
-
-    system(command.toLatin1()+" "+instpath.toLatin1()+"/Doc/SUM-NOVAembed-V1.0.pdf");
+    system(system_pdf_viewer.toLatin1()+" "+instpath.toLatin1()+"/Doc/SUM-NOVAembed-V1.0.pdf");
 }
 

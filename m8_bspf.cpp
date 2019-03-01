@@ -24,6 +24,7 @@ extern  QString LVDSVideo;
 extern  QString Quad;
 extern  QString instpath;
 extern  QString Kernel;
+extern  QString system_editor;
 
 QString M8_getvalue(QString strKey, QSettings *settings , QString entry)
 {
@@ -116,7 +117,7 @@ QFileInfo fi;
     out << QString("cd "+instpath+"/Utils\n");
     out << QString(instpath+"/Qt/NOVAembed/NOVAembed_M8_Parser/bin/Debug/NOVAembed_M8_Parser "+instpath+"/DtbUserWorkArea/M8Class_bspf/"+FileNameNoExtension+".bspf > "+instpath+"/Logs/M8_bspf.log\n");
     if ( ui->M8_EditBeforeGenerate_checkBox->isChecked())
-        out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+FileNameNoExtension+".dts\n");
+        out << QString(system_editor+" "+instpath+"/DtbUserWorkArea/"+FileNameNoExtension+".dts\n");
     out << QString("./user_dtb_compile "+FileNameNoExtension+" M8 >> "+instpath+"/Logs/M8_bspf.log\n");
 
     scriptfile.close();

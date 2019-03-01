@@ -27,6 +27,7 @@ extern  QString LVDSVideo;
 extern  QString Quad;
 extern  QString instpath;
 extern  QString Kernel;
+extern  QString system_editor;
 
 QString M7_GPIO2_C1_comboBox="GPIO2_C1";
 QString M7_GPIO0_A0_comboBox="GPIO0_A0";
@@ -254,7 +255,7 @@ QFileInfo fi;
     out << QString("cd "+instpath+"/Utils\n");
     out << QString(instpath+"/Qt/NOVAembed/NOVAembed_M7_Parser/bin/Debug/NOVAembed_M7_Parser "+instpath+"/DtbUserWorkArea/M7Class_bspf/"+Last_M7_BSPFactoryFile+".bspf > "+instpath+"/Logs/M7_bspf.log\n");
     if ( ui->M7_EditBeforeGenerate_checkBox->isChecked())
-        out << QString("kwrite "+instpath+"/DtbUserWorkArea/"+Last_M7_BSPFactoryFile+".dts\n");
+        out << QString(system_editor+" "+instpath+"/DtbUserWorkArea/"+Last_M7_BSPFactoryFile+".dts\n");
     out << QString("./user_dtb_compile "+Last_M7_BSPFactoryFile+" M7 >> "+instpath+"/Logs/M7_bspf.log\n");
     out << QString("if [ -f "+instpath+"/DtbUserWorkArea/"+Last_M7_BSPFactoryFile+".dtb ]; then\n");
     out << QString("    rm "+instpath+"/Deploy/m7_dtb.dtb\n");
@@ -277,7 +278,7 @@ QFileInfo fi;
 
 void NOVAembed::on_M7_ViewDtbCompileLog_pushButton_clicked()
 {
-    system("kwrite "+instpath.toLatin1()+"/Logs/M7_bspf.log");
+    system(system_editor.toLatin1()+" "+instpath.toLatin1()+"/Logs/M7_bspf.log");
 }
 
 void NOVAembed::on_M7_Clear_pushButton_clicked()
