@@ -1,3 +1,5 @@
+/* bootargs = \"rockchip_jtag earlyprintk=uart8250-32bit,0xff130000\";\ */
+
 #define dts_header "\n\
 /dts-v1/;\n\
 #include \"rk3328.dtsi\"\n\
@@ -7,7 +9,7 @@
 	compatible = \"rockchip,rk3328-evb\", \"rockchip,rk3328\";\n\
 \n\
 	chosen {\n\
-		bootargs = \"rockchip_jtag earlyprintk=uart8250-32bit,0xff130000\";\n\
+		bootargs = \"earlycon=uart8250,mmio32,0xff130000 swiotlb=1 kpti=0 console=ttyFIQ0\";\n\
 	};\n\
 \n\
 	fiq-debugger {\n\
@@ -35,15 +37,15 @@
 		reset-gpios = <&gpio1 18 GPIO_ACTIVE_LOW>;\n\
 	};\n\
 \n\
-	sound {\
+	sound {\n\
 		compatible = \"simple-audio-card\";\n\
 		simple-audio-card,format = \"i2s\";\n\
 		simple-audio-card,mclk-fs = <256>;\n\
 		simple-audio-card,name = \"rockchip,rk3328\";\n\
-		simple-audio-card,cpu {\
+		simple-audio-card,cpu {\n\
 			sound-dai = <&i2s1>;\n\
 		};\n\
-		simple-audio-card,codec {\
+		simple-audio-card,codec {\n\
 			sound-dai = <&codec>;\n\
 		};\n\
 	};\n\
@@ -53,10 +55,10 @@
 		simple-audio-card,format = \"i2s\";\n\
 		simple-audio-card,mclk-fs = <128>;\n\
 		simple-audio-card,name = \"rockchip,hdmi\";\n\
-		simple-audio-card,cpu {\
+		simple-audio-card,cpu {\n\
 			sound-dai = <&i2s0>;\n\
 		};\n\
-		simple-audio-card,codec {\
+		simple-audio-card,codec {\n\
 			sound-dai = <&hdmi>;\n\
 		};\n\
 	};\n\
@@ -64,10 +66,10 @@
 	spdif-sound {\n\
 		compatible = \"simple-audio-card\";\n\
 		simple-audio-card,name = \"rockchip,spdif\";\n\
-		simple-audio-card,cpu {\
+		simple-audio-card,cpu {\n\
 			sound-dai = <&spdif>;\n\
 		};\n\
-		simple-audio-card,codec {\
+		simple-audio-card,codec {\n\
 			sound-dai = <&spdif_out>;\n\
 		};\n\
 	};\n\
@@ -206,6 +208,10 @@
 &cpu0 {\n\
 	cpu-supply = <&vdd_arm>;\n\
 };\n\
+&dmc {\n\
+	center-supply = <&vdd_logic>;\n\
+	status = \"okay\";\n\
+};\n\
 \n\
 &display_subsystem {\n\
 	status = \"okay\";\n\
@@ -250,19 +256,19 @@
 	status = \"okay\";\n\
 };\n\
 \n\
-&gpu {\
+&gpu {\n\
 	status = \"okay\";\n\
 	mali-supply = <&vdd_logic>;\n\
 };\n\
 \n\
-&hdmi {\
+&hdmi {\n\
 	#sound-dai-cells = <0>;\n\
 	ddc-i2c-scl-high-time-ns = <9625>;\n\
 	ddc-i2c-scl-low-time-ns = <10000>;\n\
 	status = \"okay\";\n\
 };\n\
 \n\
-&hdmiphy {\
+&hdmiphy {\n\
 	status = \"okay\";\n\
 };\n\
 \n\
@@ -299,7 +305,7 @@
 			status = \"okay\";\n\
 			#address-cells = <1>;\n\
 			#size-cells = <0>;\n\
-			vdd_logic: RK805_DCDC1 {\
+			vdd_logic: RK805_DCDC1 {\n\
 				regulator-compatible = \"RK805_DCDC1\";\n\
 				regulator-name = \"vdd_logic\";\n\
 				regulator-min-microvolt = <712500>;\n\
@@ -308,7 +314,7 @@
 				regulator-ramp-delay = <12500>;\n\
 				regulator-boot-on;\n\
 				regulator-always-on;\n\
-				regulator-state-mem {\
+				regulator-state-mem {\n\
 					regulator-mode = <0x2>;\n\
 					regulator-on-in-suspend;\n\
 					regulator-suspend-microvolt = <1000000>;\n\
@@ -324,7 +330,7 @@
 				regulator-ramp-delay = <12500>;\n\
 				regulator-boot-on;\n\
 				regulator-always-on;\n\
-				regulator-state-mem {\
+				regulator-state-mem {\n\
 					regulator-mode = <0x2>;\n\
 					regulator-on-in-suspend;\n\
 					regulator-suspend-microvolt = <950000>;\n\
@@ -337,7 +343,7 @@
 				regulator-initial-mode = <0x1>;\n\
 				regulator-boot-on;\n\
 				regulator-always-on;\n\
-				regulator-state-mem {\
+				regulator-state-mem {\n\
 					regulator-mode = <0x2>;\n\
 					regulator-on-in-suspend;\n\
 				};\n\
@@ -351,7 +357,7 @@
 				regulator-initial-mode = <0x1>;\n\
 				regulator-boot-on;\n\
 				regulator-always-on;\n\
-				regulator-state-mem {\
+				regulator-state-mem {\n\
 					regulator-mode = <0x2>;\n\
 					regulator-on-in-suspend;\n\
 					regulator-suspend-microvolt = <3300000>;\n\
@@ -365,7 +371,7 @@
 				regulator-max-microvolt = <1800000>;\n\
 				regulator-boot-on;\n\
 				regulator-always-on;\n\
-				regulator-state-mem {\
+				regulator-state-mem {\n\
 					regulator-on-in-suspend;\n\
 					regulator-suspend-microvolt = <1800000>;\n\
 				};\n\
@@ -378,7 +384,7 @@
 				regulator-max-microvolt = <1800000>;\n\
 				regulator-boot-on;\n\
 				regulator-always-on;\n\
-				regulator-state-mem {\
+				regulator-state-mem {\n\
 					regulator-on-in-suspend;\n\
 					regulator-suspend-microvolt = <1800000>;\n\
 				};\n\
@@ -391,7 +397,7 @@
 				regulator-max-microvolt = <1100000>;\n\
 				regulator-boot-on;\n\
 				regulator-always-on;\n\
-				regulator-state-mem {\
+				regulator-state-mem {\n\
 					regulator-on-in-suspend;\n\
 					regulator-suspend-microvolt = <1100000>;\n\
 				};\n\
@@ -400,22 +406,22 @@
 	};\n\
 };\n\
 \n\
-&h265e {\
+&h265e {\n\
 	status = \"okay\";\n\
 };\n\
 \n\
-&i2s0 {\
+&i2s0 {\n\
 	#sound-dai-cells = <0>;\n\
 	rockchip,bclk-fs = <128>;\n\
 	status = \"okay\";\n\
 };\n\
 \n\
-&i2s1 {\
+&i2s1 {\n\
 	#sound-dai-cells = <0>;\n\
 	status = \"okay\";\n\
 };\n\
 \n\
-&io_domains {\
+&io_domains {\n\
 	status = \"okay\";\n\
 	vccio1-supply = <&vcc_io>;\n\
 	vccio2-supply = <&vcc_18emmc>;\n\
@@ -431,6 +437,15 @@
 	status = \"okay\";\n\
 };\n\
 \n\
+&rockchip_suspend {\n\
+	status = \"okay\";\n\
+	rockchip,virtual-poweroff = <1>;\n\
+};\n\
+\n\
+&saradc {\n\
+	status = \"okay\";\n\
+	vref-supply = <&vdd_18>;\n\
+};\n\
 &uart0 {\n\
         pinctrl-names = \"default\";\n\
         pinctrl-0 = <&uart0_xfer &uart0_cts>;\n\

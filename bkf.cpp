@@ -64,7 +64,7 @@ void NOVAembed::initrd_helper(void)
 {
     QFileInfo info1(instpath+"/FileSystem/"+FileSystemName+"/output/images/rootfs.ext2");
 
-    initrd_size = (info1.size() / 1024) * 1.1;
+    initrd_size = ((info1.size() / 1024) * 1.1) + 20000; // Leave 20M of free space
 /*
     std::cout << "\n" << FileSystemName.toLatin1().constData()<< "\n" << std::flush;
     std::cout << info1.size()<< "\n" << std::flush;
@@ -303,6 +303,7 @@ void NOVAembed::on_KernelCompile_pushButton_clicked()
     scriptfile.close();
     if ( run_script() == 0)
     {
+        initrd_helper();
         update_status_bar("Kernel built succesfully");
         KernelValid = "OK";
         ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));
