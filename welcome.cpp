@@ -47,7 +47,6 @@ extern QWidget *current_stab;
 void NOVAembed::Board_comboBox_setText(const QString &arg1)
 {
     ui->HUM_pushButton->setText(arg1+" Hardware User Manual");
-    ui->QSG_pushButton->setText(arg1+" Quick Start Guide");
 }
 
 void NOVAembed::on_Board_comboBox_currentIndexChanged(const QString &arg1)
@@ -215,27 +214,12 @@ void NOVAembed::on_HUM_pushButton_clicked()
         filename = HUM_U5;
     if ( ui->Board_comboBox->currentText() == "M7")
         filename = HUM_M7;
+    if ( ui->Board_comboBox->currentText() == "M8")
+        filename = HUM_M8;
     syscmd = system_pdf_viewer+" "+instpath+"/Doc/"+filename;
     QByteArray ba = syscmd.toLatin1();
     const char *str = ba.data();
     system(str);
-}
-
-
-void NOVAembed::on_QSG_pushButton_clicked()
-{
-    QString syscmd,filename;
-
-        if ( ui->Board_comboBox->currentText() == "P Series")
-            filename = QSG_P;
-        if ( ui->Board_comboBox->currentText() == "U5")
-            filename = HUM_U5;
-        if ( ui->Board_comboBox->currentText() == "M7")
-            filename = HUM_M7;
-        syscmd = system_pdf_viewer+" "+instpath+"/Doc/"+filename;
-        QByteArray ba = syscmd.toLatin1();
-        const char *str = ba.data();
-        system(str);
 }
 
 void NOVAembed::on_NovaEmbedM_pushButton_clicked()

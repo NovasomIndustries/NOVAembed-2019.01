@@ -54,11 +54,9 @@
 #define SYSTEM_REPO_SERVER      "93.41.190.216"
 #define BKP_SYSTEM_REPO_SERVER  "93.41.190.216"
 #define HUM_P               "NI150316-HUM-P.pdf"
-#define QSG_P               "NI150316-QSG-P.pdf"
 #define HUM_U5              "N.U-200417-HUM-U5.pdf"
-#define QSG_U5              "N.U-200417-QSG-U5.pdf"
 #define HUM_M7              "N.M7-250518-HUM-M7.pdf"
-#define QSG_M7              "N.M7-250518-HUM-M7.pdf"
+#define HUM_M8              "N.M8-091116-HUM-M8.pdf"
 
 #define SYSTEM_EDITOR       "kwrite"
 #define SYSTEM_PDFVIEWER    "okular"
@@ -351,8 +349,6 @@ private slots:
     void on_ExtFS_DownloadSelected_FS_pushButton_clicked();
 
     void on_HUM_pushButton_clicked();
-
-    void on_QSG_pushButton_clicked();
 
     void on_NovaEmbedM_pushButton_clicked();
 
