@@ -803,7 +803,7 @@ void NOVAembed::on_Write_uSD_pushButton_clicked()
     if ( ui->Board_comboBox->currentText() == "M7")
     {
         out << QString("cd "+instpath+"/Utils/rock\n");
-        out << QString("./flashM7 "+NumberOfUserPartitions+" "+UserPartition1Size+" "+UserPartition2Size+" /dev/"+uSD_Device+" NotSet NotSet NOVAsomParams_M7 "+ui->initRdSize_lineEdit->text()+" > "+instpath+"/Logs/uSD_Write.log\n");
+        out << QString("./flashM7 "+NumberOfUserPartitions+" "+UserPartition1Size+" "+UserPartition2Size+" /dev/"+uSD_Device+" "+fi.baseName()+" > "+instpath+"/Logs/uSD_Write.log\n");
         if ( ui->UserAutoRun_checkBox->isChecked())
             out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write.log\n");
     }
@@ -1247,7 +1247,10 @@ void NOVAembed::on_Write_AutoRun_pushButton_clicked()
     QTextStream out(&scriptfile);
     out << QString("#!/bin/sh\n");
     out << QString("cd "+instpath+"/Utils\n");
-    out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write\n");
+    if ( ui->Board_comboBox->currentText() == "M7")
+        out << QString("cd rock; ./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write\n");
+    else
+        out << QString("./store_application_storage "+ui->UserAutoRunSelectedlineEdit->text()+" /dev/"+uSD_Device+" >> "+instpath+"/Logs/uSD_Write\n");
     scriptfile.close();
 
     if ( run_script() == 0)

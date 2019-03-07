@@ -330,7 +330,10 @@ QString PixMapName="";
         SourceMeFile=RK_M7_SOURCEME;
         PixMapName=":/Icons/RockchipLogo.jpg";
     }
-
+    QString board_cbox = _Board_comboBox;
+    _Board_comboBox = "Unset";
+    on_Board_comboBox_currentIndexChanged(board_cbox);
+    _Board_comboBox = board_cbox;
     ui->Board_comboBox->setCurrentText(_Board_comboBox);
     Board_comboBox_setText(_Board_comboBox);
     ui->brand_label->setPixmap(QPixmap(PixMapName));
@@ -853,7 +856,6 @@ QString line;
             ui->UserPartition2Size_lineEdit->setVisible(true);
         }
         ui->uSD_Device_comboBox->setCurrentText(uSD_Device);
-
         if ( ui->Board_comboBox->currentText() == "P Series")
         {
             if ( !QFile(instpath+"/Blobs/"+NXP_P_SPL).exists() )
@@ -872,13 +874,46 @@ QString line;
 
         if ( ui->Board_comboBox->currentText() == "M7")
         {
+            BootValid = "OK";
+            int bootok;
+            QString thepath;
+            QFileInfo check_file1;
+
+            thepath=instpath+"/Bootloader/"+RK_M7_BOOTPATH+"/uboot.img";
+            check_file1 = QFileInfo(thepath);
+            if (check_file1.exists() && check_file1.isFile())
+                bootok++;
+            else
+            {
+                BootValid = "INVALID";
+                std::cout << "novaembed.cpp : M7 uboot not found : " << thepath.toLatin1().constData() <<"\n" << std::flush;
+            }
+            thepath=instpath+"/Bootloader/"+RK_M7_BOOTPATH+"/trust.img";
+            if (check_file1.exists() && check_file1.isFile())
+                bootok++;
+            else
+            {
+                BootValid = "INVALID";
+                std::cout << "novaembed.cpp : M7 trust not found : "<< thepath.toLatin1().constData() <<"\n" << std::flush;
+            }
+            thepath=instpath+"/Bootloader/"+RK_M7_BOOTPATH+"/idbloader.img";
+            if (check_file1.exists() && check_file1.isFile())
+                bootok++;
+            else
+            {
+                BootValid = "INVALID";
+                std::cout << "novaembed.cpp : M7 idbloader not found\n"<< thepath.toLatin1().constData() <<"\n" << std::flush;
+            }
+/*
             if ( !QFile(instpath+"/Blobs/"+RK_M7_BOOT).exists() )
                 BootValid = "INVALID";
             if ( !QFile(instpath+"/Blobs/"+RK_M7_TRUST).exists() )
                 BootValid = "INVALID";
             if ( !QFile(instpath+"/Blobs/"+RK_M7_IDBLOADER).exists() )
                 BootValid = "INVALID";
+                */
         }
+
 
         if ( BootValid == "OK" )
         {
@@ -901,9 +936,26 @@ QString line;
             if ( !QFile(instpath+"/Blobs/"+QUALCOMM_BLOB_NAME).exists() )
                 KernelValid = "INVALID";
         if ( ui->Board_comboBox->currentText() == "M7")
+        {
+            KernelValid = "OK";
+            int kernelok;
+            QString thepath;
+            QFileInfo check_file1;
+            thepath=instpath+"/Kernel/"+RK_M7_KERNEL+"/arch/arm64/boot/Image";
+            check_file1 = QFileInfo(thepath);
+            if (check_file1.exists() && check_file1.isFile())
+                kernelok=1;
+            else
+            {
+                KernelValid = "INVALID";
+                std::cout << "novaembed.cpp : M7 kernel not found : "<<thepath.toLatin1().constData() <<"\n" << std::flush;
+            }
+
+            /*
             if ( !QFile(instpath+"/Blobs/"+RK_M7_BLOB_NAME).exists() )
                 KernelValid = "INVALID";
-
+                */
+        }
         if ( KernelValid == "OK" )
         {
             ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/valid.png"));

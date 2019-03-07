@@ -23,6 +23,8 @@
 #define NXP_P_KERNEL        "linux-imx_4.1.15_1.2.0_ga"
 #define NXP_U_KERNEL        "linux-imx_4.1.43"
 
+#define RK_M7_BOOTPATH      "u-boot-novasomM7-2017.09"
+
 #define RK_M7_DEFCONFIG     "NOVAsomM7_defconfig"
 #define QUALCOMM_DEFCONFIG  "qcom_defconfig"
 #define NXP_P_DEFCONFIG     "imx_novasomp_defconfig"

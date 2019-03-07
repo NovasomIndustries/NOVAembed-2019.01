@@ -148,26 +148,31 @@ QString file_exists_path;
         ui->UserBSPFSelect_pushButton->setVisible(true);
         ui->UserBSPFselectedlineEdit->setVisible(true);
         bootok=0;
-        check_file1 = QFileInfo(instpath+"/Blobs/"+RK_M7_BLOB_NAME);
+        QString thepath;
+        thepath=instpath+"/Kernel/"+RK_M7_KERNEL+"/arch/arm64/boot/Image";
+        check_file1 = QFileInfo(thepath);
         if (check_file1.exists() && check_file1.isFile())
             kernelok=1;
         else
-            std::cout << "M7 kernel not found\n" << std::flush;
-        check_file1 = QFileInfo(instpath+"/Blobs/"+RK_M7_BOOT);
+            std::cout << "welcome.cpp : M7 kernel not found : "<<thepath.toLatin1().constData() <<"\n" << std::flush;
+
+        thepath=instpath+"/Bootloader/"+RK_M7_BOOTPATH+"/uboot.img";
+        check_file1 = QFileInfo(thepath);
         if (check_file1.exists() && check_file1.isFile())
             bootok++;
         else
-            std::cout << "M7 uboot not found\n" << std::flush;
-        check_file1 = QFileInfo(instpath+"/Blobs/"+RK_M7_TRUST);
+            std::cout << "welcome.cpp : M7 uboot not found : " << thepath.toLatin1().constData() <<"\n" << std::flush;
+        thepath=instpath+"/Bootloader/"+RK_M7_BOOTPATH+"/trust.img";
         if (check_file1.exists() && check_file1.isFile())
             bootok++;
         else
-            std::cout << "M7 trust not found\n" << std::flush;
-        check_file1 = QFileInfo(instpath+"/Blobs/"+RK_M7_IDBLOADER);
+            std::cout << "welcome.cpp : M7 trust not found : "<< thepath.toLatin1().constData() <<"\n" << std::flush;
+
+        thepath=instpath+"/Bootloader/"+RK_M7_BOOTPATH+"/idbloader.img";
         if (check_file1.exists() && check_file1.isFile())
             bootok++;
         else
-            std::cout << "M7 idbloader not found\n" << std::flush;
+            std::cout << "welcome.cpp : M7 idbloader not found\n"<< thepath.toLatin1().constData() <<"\n" << std::flush;
         if ( bootok == 3)
             bootok=1;
         else
