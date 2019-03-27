@@ -1,5 +1,3 @@
-/* bootargs = \"rockchip_jtag earlyprintk=uart8250-32bit,0xff130000\";\ */
-
 #define dts_header "\n\
 /dts-v1/;\n\
 #include \"rk3328.dtsi\"\n\

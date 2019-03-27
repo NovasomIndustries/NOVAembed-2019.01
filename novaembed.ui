@@ -50394,7 +50394,7 @@ a PCAP/RT touch</string>
         </font>
        </property>
        <property name="text">
-        <string>GPIO04_IO03</string>
+        <string>GPIO04_IO04</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_PGPIO3_IO19_60">

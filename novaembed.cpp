@@ -87,6 +87,24 @@ QString PixMapName="";
 
     std::cout << "Starting now\n" << std::flush;
     system("rm -f /tmp/script");
+    /* do this only for 2019.01 */
+    if ( QDir("/Devel/NOVAsdk2019.01").exists() )
+    {
+        QFileInfo check_file("/Devel/NOVAsdk");
+        if ( check_file.exists() )
+        {
+            if ( check_file.isFile() )
+                std::cout << "Link not present\n" << std::flush;
+            else
+                std::cout << "Link present\n" << std::flush;
+        }
+        else
+        {
+            std::cout << "Link or dir not present\n" << std::flush;
+            system("cd /Devel ; ln -s NOVAsdk2019.01 NOVAsdk");
+        }
+    }
+    /* ok, done */
 
     /* Get NOVAembed version*/
     QString strKeyLocalVersion("NOVAembed Configuration/");
