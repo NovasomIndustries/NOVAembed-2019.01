@@ -12,6 +12,7 @@
 #include <QtCore>
 #include <QDesktopServices>
 #include <QDirIterator>
+#include <iostream>
 
 extern  QString Last_U_BSPFactoryFile;
 extern  QString Kernel;
@@ -34,6 +35,45 @@ QString U_GPIO04_IO24_comboBox="GPIO04_IO24";
 QString U_I2C2Speed="100000";
 QString U_PrimaryVideo_comboBox;
 extern  QString instpath;
+
+
+QString U_getvalue(QString strKey, QSettings *settings , QString entry)
+{
+    return settings->value( strKey + entry, "r").toString();
+}
+
+void NOVAembed::U_load_BSPF_File(QString fileName)
+{
+QString strKeyFunc("U_IOMUX/");
+QSettings * func_settings = 0;
+
+    on_U_Clear_pushButton_clicked();
+    func_settings = new QSettings( fileName+".bspf", QSettings::IniFormat );
+    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO06_comboBox") == "ECSPI4_SCLK" )
+        on_U_SPI4_checkBox_toggled(true);
+    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO19_comboBox") == "I2C2_SDA" )
+        on_U_I2C2_checkBox_toggled(true);
+    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO01_comboBox") == "CAN1_TX" )
+        on_U_CAN1_checkBox_toggled(true);
+    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO17_comboBox") == "UART6_TX" )
+        on_U_UART6_checkBox_toggled(true);
+    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO23_comboBox") == "UART5_RTS" )
+        on_U_UART5_4WirescheckBox_toggled(true);
+    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO01_IO10_comboBox") == "SPDIF_OUT" )
+        on_U_SPDIF_checkBox_toggled(true);
+    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO01_IO09_comboBox") == "PWM2" )
+        on_U_PWM2_checkBox_toggled(true);
+    ui->U_SPIdev4_checkBox->setChecked(false);
+    if ( U_getvalue(strKeyFunc, func_settings , "U_SPIdev4_checkBox") == "true" )
+        ui->U_SPIdev4_checkBox->setChecked(true);
+
+
+
+    ui->U_I2C2Speed_lineEdit->setText(U_getvalue(strKeyFunc, func_settings , "U_I2C2Speed"));
+    ui->U_PrimaryVideo_comboBox->setCurrentText(U_getvalue(strKeyFunc, func_settings , "U_PrimaryVideo_comboBox"));
+    if ( U_getvalue(strKeyFunc, func_settings , "U_PrimaryVideo_24bit_comboBox") == "true")
+        on_UPriVideo_24bit_checkBox_toggled(true);
+}
 
 
 void NOVAembed::U_save_helper(QString fileName)
@@ -297,40 +337,6 @@ void NOVAembed::on_UPriVideo_24bit_checkBox_toggled(bool checked)
 }
 
 
-QString U_getvalue(QString strKey, QSettings *settings , QString entry)
-{
-    return settings->value( strKey + entry, "r").toString();
-}
-
-void NOVAembed::U_load_BSPF_File(QString fileName)
-{
-QString strKeyFunc("U_IOMUX/");
-QSettings * func_settings = 0;
-
-    on_U_Clear_pushButton_clicked();
-    func_settings = new QSettings( fileName, QSettings::IniFormat );
-    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO06_comboBox") == "ECSPI4_SCLK" )
-        on_U_SPI4_checkBox_toggled(true);
-    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO19_comboBox") == "I2C2_SDA" )
-        on_U_I2C2_checkBox_toggled(true);
-    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO01_comboBox") == "CAN1_TX" )
-        on_U_CAN1_checkBox_toggled(true);
-    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO17_comboBox") == "UART6_TX" )
-        on_U_UART6_checkBox_toggled(true);
-    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO04_IO23_comboBox") == "UART5_RTS" )
-        on_U_UART5_4WirescheckBox_toggled(true);
-    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO01_IO10_comboBox") == "SPDIF_OUT" )
-        on_U_SPDIF_checkBox_toggled(true);
-    if ( U_getvalue(strKeyFunc, func_settings , "U_GPIO01_IO09_comboBox") == "PWM2" )
-        on_U_PWM2_checkBox_toggled(true);
-
-
-    ui->U_I2C2Speed_lineEdit->setText(U_getvalue(strKeyFunc, func_settings , "U_I2C2Speed"));
-    ui->U_SPIdev4_checkBox->setChecked(false);
-    ui->U_PrimaryVideo_comboBox->setCurrentText(U_getvalue(strKeyFunc, func_settings , "U_PrimaryVideo_comboBox"));
-    if ( U_getvalue(strKeyFunc, func_settings , "U_PrimaryVideo_24bit_comboBox") == "true")
-        on_UPriVideo_24bit_checkBox_toggled(true);
-}
 
 void NOVAembed::on_U_Load_pushButton_clicked()
 {

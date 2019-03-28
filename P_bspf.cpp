@@ -1810,7 +1810,7 @@ QSettings * func_settings = 0;
 
     on_P_Clear_pushButton_clicked();
     set_all_io();
-    func_settings = new QSettings( fileName, QSettings::IniFormat );
+    func_settings = new QSettings( fileName+".bspf", QSettings::IniFormat );
     if ( P_getvalue(strKeyFunc, func_settings , "P_ECSPI1_MISO_comboBox") == "ECSPI1_MISO" )
         on_P_SPI1_checkBox_toggled(true);
     if ( P_getvalue(strKeyFunc, func_settings , "P_ECSPI2_MISO_comboBox") == "ECSPI2_MISO" )

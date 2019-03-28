@@ -12,6 +12,7 @@
 #include <QtCore>
 #include <QDesktopServices>
 #include <QDirIterator>
+#include <iostream>
 
 
 extern  QString FileSystemName;
@@ -34,7 +35,7 @@ QString M8_getvalue(QString strKey, QSettings *settings , QString entry)
 void NOVAembed::M8_load_BSPF_File(QString fileName)
 {
     on_M8_Clear_pushButton_clicked();
-    Last_M8_BSPFactoryFile = fileName;
+    Last_M8_BSPFactoryFile = fileName+".bspf";
 }
 
 
