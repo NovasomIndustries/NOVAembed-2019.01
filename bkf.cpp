@@ -570,12 +570,12 @@ void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
     out << QString("#!/bin/sh\n");
     if ( ui->Board_comboBox->currentText() == "P Series")
     {
-        out << QString("cd "+instpath+"/Utils\n");
+        out << QString("cd "+instpath+"/Utils/nxp\n");
         out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" P > "+instpath+"/Logs/FileSystem_Pmake.log\n");
     }
     if ( ui->Board_comboBox->currentText() == "U5")
     {
-        out << QString("cd "+instpath+"/Utils\n");
+        out << QString("cd "+instpath+"/Utils/nxp\n");
         out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" U > "+instpath+"/Logs/FileSystem_Umake.log\n");
     }
     if ( ui->Board_comboBox->currentText() == "M8")
@@ -587,7 +587,6 @@ void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
     {
         out << QString("cd "+instpath+"/Utils/rock\n");
         out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" "+Kernel+" > "+instpath+"/Logs/FileSystem_M7make.log\n");
-        //out << QString("./MakeFs "+ui->FileSystemSelectedlineEdit->text()+" "+IP+" M7 > "+instpath+"/Logs/FileSystem_M7make.log\n");
     }
     out << QString("cp "+instpath+"/FileSystem/"+ui->FileSystemSelectedlineEdit->text()+"/.config "+instpath+"/Deploy/"+ui->FileSystemSelectedlineEdit->text()+".buildroot.config\n");
 
