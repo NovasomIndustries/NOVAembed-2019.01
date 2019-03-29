@@ -836,6 +836,7 @@ void NOVAembed::on_P_I2C1_checkBox_toggled(bool checked)
     }
     else
     {
+        ui->P_I2C1_OnJ13checkBox->setChecked(false);
         ui->P_I2C1_OnJ13checkBox->setEnabled(false);
         ui->P_SPI3_2ndSScheckBox->setChecked(false);
         ui->label_PI2C1_SDA->setText("GPIO5_IO26");
