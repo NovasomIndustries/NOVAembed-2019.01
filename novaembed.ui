@@ -107511,7 +107511,7 @@ a PCAP or an external RT touch</string>
        </font>
       </property>
       <property name="text">
-       <string>* GPIO : 32 * (PORT - 1) + (Byte-1)*Index + Bit.</string>
+       <string>* GPIO : 32 * (PORT - 1) + Index + Bit.</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -107563,7 +107563,7 @@ a PCAP or an external RT touch</string>
        </font>
       </property>
       <property name="text">
-       <string>Byte can be A (0) ,B (8), C (16) or D (24)</string>
+       <string>Index can be A (0) ,B (8), C (16) or D (24)</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
