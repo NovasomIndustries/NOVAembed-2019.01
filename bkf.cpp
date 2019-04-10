@@ -379,7 +379,7 @@ void NOVAembed::on_KernelReCompile_pushButton_clicked()
             out << QString("        cp "+instpath+"/DtbUserWorkArea/"+ui->UserBSPFselectedlineEdit->text()+".dtb "+instpath+"/Deploy/m7_dtb.dtb\n");
             out << QString("    fi\n");
         }
-
+        out << QString("fi\n");
     }
     scriptfile.close();
     if ( run_script() == 0)
