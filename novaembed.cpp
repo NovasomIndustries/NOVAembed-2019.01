@@ -101,12 +101,12 @@ QString PixMapName="";
         else
         {
             std::cout << "Link or dir not present\n" << std::flush;
-            system("cd /Devel ; ln -s NOVAsdk2019.01 NOVAsdk");
         }
     }
     /* ok, done */
 
     /* Get NOVAembed version*/
+    system("cd /Devel/NOVAsdk2019.01/Qt ; ln -s NOVAsdk2019.01 NOVAsdk");
     QString strKeyLocalVersion("NOVAembed Configuration/");
     QSettings * configNe = 0;
     configNe = new QSettings( instpath+"/Qt/NOVAembed/version", QSettings::IniFormat );
