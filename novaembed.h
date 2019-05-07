@@ -90,6 +90,7 @@ private slots:
     void initrd_helper(void);
     void Board_comboBox_setText(const QString &arg1);
     int CheckIfKernelsPresent();
+    void uSD_Write_frame_enable();
 
     /* Helper Functions End */
 

@@ -995,10 +995,7 @@ QString line;
             std::cout << "FileSystemNotValid\n" << std::flush;
         }
 
-        if (( KernelValid == "OK" ) && ( BootValid == "OK" ) && (FSValid == "OK"))
-            ui->uSD_Write_frame->setEnabled(true);
-        else
-            ui->uSD_Write_frame->setEnabled(false);
+        uSD_Write_frame_enable();
 
         int ret;
         if ( ui->Board_comboBox->currentText() == "P Series")

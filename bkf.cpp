@@ -74,6 +74,19 @@ void NOVAembed::initrd_helper(void)
     ui->initRdSize_lineEdit->setText( QString::number(initrd_size) );
 }
 
+/* Write uSD frame enables */
+void NOVAembed::uSD_Write_frame_enable()
+{
+    if (( KernelValid == "OK" ) && ( BootValid == "OK" ) && (FSValid == "OK"))
+        ui->uSD_Write_frame->setEnabled(true);
+    else
+        ui->uSD_Write_frame->setEnabled(false);
+    if ( ui->UserBSPFselectedlineEdit->text() == "Not Initialized")
+        ui->Write_uSD_pushButton->setEnabled(false);
+    else
+        ui->Write_uSD_pushButton->setEnabled(true);
+}
+
 /* Bootloader */
 void NOVAembed::on_BootLoaderCompile_pushButton_clicked()
 {
@@ -148,10 +161,7 @@ void NOVAembed::on_BootLoaderCompile_pushButton_clicked()
         BootValid = "INVALID";
         ui->BootStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
     }
-    if (( KernelValid == "OK" ) && ( BootValid == "OK" ) && (FSValid == "OK"))
-        ui->uSD_Write_frame->setEnabled(true);
-    else
-        ui->uSD_Write_frame->setEnabled(false);
+    uSD_Write_frame_enable();
     storeNOVAembed_ini();
 }
 
@@ -225,10 +235,7 @@ void NOVAembed::on_KernelXconfig_pushButton_clicked()
         KernelValid = "INVALID";
         ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
     }
-    if (( KernelValid == "OK" ) && ( BootValid == "OK" ) && (FSValid == "OK"))
-        ui->uSD_Write_frame->setEnabled(true);
-    else
-        ui->uSD_Write_frame->setEnabled(false);
+    uSD_Write_frame_enable();
     storeNOVAembed_ini();
 }
 
@@ -314,10 +321,8 @@ void NOVAembed::on_KernelCompile_pushButton_clicked()
         KernelValid = "INVALID";
         ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
     }
-    if (( KernelValid == "OK" ) && ( BootValid == "OK" ) && (FSValid == "OK"))
-        ui->uSD_Write_frame->setEnabled(true);
-    else
-        ui->uSD_Write_frame->setEnabled(false);
+    uSD_Write_frame_enable();
+
     storeNOVAembed_ini();
 }
 
@@ -394,10 +399,8 @@ void NOVAembed::on_KernelReCompile_pushButton_clicked()
         ui->KernelStatus_label->setPixmap(QPixmap(":/Icons/invalid.png"));
         KernelValid = "INVALID";
     }
-    if (( KernelValid == "OK" ) && ( BootValid == "OK" ) && (FSValid == "OK"))
-        ui->uSD_Write_frame->setEnabled(true);
-    else
-        ui->uSD_Write_frame->setEnabled(false);
+    uSD_Write_frame_enable();
+
     storeNOVAembed_ini();
 }
 
@@ -621,10 +624,8 @@ void NOVAembed::on_FileSystemDeploy_pushButton_clicked()
         if ( ui->Board_comboBox->currentText() == "M7")
             Last_M7_FileSystem = "";
     }
-    if (( KernelValid == "OK" ) && ( BootValid == "OK" ) && (FSValid == "OK"))
-        ui->uSD_Write_frame->setEnabled(true);
-    else
-        ui->uSD_Write_frame->setEnabled(false);
+    uSD_Write_frame_enable();
+
     storeNOVAembed_ini();
 }
 
@@ -1163,6 +1164,7 @@ void NOVAembed::on_UserBSPFSelect_pushButton_clicked()
         return;
     else
     {
+        ui->Write_uSD_pushButton->setEnabled(true);
         skip_filesave_on_Generate_pushButton_clicked = 1;
         if ( ui->Board_comboBox->currentText() == "P Series")
         {
