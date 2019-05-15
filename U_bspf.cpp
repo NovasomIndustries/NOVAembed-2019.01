@@ -229,7 +229,7 @@ void NOVAembed::on_U_CAN1_checkBox_toggled(bool checked)
 {
     if ( checked )
     {
-        ui->label_UGPIO04_IO02->setText("CAN1_TX");
+        ui->label_UGPIO04_IO01->setText("CAN1_TX");
         ui->label_UGPIO04_IO02->setText("CAN1_RX");
         U_GPIO04_IO01_comboBox="CAN1_TX";
         U_GPIO04_IO02_comboBox="CAN1_RX";
@@ -239,7 +239,7 @@ void NOVAembed::on_U_CAN1_checkBox_toggled(bool checked)
     else
     {
         ui->U_CAN1_checkBox->setChecked(false);
-        ui->label_UGPIO04_IO02->setText("GPIO04_IO01");
+        ui->label_UGPIO04_IO01->setText("GPIO04_IO01");
         ui->label_UGPIO04_IO02->setText("GPIO04_IO02");
         U_GPIO04_IO01_comboBox="GPIO04_IO01";
         U_GPIO04_IO02_comboBox="GPIO04_IO02";

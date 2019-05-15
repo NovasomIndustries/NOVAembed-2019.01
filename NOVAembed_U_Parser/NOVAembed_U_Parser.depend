@@ -44,17 +44,21 @@
 1535456911 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_U_Parser/src/iomux.c
 	"../include/NOVAembed_U_parser.h"
 
-1535456911 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_U_Parser/include/NOVAembed_U_parser.h
+1557214230 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_U_Parser/include/NOVAembed_U_parser.h
 	<stdio.h>
 	<stdlib.h>
 	<strings.h>
 	<string.h>
 	<libgen.h>
 
-1535538865 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_U_Parser/src/main.c
+1557214230 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_U_Parser/src/main.c
 	"../include/NOVAembed_U_parser.h"
 	"../include/header.h"
 
-1535456911 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_U_Parser/include/header.h
+1557923807 /Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_U_Parser/include/header.h
 	<dt-bindings/input/input.h>
+
+1557214230 source:/Devel/NOVAsdk2019.01/Qt/NOVAembed-2019.01/NOVAembed_U_Parser/src/dts_gen.c
+	"../include/NOVAembed_U_parser.h"
+	"../include/header.h"
 
